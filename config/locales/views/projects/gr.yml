@@ -1,0 +1,16 @@
+gr:
+  projects: "Έργα"
+  your_projects: "Τα Έργα σας"
+  title: "Τίτλος"
+  description: "Περιγραφή"
+  created_at: "Δημιουργήθηκε στις"
+  last_modified: "Τελευταία τροποποίηση"
+  private: "Απόρρητο"
+  create_project: "Δημιουργία Νέου Έργου"
+  search_gs: "Αναζήτηση βιβλίου, άρθρου ή εργασίας"
+  upload: "Αποστολή"
+  upload_file: "Αποστολή αρχείου..."
+  time:
+    formats:
+      short: "%d/%m/%Y"
+      long: "%d/%m/%Y (%H:%m:%S)"

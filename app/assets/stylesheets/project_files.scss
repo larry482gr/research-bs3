@@ -1,0 +1,27 @@
+// Place all the styles related to the ProjectFiles controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.citation-modal {
+	width: 700px !important;
+	margin-left: -350px !important;
+}
+
+.citation {
+	clear: both;
+}
+
+.citation-type {
+	float: left;
+	width: 50px;
+	font-weight: bold;
+	color: #666;
+	text-align: right;
+}
+
+.citation-body {
+	float: right;
+	width: 600px;
+	margin-bottom: 20px;
+}

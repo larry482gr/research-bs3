@@ -1,0 +1,43 @@
+%h3.project_title
+  = @project.title
+  %span.project_updated.help-block
+    = "#{(t :created_at)} #{l @project.created_at, format: :long} - "
+    = "#{(t :last_modified)} #{@updated_at}"
+
+.span7.project_files_table
+  %p
+    %b Description:
+    .project_description
+      = @project.description
+  
+  %table.table.table-condensed.table-hover
+    %thead
+      %tr
+        %th
+        %th= t :filename
+        %th= t :created_at
+        %th= t :last_modified
+    
+    - @project_files.each do |file|
+      %tr{class: "pr_file_row", rel: file.project_id}
+        %td{class: "pr_file", rel: "#{file.id}"}= file.is_basic ? (t :main_file) : ''
+        %td{rel: "#{file.filepath}"}= file.filename
+        %td= file.created_at
+        %td= file.updated_at
+        -# %td= link_to 'Show', @project
+        -# %td= link_to 'Edit', edit_project_path(@project)
+        -# %td= link_to 'Destroy',@project, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+  = link_to (t :edit), edit_project_path(@project), :class => "btn btn-mini btn-warning"
+  = link_to (t :back), projects_path, :class => "btn btn-mini"
+  =# link_to (t :back), @project,  :class => "btn btn-mini btn-danger", :method => :delete, :data => { :confirm => 'Are you sure?' }
+  = form_tag({controller: "project_files", action: "create", project_id: "#{@project.id}"}, multipart: true, id: "upload_form") do
+    = file_field_tag "project_file[filename]"
+    %button.btn.btn-success.btn-small#file_btn{type: "button"}= t :upload_file
+    = hidden_field_tag "project_file[filepath]", "#{@project.id/100}/#{@project.id}"
+    
+.span5.search_div
+  =render "static_pages/search_gs";
+  
+%input#project_id{type: "hidden", value: "#{@project.id}"}
+%input#user_id{type: "hidden", value: "#{session[:user][:id]}"}

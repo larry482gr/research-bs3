@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Researchgr | <%= yield :title %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <%= javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" %>
+  <%= javascript_include_tag 'translations' %>
+  <%= javascript_tag "I18n.defaultLocale = '#{I18n.default_locale}'; I18n.locale = '#{I18n.locale}';" %>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsible-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<% :root %>">ResearchGr</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="collapsible-navbar">
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" id="search" class="form-control" placeholder="<%= (t :search) %>" autocomplete="off">
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li><a href="#">Another Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+        <%- if (session[:user].nil?) %>
+            <li><button id="sign-in" class="btn btn-success sign-in-out"><%= (t :sign_in) %></button></li>
+        <%- else %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= "#{session[:user]['username']}" %> <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul>
+            </li>
+            <li>
+              <%= link_to (t :sign_out), '/logout', :class => 'btn btn-success sign-in-out', :id => '#sign-out' %>
+            </li>
+        <% end %>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+  <div id="main">
+    <%- if flash[:notice] %>
+        <div id="notice" class="message">
+          <%= (t flash[:notice]) %>
+        </div>
+    <%- elsif flash[:alert] %>
+        <div id="alert" class="message">
+          <%= (t flash[:alert]) %>
+        </div>
+    <% end %>
+    <%= yield %>
+  </div>
+</div>
+
+<div class="footer container">
+  <h5>Footer Content to be added...</h5>
+</div>
+</body>
+</html>

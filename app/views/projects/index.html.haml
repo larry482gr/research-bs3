@@ -1,0 +1,28 @@
+- provide(:title, (t :projects))
+
+%h3= t :your_projects
+
+.span7.projects_table
+  %table.table.table-striped.table-condensed.table-hover
+    %thead
+      %tr
+        %th= t :title
+        %th= t :description
+        %th= t :private
+
+    - @projects.each do |project|
+      %tr{id: "projects/#{project.id}"}
+        %td= project.title
+        %td= project.description
+        %td
+          - if project.is_private
+            = t :yes
+          -else
+            = t :no
+        -# %td= link_to 'Show', project
+        -# %td= link_to 'Edit', edit_project_path(project)
+        -# %td= link_to 'Destroy', project, :method => :delete, :data => { :confirm => 'Are you sure?' }
+  = link_to (t :create_project), new_project_path, :class => "btn btn-success create_project"
+
+.span5.search_div
+  =render "static_pages/search_gs";

@@ -1,0 +1,13 @@
+en:
+  error:
+    one: "error"
+    other: "errors"
+  user_prohibit: "prohibited your registation:"
+  username: "Username"
+  password: "Password"
+  sign_in: "Sign In"
+  invalid_credentials: "The username or password you entered is invalid."
+  activation_error_html: "Oops, we had some problems activating your account! Either it is already activated or an error occured.<br/>Try following the activation link again or directly Sign In. If you see this message again contact our support team at: support@researchgr.com"
+  sign_out: "Sign Out"
+  sign_in_modal: "Sign in to my account"
+  register: "Register"

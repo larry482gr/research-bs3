@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Project:
+  = @project_file.project
+%p
+  %b User:
+  = @project_file.user
+%p
+  %b Filename:
+  = @project_file.filename
+%p
+  %b Is basic:
+  = @project_file.is_basic
+
+= link_to 'Edit', edit_project_file_path(@project_file)
+\|
+= link_to 'Back', project_files_path

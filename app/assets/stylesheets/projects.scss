@@ -1,0 +1,206 @@
+// Place all the styles related to the Projects controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* index */
+.projects_table, .project_files_table {
+	margin-left: 0px !important;
+	transition: width 0.6s;
+	-webkit-transition: width 0.6s;
+	-moz-transition: width 0.6s;
+	-o-transition: width 0.6s;
+}
+
+.projects_table, .project_files_table table tbody tr {
+	cursor: pointer;
+}
+
+.search_div {
+	transition: width 0.6s;
+	-webkit-transition: width 0.6s;
+	-moz-transition: width 0.6s;
+	-o-transition: width 0.6s;
+}
+
+#exact_match_div {
+	@media screen and (min-width: 767px) {
+		float: right;
+	}
+}
+
+#exact_match {
+	margin-top: 0px;
+}
+
+.create_project {
+	color: #FFF !important;
+}
+
+.search_div {
+	@media screen and (max-width: 767px) {
+		margin-top: 20px;
+		border-top: 1px solid #999;
+	}
+}
+
+.search_gs_results {
+	@media screen and (min-width: 767px) {
+		margin-top: 40px;
+	}
+}
+
+.search_gs {
+	width: 100%;
+	@media screen and (min-width: 767px) {
+		text-align: right;
+	}
+	@media screen and (max-width: 767px) {
+		margin-top: 10px;
+	}
+}
+
+#rows_div {
+	display: none;
+	margin-top: 10px;
+	text-align: right;
+}
+
+#search_gs_input {
+	width: 250px;
+	transition: width 0.4s;
+	-webkit-transition: width 0.4s;
+	-moz-transition: width 0.4s;
+	-o-transition: width 0.4s;
+}
+
+.gs_ggs {
+	float: right;
+	margin-left: 16px;
+	line-height: 20px;
+}
+
+.gs_ggsS {
+	font-size: medium;
+}
+
+.gs_ggs div a{
+	margin-right: 0px !important;
+}
+
+.gs_ggs button, .gs_mor, .gs_nvi, .gs_svm, .gs_ggsL, .gs_rt .gs_ct2 {
+	display: none;
+}
+
+.gs_r {
+	margin-top: 20px;
+}
+
+.gs_rt {
+	margin-bottom: 4px !important;
+	line-height: 18px;
+	color: #0077AA;
+	font-size: x-small;
+	font-weight: bold;
+}
+
+.gs_rt a {
+	color: #0077AA !important;
+	font-size: medium;
+	font-weight: normal;
+	text-decoration: underline;
+}
+
+.gs_rs {
+	font-size: small;
+	font-weight: normal;
+}
+
+.gs_fl a {
+	color: #0088CC !important;
+	font-size: small;
+	font-weight: normal;
+}
+
+.gs_fl a:hover, .gs_fl a:hover {
+	text-decoration: none;
+}
+
+.gs_a {
+	color: #009933;
+	font-weight: normal;
+}
+
+.gs_a a {
+	color: #009933 !important;
+	text-decoration: underline;
+}
+
+.gs_fl a {
+	margin-right: 16px;
+}
+
+.paging_bottom {
+	margin-top: 30px;
+}
+
+#paging_gs_results {
+	float: left;
+	margin-top: 6px;
+}
+
+#rows_div {
+	font-size: small;
+}
+
+#rows_div .rowsPerPage{
+	width: 46px;
+	height: 25px;
+	font-size: 12px;
+	padding: 3px 4px 3px 0px;
+}
+
+.paging button {
+	margin: 0px 1px;
+}
+
+.pdf_modal {
+	top: 2% !important;
+	width: 80% !important;
+	height: 900px;
+	overflow-y: auto !important;
+	margin: 0px !important;
+	left: 10% !important;
+	right: 10% !important;
+	position: absolute !important;
+}
+
+.pdf_modal .modal-body {
+	text-align: center;
+	height: 840px;
+	max-height: 850px !important;
+	overflow-y: auto !important;
+}
+
+/* show */
+
+.project_title {
+	line-height: 26px;
+}
+
+.project_updated {
+	font-size: 12px;
+	font-weight: normal;
+	color: #999 !important;
+}
+
+.save-article-btn {
+	float: right;
+}
+
+#project_file_filename {
+	display: none;
+}
+
+#upload_form {
+	float: right;
+}
