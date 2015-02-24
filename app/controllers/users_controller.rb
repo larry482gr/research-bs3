@@ -74,9 +74,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     profile = session[:user][:profile].to_i
     if profile > @user.profile.id.to_i # and session[:user][:id] != @user.id
-      flash[:alert] = "Sorry! You cannot view info of a user who has higher profile than you."
+      flash[:alert] = 'Sorry! You cannot view info of a user who has higher profile than you.'
       redirect_to :root and return
     end
+    @user.user_info.language = @user.user_info.get_proper_language
   end
 
   # GET /users/new
@@ -84,7 +85,7 @@ class UsersController < ApplicationController
     @user = User.new
     session[:return_to] = request.referer unless session[:return_to] != nil
     respond_to do |format|
-      format.html # new.html.haml
+      format.html # new.html.erb
       format.json { render json: @user }
     end
   end
@@ -97,7 +98,7 @@ class UsersController < ApplicationController
     end
     @user = User.find(params[:id])
     if session[:user][:profile].to_i > @user.profile.id.to_i and session[:user][:id].to_i != @user.id.to_i
-      flash[:alert] = "Sorry! You cannot edit a user who has the same or higher role than you."
+      flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
       redirect_to :root and return
     end
   end

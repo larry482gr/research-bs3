@@ -28,5 +28,8 @@ en:
   yes: "Yes"
   no: "No"
   question_mark: "?"
+  show: "Show"
   edit: "Edit"
   back: "Back"
+  english: "English"
+  greek: "Greek"

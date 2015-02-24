@@ -33,22 +33,3 @@
 <div class="col-md-5 search_div">
   <%= render "static_pages/search_gs" %>
 </div>
-
-<!--
-    - @projects.each do |project|
-      %tr{id: "projects/#{project.id}"}
-        %td= project.title
-        %td= project.description
-        %td
-          - if project.is_private
-            = t :yes
-          -else
-            = t :no
-        -# %td= link_to 'Show', project
-        -# %td= link_to 'Edit', edit_project_path(project)
-        -# %td= link_to 'Destroy', project, :method => :delete, :data => { :confirm => 'Are you sure?' }
-  = link_to (t :create_project), new_project_path, :class => "btn btn-success create_project"
-
-.span5.search_div
-  =render "static_pages/search_gs";
--->

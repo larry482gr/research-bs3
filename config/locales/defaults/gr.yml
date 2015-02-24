@@ -28,5 +28,8 @@ gr:
   yes: "Ναι"
   no: "Όχι"
   question_mark: ";"
+  show: "Προβολή"
   edit: "Επεξεργασία"
   back: "Επιστροφή"
+  english: "Aγγλικά"
+  greek: "Ελληνικά"

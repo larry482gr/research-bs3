@@ -1,0 +1,30 @@
+<h1>Listing project files</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>User</th>
+      <th>Filename</th>
+      <th>Is basic</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @project_files.each do |project_file| %>
+      <tr>
+        <td><%= project_file.project %></td>
+        <td><%= project_file.user %></td>
+        <td><%= project_file.filename %></td>
+        <td><%= project_file.is_basic %></td>
+        <td><%= link_to 'Show',  project_file %></td>
+        <td><%= link_to 'Edit',  edit_project_file_path(project_file) %></td>
+        <td><%= link_to 'Destroy',  project_file, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Project file', new_project_file_path %>

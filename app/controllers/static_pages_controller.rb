@@ -18,8 +18,8 @@ class StaticPagesController < ApplicationController
     @projects = Project.where("title LIKE :title", title: "%#{params[:question]}%")
     
     respond_to do |format|
-	  format.json { render json: { :users => @users, :projects => @projects } }
-	end
+	  	format.json { render json: { :users => @users, :projects => @projects } }
+		end
   end
   
   def search_scholar

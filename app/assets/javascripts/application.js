@@ -24,21 +24,21 @@ $(document).ready(function(){
     // PNotify.prototype.options.styling = "fontawesome";
     $('.container').on('click', '#sign-in', function(){
         var message_text = '<form class="form-horizontal">'+
-            '<div class="control-group">'+
-            '<label class="control-label" for="inputUsername">'+I18n.t("username")+'</label>'+
-            '<div class="controls">'+
-            '<input type="text" id="inputUsername" placeholder="'+I18n.t("username")+'">'+
+            '<div class="form-group">'+
+            '<label class="control-label col-md-2" for="inputUsername">'+I18n.t("username")+'</label>'+
+            '<div class="controls col-md-6">'+
+            '<input type="text" id="inputUsername" class="form-control" placeholder="'+I18n.t("username")+'">'+
             '</div>'+
             '</div>'+
-            '<div class="control-group">'+
-            '<label class="control-label" for="inputPassword">'+I18n.t("password")+'</label>'+
-            '<div class="controls">'+
-            '<input type="password" id="inputPassword" placeholder="'+I18n.t("password")+'">'+
-            '<div id="sign-in-error"></div>'+
+            '<div class="form-group">'+
+            '<label class="control-label col-md-2" for="inputPassword">'+I18n.t("password")+'</label>'+
+            '<div class="controls col-md-6">'+
+            '<input type="password" id="inputPassword" class="form-control" placeholder="'+I18n.t("password")+'">'+
             '</div>'+
+            '<div id="sign-in-error" class="col-md-offset-2 col-md-9"></div>'+
             '</div>'+
-            '<div class="control-group">'+
-            '<div class="controls">'+
+            '<div class="form-group">'+
+            '<div class="controls col-md-offset-2 col-md-6">'+
             '<button type="button" class="btn btn-success" id="sign-in-btn">'+I18n.t("sign_in")+'</button>'+
             '</div>'+
             '</div>'+
@@ -69,7 +69,7 @@ $(document).ready(function(){
     $('#search').on('focus', function(){
         if($( document ).width() > 630)
             $(this).parent().addClass('has-success');
-            $(this).css('width', '258px').css('background-color', '#FFF').css('border', '1px solid #67b168');
+            $(this).css('width', '380px').css('background-color', '#FFF').css('border', '1px solid #67b168');
     });
 
     $('#search').on('blur', function(){

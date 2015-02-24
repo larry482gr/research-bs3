@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+<p><strong>Project: </strong><%= @project_file.project %></p>
+<p><strong>User: </strong><%= @project_file.user %></p>
+<p><strong>Filename: </strong><%= @project_file.filename %></p>
+<p><strong>Is basic: </strong><%= @project_file.is_basic %></p>
+
+<%= link_to t :edit, edit_project_file_path(@project_file) %>
+\|
+<%= link_to t :back, project_files_path %>
