@@ -26,13 +26,13 @@ class StaticPagesController < ApplicationController
     url_extention = "com"
     if I18n.locale != :en
       url_extention = I18n.locale
-      puts I18n.locale
+      # puts I18n.locale
     end
     
     question	= params[:question].gsub(" ", "+")
     start		= params[:start]
     num			= params[:num]
-    
+
     doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extention}/scholar?q=#{question}&start=#{start}&num=#{num}")))
     doc.encoding = "UTF-8"
     

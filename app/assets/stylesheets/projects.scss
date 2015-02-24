@@ -66,11 +66,15 @@
 }
 
 #search_gs_input {
-	width: 250px;
+	width: 280px;
 	transition: width 0.4s;
 	-webkit-transition: width 0.4s;
 	-moz-transition: width 0.4s;
 	-o-transition: width 0.4s;
+}
+
+#search_gs_btn {
+  cursor: pointer;
 }
 
 .gs_ggs {

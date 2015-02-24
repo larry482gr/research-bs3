@@ -3,16 +3,16 @@ $(document).ready(function(){
     getSearchResults(1, $('#search_gs_input').val());
 
   $('#search_gs_input').on('focus', function(){
-  	if($(".search_div").hasClass("span5"))
-  		$(this).css('width', '86%'); 
+  	if($(".search_div").hasClass("col-md-5"))
+  		$(this).css('width', '100%');
   });
   
   $('#search_gs_input').on('blur', function(){
      if ($(this).val().length == 0) {
-	 	$('.projects_table').removeClass("span4").addClass("span7");
-	 	$('.search_div').removeClass("span8").addClass("span5");
+	 	$('.projects_table').removeClass("col-md-4").addClass("col-md-7");
+	 	$('.search_div').removeClass("col-md-8").addClass("col-md-5");
 	 	if($(".search_gs_results").text().length == 0)
-	 		$(this).css('width', '250px');
+	 		$(this).css('width', '280px');
 	 }
   });
   
@@ -171,10 +171,10 @@ $(document).ready(function(){
 		dataType: "json",
 		beforeSend: function(){
 			$('.search_gs_results').animate({opacity: 0.2});
-			if($('.projects_table').hasClass("span7")){
-				$('.projects_table').removeClass("span7").addClass("span4");
-				$('.search_div').removeClass("span5").addClass("span8");
-				$("#search_gs_input").css('width', '92%');
+			if($('.projects_table').hasClass("col-md-7")){
+				$('.projects_table').removeClass("col-md-7").addClass("col-md-4");
+				$('.search_div').removeClass("col-md-5").addClass("col-md-8");
+				$("#search_gs_input").css('width', '90%');
 			}
 		},
 		success: function(response) {

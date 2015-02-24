@@ -62,6 +62,10 @@ $(document).ready(function(){
         });
     });
 
+    $('.container').on('click', '#sign-out', function() {
+        location.href = "/logout";
+    });
+
     $('#search').on('focus', function(){
         if($( document ).width() > 630)
             $(this).parent().addClass('has-success');
@@ -70,7 +74,7 @@ $(document).ready(function(){
 
     $('#search').on('blur', function(){
         $(this).parent().removeClass('has-success');
-        $(this).css('width', '180px').css('background-color', '#EEE').css('border', '1px solid #ccc');
+        $(this).css('width', '200px').css('background-color', '#EEE').css('border', '1px solid #ccc');
     });
 
     $(document).keypress(function(e){
@@ -145,7 +149,7 @@ function signIn() {
         dataType: "json",
         success: function(user) {
             if (user.id > 0){
-                location.href = "http://localhost:3000"; // "projects";
+                location.href = "projects"; // "http://localhost:3000";
             }
             else if (user.id == 0){
                 $(".modal").modal("hide");
