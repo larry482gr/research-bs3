@@ -14,7 +14,7 @@ class StaticPagesController < ApplicationController
       return
     end
     
-    @users = User.where("(username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: session[:user][:profile])
+    @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: session[:user]['id'],username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: session[:user]['profile'])
     @projects = Project.where("title LIKE :title", title: "%#{params[:question]}%")
     
     respond_to do |format|

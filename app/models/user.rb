@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: true
+
+  def can_list_users?
+    return self.profile.id <= 2
+  end
   
   protected
   

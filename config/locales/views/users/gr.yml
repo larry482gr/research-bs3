@@ -11,3 +11,5 @@ gr:
   sign_out: "Έξοδος"
   sign_in_modal: "Είσοδος στο λογαριασμό μου"
   register: "Εγγραφή"
+  profile: "Προφίλ"
+  list_users: "Προβολή Χρηστών"

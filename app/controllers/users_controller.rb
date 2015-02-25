@@ -5,11 +5,11 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    if session[:user].nil? or session[:user][:profile] == 3
+    if @current_user.nil? or @current_user.profile.id == 3
       flash[:alert] = :no_access
       redirect_to :root and return
     else
-      if session[:user][:profile] == 1
+      if @current_user.profile.id == 1
         @users = User.all
       else
         @users = User.order('profile_id, username').where(:profile_id => '>= 2')
@@ -21,10 +21,11 @@ class UsersController < ApplicationController
   def check_login
     pass = Digest::SHA1.hexdigest(params[:user][:password])
     @user = User.find_by_username(params[:user][:username])
-    @user_info = @user.user_info
+    # @user_info = @user.user_info
     if @user and pass == @user.password
-      if @user_info.activated
-        session[:user] = {id: @user.id, username: @user.username, profile: @user.profile.id}
+      if @user.user_info.activated
+        # session[:user] = {id: @user.id, username: @user.username, profile: @user.profile.id}
+        session[:id] = @user.password
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
@@ -51,7 +52,8 @@ class UsersController < ApplicationController
         @user_info.activated = 1
         @user_info.token = nil
         @user_info.save
-        session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
+        # session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
+        session[:id] = @user.password
         notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
         redirect_to(projects_path, :notice => notices.join('<br/>').html_safe) and return
       end
@@ -60,24 +62,27 @@ class UsersController < ApplicationController
   end
 
   def logout
-    session.delete(:user)
+    session.delete(:id)
     redirect_to :root
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    if session[:user].nil? or (session[:user][:profile].to_i > 2 and session[:user][:id].to_i != params[:id].to_i)
+    puts "\n\n\n"
+    puts "Session: #{session[:id]}"
+    puts "\n\n\n"
+    if @current_user.nil? or (@current_user.profile.id > 2 and @current_user.id != params[:id])
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    profile = session[:user][:profile].to_i
-    if profile > @user.profile.id.to_i # and session[:user][:id] != @user.id
+    # profile = session[:user][:profile].to_i
+    if @current_user.profile.id > @user.profile.id # and session[:user][:id] != @user.id
       flash[:alert] = 'Sorry! You cannot view info of a user who has higher profile than you.'
       redirect_to :root and return
     end
-    @user.user_info.language = @user.user_info.get_proper_language
+    @language = t(Language.find(@user.user_info.language_id).language)
   end
 
   # GET /users/new
@@ -92,12 +97,12 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if request.referer.nil? or (session[:user][:profile].to_i > 2 and session[:user][:id].to_i != params[:id].to_i)
+    if request.referer.nil? or (@current_user.profile.id > 2 and @current_user.id != params[:id])
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    if session[:user][:profile].to_i > @user.profile.id.to_i and session[:user][:id].to_i != @user.id.to_i
+    if @current_user.profile.id > @user.profile.id and @current_user.id != @user.id
       flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
       redirect_to :root and return
     end
@@ -109,30 +114,26 @@ class UsersController < ApplicationController
     begin
       @user = User.create!(user_params)
     rescue ActiveRecord::RecordInvalid => validation_error
-      warnings_array = validation_error.message[19..-1].split(", ")
-      warning_list = "<ul>"
+      warnings_array = validation_error.message[19..-1].split(', ')
+      warning_list = '<ul>'
       warnings_array.each do |warning|
-        warning_list += "<li>" + warning + "</li>"
+        warning_list += '<li>' + warning + '</li>'
       end
-      warning_list += "</ul>"
-      warning_message = "Registration failed because:<br/>"
+      warning_list += '</ul>'
+      warning_message = 'Registration failed because:<br/>'
       flash[:alert] = (warning_message + warning_list).html_safe
 
-      session[:username] = params[:user][:username]
+      # session[:username] = params[:user][:username]
       # session[:password] = params[:user][:password]
-      session[:email] = params[:user][:email]
+      # session[:email] = params[:user][:email]
       @user = User.new
       redirect_to :root and return
     end
     if session[:user] == nil
-      #user = User.find(:all, :conditions => ['username = ?', params[:user][:username]])
       @user_info = UserInfo.create(:user_id => @user.id)
-      #@user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver
-      # session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
     end
     notices = ["Welcome to ResearchGr #{params[:user][:username]}!"]
-    # flash[:notice] = notices.join("<br/>").html_safe
     redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
   end
 

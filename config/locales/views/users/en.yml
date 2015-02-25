@@ -11,3 +11,5 @@ en:
   sign_out: "Sign Out"
   sign_in_modal: "Sign in to my account"
   register: "Register"
+  profile: "Profile"
+  list_users: "List Users"

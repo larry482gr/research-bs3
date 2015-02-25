@@ -4,8 +4,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @user = User.find(session[:user]['id'])
-    @projects = @user.projects
+    @projects = @current_user.projects
   end
 
   # GET /projects/1
@@ -27,8 +26,7 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    @user = User.find(session[:user][:id])
-    @project = @user.projects.create(project_params)
+    @project = @current_user.projects.create(project_params)
 
     respond_to do |format|
       if @project.save
