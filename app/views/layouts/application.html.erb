@@ -57,10 +57,9 @@
                 <li><a href="#">Something else here</a></li>
                 <li class="divider"></li>
                 <li><a href="#">Separated link</a></li>
+                <li class="divider"></li>
+                <li><%= link_to (t :sign_out), '/logout' %></li>
               </ul>
-            </li>
-            <li>
-              <button id="sign-out" class="btn btn-success sign-in-out"><%= (t :sign_out) %></button>
             </li>
         <% end %>
       </ul>

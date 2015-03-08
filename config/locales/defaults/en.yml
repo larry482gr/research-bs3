@@ -33,3 +33,7 @@ en:
   back: "Back"
   english: "English"
   greek: "Greek"
+  time:
+      formats:
+        short: "%m-%d-%Y"
+        long: "%m-%d-%Y (%H:%m:%S)"

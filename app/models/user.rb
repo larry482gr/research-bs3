@@ -2,6 +2,7 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   has_one :user_info
+  accepts_nested_attributes_for :user_info
   belongs_to :profile
   
   has_one :language, through: :user_info
@@ -20,8 +21,15 @@ class User < ActiveRecord::Base
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: true
 
+  def owner?
+    profile.label == Profile::OWNER
+  end
+
   def can_list_users?
-    return self.profile.id <= 2
+    profile.rights.each do |right|
+      return true if right.label == 'list_users'
+    end
+    return false
   end
   
   protected

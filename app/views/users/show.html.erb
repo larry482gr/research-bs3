@@ -1,24 +1,23 @@
 <p>
-  <strong>Username: </strong>
+  <strong><%= (t :username) %>: </strong>
   <%= @user.username %>
 </p>
 <p>
-  <strong>Email: </strong>
+  <strong><%= (t :email) %>: </strong>
   <%= @user.email %>
 </p>
 <p>
-  <strong>First name: </strong>
+  <strong><%= (t :first_name) %>: </strong>
   <%= @user.user_info.first_name %>
 </p>
 <p>
-  <strong>Last name: </strong>
+  <strong><%= (t :last_name) %>: </strong>
   <%= @user.user_info.last_name %>
 </p>
 <p>
-  <strong>Preferred language: </strong>
+  <strong><%= (t :preferred_language) %>: </strong>
   <%= @language %>
 </p>
 
-<%= link_to (t :edit), edit_user_path(@user) %>
-\|
-<%= link_to (t :back), users_path %>
+<%= link_to (t :edit), edit_user_path(@user), class: 'btn btn-sm btn-warning' %>
+<a href="<%= "#{session[:return_to]}" %>" class="btn btn-sm btn-default"><%= (t :back) %></a>

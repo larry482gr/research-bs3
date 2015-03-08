@@ -33,3 +33,7 @@ gr:
   back: "Επιστροφή"
   english: "Aγγλικά"
   greek: "Ελληνικά"
+  time:
+      formats:
+        short: "%d/%m/%Y"
+        long: "%d/%m/%Y (%H:%m:%S)"

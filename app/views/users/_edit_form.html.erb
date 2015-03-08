@@ -1,0 +1,39 @@
+<%= form_for @user do |f| %>
+    <%- if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= "#{pluralize(@user.errors.count, 'error')} prohibited this user from being saved:" %></h2>
+          <ul>
+            <%- @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="field form-group">
+      <h4>
+      <%= f.label (t :username) %>
+      <%= :username %>
+      </h4>
+    </div>
+    <div class="field form-group">
+      <%= f.label (t :email) %>
+      <%= f.text_field :email, class: 'form-control', value: @user.email %>
+    </div>
+    <%= f.fields_for :user_info do |c| %>
+        <div class="field form-group">
+          <%= c.label :first_name, (t :first_name) %>
+          <%= c.text_field :first_name, class: 'form-control', value: @user.user_info.first_name %>
+        </div>
+        <div class="field form-group">
+          <%= c.label :last_name, (t :last_name) %>
+          <%= c.text_field :last_name, class: 'form-control', value: @user.user_info.last_name %>
+        </div>
+        <div class="field form-group">
+          <%= c.label :language_id, (t :preferred_language) %>
+          <%= c.collection_select :language_id, Language.order(:id), :id, :language, include_blank: false, class: 'form-control', value: @user.user_info.language_id %>
+        </div>
+    <% end %>
+    <div class="actions">
+      <button type="submit" name="commit" class="btn btn-sm btn-success"><%= (t :save) %></button>
+    </div>
+<% end %>

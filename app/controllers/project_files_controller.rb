@@ -50,7 +50,6 @@ class ProjectFilesController < ApplicationController
   # POST /project_files
   # POST /project_files.json
   def create
-    @user = User.find(session[:user][:id])
     @project = Project.find(params[:project_id])
     is_new = false
     # uploaded_io = params[:project_file][:filename]
@@ -61,7 +60,7 @@ class ProjectFilesController < ApplicationController
     
     if @project_file.empty?
       @project_file = @project.project_files.create(project_file_params)
-      @project_file.user_id = @user.id
+      @project_file.user_id = @current_user.id
       @project_file.save
       is_new = true
     end

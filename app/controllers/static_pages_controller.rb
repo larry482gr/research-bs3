@@ -7,14 +7,14 @@ class StaticPagesController < ApplicationController
   end
   
   def search
-    if session[:user].nil?
+    if @current_user.nil?
       respond_to do |format|
         format.json { render json: { :illegal => "1" } }
       end
       return
     end
     
-    @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: session[:user]['id'],username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: session[:user]['profile'])
+    @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: @current_user.id, username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: @current_user.profile_id)
     @projects = Project.where("title LIKE :title", title: "%#{params[:question]}%")
     
     respond_to do |format|

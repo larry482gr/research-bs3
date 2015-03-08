@@ -5,12 +5,12 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    if @current_user.nil? or @current_user.profile.id == 3
+    if @current_user.nil? or not @current_user.can_list_users?
       flash[:alert] = :no_access
       redirect_to :root and return
     else
-      if @current_user.profile.id == 1
-        @users = User.all
+      if @current_user.owner?
+        @users = User.all.order('profile_id, username')
       else
         @users = User.order('profile_id, username').where(:profile_id => '>= 2')
         # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
@@ -24,7 +24,6 @@ class UsersController < ApplicationController
     # @user_info = @user.user_info
     if @user and pass == @user.password
       if @user.user_info.activated
-        # session[:user] = {id: @user.id, username: @user.username, profile: @user.profile.id}
         session[:id] = @user.password
         respond_to do |format|
           format.js {}
@@ -52,7 +51,6 @@ class UsersController < ApplicationController
         @user_info.activated = 1
         @user_info.token = nil
         @user_info.save
-        # session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
         session[:id] = @user.password
         notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
         redirect_to(projects_path, :notice => notices.join('<br/>').html_safe) and return
@@ -69,16 +67,15 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    puts "\n\n\n"
-    puts "Session: #{session[:id]}"
-    puts "\n\n\n"
-    if @current_user.nil? or (@current_user.profile.id > 2 and @current_user.id != params[:id])
+    session[:return_to] = '/'
+    session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    @current_user.can_list_users?
+    if @current_user.nil? or (@current_user.profile.id.to_i > 2 and @current_user.id.to_i != params[:id].to_i)
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    # profile = session[:user][:profile].to_i
-    if @current_user.profile.id > @user.profile.id # and session[:user][:id] != @user.id
+    if @current_user.profile.id > @user.profile.id and @current_user.id != @user.id
       flash[:alert] = 'Sorry! You cannot view info of a user who has higher profile than you.'
       redirect_to :root and return
     end
@@ -90,14 +87,14 @@ class UsersController < ApplicationController
     @user = User.new
     session[:return_to] = request.referer unless session[:return_to] != nil
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render action: 'new' }
       format.json { render json: @user }
     end
   end
 
   # GET /users/1/edit
   def edit
-    if request.referer.nil? or (@current_user.profile.id > 2 and @current_user.id != params[:id])
+    if request.referer.nil? or (@current_user.profile.id.to_i > 2 and @current_user.id.to_i != params[:id].to_i)
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
@@ -123,13 +120,10 @@ class UsersController < ApplicationController
       warning_message = 'Registration failed because:<br/>'
       flash[:alert] = (warning_message + warning_list).html_safe
 
-      # session[:username] = params[:user][:username]
-      # session[:password] = params[:user][:password]
-      # session[:email] = params[:user][:email]
       @user = User.new
       redirect_to :root and return
     end
-    if session[:user] == nil
+    if @current_user == nil
       @user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver
     end
@@ -141,29 +135,18 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user = User.find(params[:id])
-    if !params[:old_pass][:password].empty? or !params[:new_pass][:password].empty?
-      if params[:old_pass][:password].empty? or Digest::SHA1.hexdigest(params[:old_pass][:password]) != @user.password
-        flash[:alert] = "Old password doesn't match your current password!"
-        redirect_to edit_user_path(@user) and return
-      elsif params[:new_pass][:password].empty?
-        flash[:alert] = "You should fill a new password!"
-        redirect_to edit_user_path(@user) and return
-      else
-        params[:user][:password] = Digest::SHA1.hexdigest(params[:new_pass][:password])
-      end
-    end
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  def change_role
+  def change_profile
 
   end
 
@@ -196,6 +179,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :email)
+      params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id])
     end
 end
