@@ -50,7 +50,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= @current_user.username %> <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="<%= user_path(@current_user.id) %>"><%= (t :profile) %></a></li>
-                <%- if @current_user.can_list_users? %>
+                <%- if @current_user.can_access?('user_list') %>
                   <li><a href="<%= users_path %>"><%= (t :list_users) %></a></li>
                 <% end %>
                 <li><a href="#">Another action</a></li>

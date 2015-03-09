@@ -25,9 +25,9 @@ class User < ActiveRecord::Base
     profile.label == Profile::OWNER
   end
 
-  def can_list_users?
+  def can_access?(right_label)
     profile.rights.each do |right|
-      return true if right.label == 'list_users'
+      return true if right.label == right_label
     end
     return false
   end

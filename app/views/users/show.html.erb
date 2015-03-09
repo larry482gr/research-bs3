@@ -19,5 +19,6 @@
   <%= @language %>
 </p>
 
+<br/>
 <%= link_to (t :edit), edit_user_path(@user), class: 'btn btn-sm btn-warning' %>
 <a href="<%= "#{session[:return_to]}" %>" class="btn btn-sm btn-default"><%= (t :back) %></a>

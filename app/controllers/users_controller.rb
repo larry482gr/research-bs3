@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    if @current_user.nil? or not @current_user.can_list_users?
+    if @current_user.nil? or not @current_user.can_access?('user_list')
       flash[:alert] = :no_access
       redirect_to :root and return
     else
@@ -69,17 +69,20 @@ class UsersController < ApplicationController
   def show
     session[:return_to] = '/'
     session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
-    @current_user.can_list_users?
-    if @current_user.nil? or (@current_user.profile.id.to_i > 2 and @current_user.id.to_i != params[:id].to_i)
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    if @current_user.profile.id > @user.profile.id and @current_user.id != @user.id
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
       flash[:alert] = 'Sorry! You cannot view info of a user who has higher profile than you.'
       redirect_to :root and return
     end
-    @language = t(Language.find(@user.user_info.language_id).language)
+    begin
+      @language = t(Language.find(@user.user_info.language_id).language)
+    rescue ActiveRecord::RecordNotFound
+      @language = Language.find(1).language
+    end
   end
 
   # GET /users/new
@@ -94,12 +97,12 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if request.referer.nil? or (@current_user.profile.id.to_i > 2 and @current_user.id.to_i != params[:id].to_i)
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    if @current_user.profile.id > @user.profile.id and @current_user.id != @user.id
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
       flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
       redirect_to :root and return
     end
@@ -108,6 +111,18 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    # puts request.referer.nil?
+    # puts request.referer
+    # puts Rails.root.to_s
+    # puts Rails.public_path.to_s
+    # puts request.referer.index(Rails.root.to_s)
+    # puts @current_user != nil
+    # puts @current_user.can_access?('user_create') unless @current_user == nil
+    if request.referer.nil? or (@current_user != nil and not @current_user.can_access?('user_create'))
+      flash[:alert] = "Sorry! You don't have access to this page."
+      redirect_to :root and return
+    end
+
     begin
       @user = User.create!(user_params)
     rescue ActiveRecord::RecordInvalid => validation_error
@@ -123,7 +138,7 @@ class UsersController < ApplicationController
       @user = User.new
       redirect_to :root and return
     end
-    if @current_user == nil
+    if @current_user == nil or @current_user.can_access?('user_create')
       @user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver
     end
@@ -134,7 +149,15 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
+      flash[:alert] = "Sorry! You don't have access to this page."
+      redirect_to :root and return
+    end
     @user = User.find(params[:id])
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
+      redirect_to :root and return
+    end
     respond_to do |format|
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
@@ -153,11 +176,16 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if request.referer.nil? or request.referer.index(Rails.root.to_s) != 0
-      flash[:alert] = 'You think you are a hacker???'
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_delete'))
+      flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
     end
     @user = User.find(params[:id])
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = 'Sorry! You cannot delete a user who has the same or higher role than you.'
+      redirect_to :root and return
+    end
+
     @user.destroy
 
     respond_to do |format|

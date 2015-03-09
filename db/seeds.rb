@@ -12,7 +12,8 @@ owner = Profile.create(id: 1, label: 'owner', description: 'Application Owner')
 admin = Profile.create(id: 2, label: 'admin', description: 'Application Administrator')
 user  = Profile.create(id: 3, label: 'user', description: 'Single User')
 
-user_rights = [Right.create(label: 'list_users', description: 'List other users\' profiles'),
+user_rights = [Right.create(label: 'user_list', description: 'List other users\' profiles'),
+               Right.create(label: 'user_show', description: 'Show users'),
                Right.create(label: 'user_create', description: 'Create users'),
                Right.create(label: 'user_edit', description: 'Edit users'),
                Right.create(label: 'user_delete', description: 'Delete users')]
