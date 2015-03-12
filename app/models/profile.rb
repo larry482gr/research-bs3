@@ -4,4 +4,5 @@ class Profile < ActiveRecord::Base
   has_many :users, through: :user_info
 
   OWNER = 'owner'
+  ADMIN = 'admin'
 end

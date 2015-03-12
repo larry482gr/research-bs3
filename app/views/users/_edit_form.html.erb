@@ -30,7 +30,13 @@
         </div>
         <div class="field form-group">
           <%= c.label :language_id, (t :preferred_language) %>
-          <%= c.collection_select :language_id, Language.order(:id), :id, :language, include_blank: false, class: 'form-control', value: @user.user_info.language_id %>
+          <%= c.collection_select :language_id, Language.order(:id), :id, :option_label, {include_blank: false}, { :class => 'form-control', :value => @user.user_info.language_id} %>
+        </div>
+    <% end %>
+    <%- if @current_user.id != @user.id and @current_user.can_access?('change_profile') %>
+        <div class="field form-group">
+          <%= f.label :profile_id, (t :profile) %>
+          <%= f.collection_select :profile_id, Profile.where('id >= ?', @current_user.profile_id), :id, :description, {include_blank: false}, { :class => 'form-control', :value => @user.profile_id} %>
         </div>
     <% end %>
     <div class="actions">

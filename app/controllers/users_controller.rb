@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       if @current_user.owner?
         @users = User.all.order('profile_id, username')
       else
-        @users = User.order('profile_id, username').where(:profile_id => '>= 2')
+        @users = User.order('profile_id, username').where('profile_id >= ?', 2)
         # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
       end
     end
@@ -160,6 +160,9 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
+        if @current_user.can_access?('change_profile')
+          @user.update(admin_params)
+        end
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
@@ -208,5 +211,9 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id])
+    end
+
+    def admin_params
+      params.require(:user).permit(:profile_id)
     end
 end

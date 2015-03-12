@@ -30,6 +30,7 @@ gr:
   question_mark: ";"
   show: "Προβολή"
   edit: "Επεξεργασία"
+  delete: "Διαγραφή"
   back: "Επιστροφή"
   english: "Aγγλικά"
   greek: "Ελληνικά"

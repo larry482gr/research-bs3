@@ -48,7 +48,7 @@ class Project < ActiveRecord::Base
       when 60..(3600-1)
         return "#{timestamp_difference/60} minute(s) ago"
       else
-        return "a few seconds ago"
+        return 'a few seconds ago'
     end
   end
   

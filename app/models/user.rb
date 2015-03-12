@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
     profile.label == Profile::OWNER
   end
 
+  def admin?
+    profile.label == Profile::ADMIN
+  end
+
   def can_access?(right_label)
     profile.rights.each do |right|
       return true if right.label == right_label
