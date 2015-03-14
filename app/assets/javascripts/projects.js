@@ -92,7 +92,7 @@ $(document).ready(function(){
                       $(".bootbox").on('hidden.bs.modal', function () {
                           bootbox.dialog({
                               title: doc_title,
-                              message: '<embed width="900" height="800" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">',
+                              message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">',
                               className: 'pdf_modal'
                           });
                       });
@@ -101,7 +101,7 @@ $(document).ready(function(){
           }
       });
   });
-	  
+
   $('.container').on('click', '.gs_nph', function(e){
 	  e.preventDefault();
   });
@@ -119,10 +119,10 @@ $(document).ready(function(){
 		  					'<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
 		  					'<input type="submit" class="save-article-btn btn btn-primary" value="Save" />'+
 		  				'</form>';
-		  				
+
 		  	bootbox.dialog({
 			  	title: doc_title,
-			  	message: '<embed width="900" height="800" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
+			  	message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
 			  	save_file,
 			  	className: 'pdf_modal'
 		  	});

@@ -148,12 +148,16 @@ function signIn() {
         data: "user[username]=" + $('#inputUsername').val() + "&user[password]=" + $('#inputPassword').val(),
         dataType: "json",
         success: function(user) {
-            if (user.id > 0){
+            if (user.id > 0) {
                 location.href = "projects"; // "http://localhost:3000";
             }
             else if (user.id == 0){
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>Please activate your account by following the link you will find at your email.</div>");
+            }
+            else if (user.id == -1){
+                $(".modal").modal("hide");
+                $("#main").prepend("<div id='alert' class='message'>Your account has been blacklisted. Please contact us at <a href='mailto:info@research.org.gr'>info@research.org.gr</a> if you need more information.</div>");
             }
             else{
                 $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);

@@ -23,22 +23,27 @@ class UsersController < ApplicationController
     @user = User.find_by_username(params[:user][:username])
     # @user_info = @user.user_info
     if @user and pass == @user.password
-      if @user.user_info.activated
+      if not @user.user_info.activated
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"id\": \"0\" }" }
+        end
+      elsif @user.user_info.blacklisted
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"id\": \"-1\" }" }
+        end
+      else
         session[:id] = @user.password
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
         end
-      else
-        respond_to do |format|
-          format.js {}
-          format.json { render json: "{ \"id\": \"0\" }" }
-        end
       end
     else
       respond_to do |format|
         format.js {}
-        format.json { render json: "{ \"id\": \"-1\" }" }
+        format.json { render json: "{ \"id\": \"-2\" }" }
       end
     end
   end
@@ -160,7 +165,10 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
-        if @current_user.can_access?('change_profile')
+        if @current_user.can_access?('user_edit')
+          if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
+            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: @user.profile_id, to_value: admin_params[:profile_id], change_type: 'profile'})
+          end
           @user.update(admin_params)
         end
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
@@ -189,6 +197,7 @@ class UsersController < ApplicationController
       redirect_to :root and return
     end
 
+    @user.user_info.destroy
     @user.destroy
 
     respond_to do |format|
@@ -214,6 +223,6 @@ class UsersController < ApplicationController
     end
 
     def admin_params
-      params.require(:user).permit(:profile_id)
+      params.require(:user).permit(:profile_id, user_info_attributes: [:id, :activated, :blacklisted])
     end
 end

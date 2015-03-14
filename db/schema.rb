@@ -29,40 +29,31 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   add_index "citations_projects", ["project_id", "citation_id"], name: "index_citations_projects_on_project_id_and_citation_id", using: :btree
 
   create_table "history_projects", id: false, force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.integer  "project_id",  limit: 4
-    t.string   "from_value",  limit: 20, null: false
-    t.string   "to_value",    limit: 20, null: false
-    t.string   "change_type", limit: 20, null: false
-    t.datetime "datetime"
+    t.integer  "user_id",     limit: 4,  default: 0, null: false
+    t.integer  "project_id",  limit: 4,  default: 0, null: false
+    t.string   "from_value",  limit: 20,             null: false
+    t.string   "to_value",    limit: 20,             null: false
+    t.string   "change_type", limit: 20,             null: false
+    t.datetime "created_at",                         null: false
   end
-
-  add_index "history_projects", ["project_id"], name: "index_history_projects_on_project_id", using: :btree
-  add_index "history_projects", ["user_id"], name: "index_history_projects_on_user_id", using: :btree
 
   create_table "history_reports", id: false, force: :cascade do |t|
-    t.integer  "user_id",            limit: 4
-    t.integer  "project_id",         limit: 4
-    t.integer  "reported_user",      limit: 4, null: false
+    t.integer  "user_id",            limit: 4, default: 0, null: false
+    t.integer  "project_id",         limit: 4, default: 0, null: false
+    t.integer  "reported_user",      limit: 4,             null: false
     t.datetime "invitation_sent_at"
-    t.datetime "created_at"
+    t.datetime "created_at",                               null: false
   end
-
-  add_index "history_reports", ["invitation_sent_at"], name: "index_history_reports_on_invitation_sent_at", using: :btree
-  add_index "history_reports", ["project_id"], name: "index_history_reports_on_project_id", using: :btree
-  add_index "history_reports", ["user_id"], name: "index_history_reports_on_user_id", using: :btree
 
   create_table "history_user_infos", id: false, force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.string   "user_email",  limit: 50, null: false
-    t.string   "admin",       limit: 20
-    t.string   "from_value",  limit: 20, null: false
-    t.string   "to_value",    limit: 20, null: false
-    t.string   "change_type", limit: 20, null: false
-    t.datetime "datetime"
+    t.integer  "user_id",     limit: 4,  default: 0,  null: false
+    t.string   "user_email",  limit: 50,              null: false
+    t.string   "admin",       limit: 20,              null: false
+    t.string   "from_value",  limit: 20,              null: false
+    t.string   "to_value",    limit: 20,              null: false
+    t.string   "change_type", limit: 50, default: "", null: false
+    t.datetime "created_at",                          null: false
   end
-
-  add_index "history_user_infos", ["user_id"], name: "index_history_user_infos_on_user_id", using: :btree
 
   create_table "invitations", force: :cascade do |t|
     t.integer  "user_id",            limit: 4

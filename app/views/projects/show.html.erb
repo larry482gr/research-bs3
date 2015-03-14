@@ -15,9 +15,9 @@
     <thead>
       <tr>
         <th></th>
-        <th><%= t :filename %></th>
-        <th><%= t :created_at %></th>
-        <th><%= t :last_modified %></th>
+        <th><%= (t :filename) %></th>
+        <th><%= (t :created_at) %></th>
+        <th><%= (t :last_modified) %></th>
         <!--
         <th></th>
         <th></th>
@@ -35,19 +35,19 @@
           <!--
           <td><%= link_to (t :show), @project %></td>
           <td><%= link_to (t :edit), edit_project_path(@project) %></td>
-          <td><%= link_to 'Destroy', @project, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+          <td><%= link_to (t :delete), @project, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
           -->
         </tr>
       <% end %>
     </tbody>
   </table>
 
-  <%= link_to (t :edit), edit_project_path(@project), :class => 'btn btn-mini btn-warning' %>
-  <%= link_to (t :back), projects_path, :class => 'btn btn-mini' %>
-  <%# link_to (t :back), @project,  :class => 'btn btn-mini btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' } %>
+  <%= link_to (t :edit), edit_project_path(@project), :class => 'btn btn-sm btn-warning' %>
+  <%= link_to (t :back), projects_path, :class => 'btn btn-sm btn-default' %>
+  <%# link_to (t :back), @project,  :class => 'btn btn-sm btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' } %>
   <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
     <%= file_field_tag 'project_file[filename]' %>
-    <button class="btn btn-success btn-small" id="file_btn" type="button"><%= t :upload_file %></button>
+    <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
     <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
   <% end %>
 </div>
@@ -56,4 +56,4 @@
   <%=render 'static_pages/search_gs' %>
 </div>
   
-<!-- <input id="project_id" type="hidden" value="<%= @project.id %>" /> -->
+<input id="project_id" type="hidden" value="<%= @project.id %>" />

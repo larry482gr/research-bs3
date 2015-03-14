@@ -167,21 +167,16 @@
 	margin: 0px 1px;
 }
 
-.pdf_modal {
-	top: 2% !important;
-	width: 80% !important;
-	height: 900px;
+.pdf_modal > .modal-dialog {
+	width: 930px;
+	height: 958px;
 	overflow-y: auto !important;
-	margin: 0px !important;
-	left: 10% !important;
-	right: 10% !important;
-	position: absolute !important;
 }
 
 .pdf_modal .modal-body {
 	text-align: center;
-	height: 840px;
-	max-height: 850px !important;
+	height: 900px;
+	max-height: 910px !important;
 	overflow-y: auto !important;
 }
 

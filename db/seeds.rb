@@ -23,8 +23,7 @@ user_rights = [Right.create(label: 'user_list', description: 'List other users\'
                Right.create(label: 'user_show', description: 'Show users'),
                Right.create(label: 'user_create', description: 'Create users'),
                Right.create(label: 'user_edit', description: 'Edit users'),
-               Right.create(label: 'user_delete', description: 'Delete users'),
-               Right.create(label: 'change_profile', description: 'Change user\'s profile')]
+               Right.create(label: 'user_delete', description: 'Delete users')]
 
 owner.rights += user_rights
 admin.rights += user_rights
