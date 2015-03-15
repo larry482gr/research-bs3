@@ -4,4 +4,13 @@ class UserInfo < ActiveRecord::Base
   
   include Tokenable
 
+  protected
+
+  before_update :set_nil_params
+
+  def set_nil_params
+    self.first_name = nil unless self.first_name.to_s.strip.length > 0
+    self.last_name  = nil unless self.last_name.to_s.strip.length > 0
+  end
+
 end

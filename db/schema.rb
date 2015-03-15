@@ -128,7 +128,8 @@ ActiveRecord::Schema.define(version: 20140302124650) do
     t.string "description", limit: 50, null: false
   end
 
-  create_table "user_infos", primary_key: "user_id", force: :cascade do |t|
+  create_table "user_infos", force: :cascade do |t|
+    t.integer "user_id",     limit: 4,                   null: false
     t.string  "first_name",  limit: 20
     t.string  "last_name",   limit: 30
     t.integer "language_id", limit: 4,   default: 1,     null: false
@@ -139,6 +140,7 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   end
 
   add_index "user_infos", ["language_id"], name: "index_user_infos_on_language_id", using: :btree
+  add_index "user_infos", ["user_id"], name: "index_user_infos_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",   limit: 20, null: false

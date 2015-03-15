@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require bootbox.min
@@ -22,7 +23,8 @@
 
 $(document).ready(function(){
     // PNotify.prototype.options.styling = "fontawesome";
-    $('.container').on('click', '#sign-in', function(){
+
+    $('.container').on('click', '#sign-in', function() {
         var message_text = '<form class="form-horizontal">'+
             '<div class="form-group">'+
             '<label class="control-label col-md-2" for="inputUsername">'+I18n.t("username")+'</label>'+
@@ -44,7 +46,7 @@ $(document).ready(function(){
             '</div>'+
             '</form>'+
             '<script type="text/javascript">'+
-            '$(".modal").on("shown", function(){'+
+            '$(".modal").on("shown.bs.modal", function(){'+
             '$("#inputUsername").focus();'+
             '});'+
             '$("#sign-in-btn").on("click", function(){'+

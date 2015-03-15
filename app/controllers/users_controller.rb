@@ -22,13 +22,13 @@ class UsersController < ApplicationController
     pass = Digest::SHA1.hexdigest(params[:user][:password])
     @user = User.find_by_username(params[:user][:username])
     # @user_info = @user.user_info
-    if @user and pass == @user.password
-      if not @user.user_info.activated
+    if @user and pass == @user.password and not @user.user_info.deleted?
+      if not @user.user_info.activated?
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"0\" }" }
         end
-      elsif @user.user_info.blacklisted
+      elsif @user.user_info.blacklisted?
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"-1\" }" }
@@ -102,6 +102,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    session[:return_to] = '/'
+    session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
@@ -116,13 +118,6 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    # puts request.referer.nil?
-    # puts request.referer
-    # puts Rails.root.to_s
-    # puts Rails.public_path.to_s
-    # puts request.referer.index(Rails.root.to_s)
-    # puts @current_user != nil
-    # puts @current_user.can_access?('user_create') unless @current_user == nil
     if request.referer.nil? or (@current_user != nil and not @current_user.can_access?('user_create'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
@@ -197,12 +192,34 @@ class UsersController < ApplicationController
       redirect_to :root and return
     end
 
-    @user.user_info.destroy
-    @user.destroy
+    @user.user_info.deleted = 1
+    if @user.user_info.save!
+      if @current_user.can_access?('user_delete')
+        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1, change_type: 'deletion', comment: params[:comment]})
 
-    respond_to do |format|
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"deleted\": \"1\" }" }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to :root }
+          format.json { head :no_content }
+        end
+      end
+    else
+      if @current_user.can_access?('user_delete')
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"deleted\": \"0\" }" }
+        end
+      else
+        flash[:alert] = 'An error occured while trying to delete your account'
+        respond_to do |format|
+          format.html { redirect_to :root }
+          format.json { head :no_content }
+        end
+      end
     end
   end
   
@@ -219,7 +236,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id])
+      params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id, :deleted])
     end
 
     def admin_params

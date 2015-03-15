@@ -7,6 +7,7 @@ class CreateHistoryUserInfos < ActiveRecord::Migration
       t.string :from_value, {limit: 20, null: false}
       t.string :to_value, {limit: 20, null: false}
       t.string :change_type, {limit: 50}
+      t.string :comment, {limit: 255, null: true, default: nil}
       t.timestamp :created_at
     end
     execute 'ALTER TABLE history_user_infos ADD PRIMARY KEY (user_id,change_type,created_at);';

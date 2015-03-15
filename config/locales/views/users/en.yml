@@ -9,6 +9,7 @@ en:
   email: "Email"
   activated: "Activated"
   blacklisted: "Blacklisted"
+  deleted: "Deleted"
   preferred_language: "Preferred language"
   password: "Password"
   sign_in: "Sign In"
@@ -21,3 +22,9 @@ en:
   list_users: "List Users"
   new_user: "New User"
   create_user: "Create User"
+  delete_user: "Delete User"
+  delete_comment:
+    - "User request"
+    - "Harmful usage"
+    - "Don't like his/her face"
+    - "Other"

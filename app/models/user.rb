@@ -21,8 +21,6 @@ class User < ActiveRecord::Base
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: true
 
-  after_update
-
   def owner?
     profile.label == Profile::OWNER
   end

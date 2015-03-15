@@ -9,6 +9,7 @@ gr:
   email: "Email"
   activated: "Ενεργοποιημένος"
   blacklisted: "Blacklisted"
+  deleted: "Διεγραμένος"
   preferred_language: "Γλώσσα Προτίμησης"
   password: "Κωδικός Πρόσβασης"
   sign_in: "Είσοδος"
@@ -21,3 +22,9 @@ gr:
   list_users: "Προβολή Χρηστών"
   new_user: "Νέος Χρήστης"
   create_user: "Δημιουργία Χρήστη"
+  delete_user: "Διαγραφή Χρήστη"
+  delete_comment:
+    - "Αίτημα Χρήστη"
+    - "Κακόβουλη χρήση"
+    - "Δε μου αρέσει η φάτσα του"
+    - "Άλλο"
