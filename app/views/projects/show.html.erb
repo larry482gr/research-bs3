@@ -1,8 +1,9 @@
 <h3 class="project_title">
   <%= @project.title %>
-  <span class="project_updated help-block"></span>
-  <%= "#{(t :created_at)} #{l @project.created_at, format: :long} - " %>
-  <%= "#{(t :last_modified)} #{@updated_at}" %>
+  <span class="project_updated help-block">
+    <%= "#{(t :created_at)} #{l @project.created_at, format: :long} - " %>
+    <%= "#{(t :last_modified)} #{@updated_at}" %>
+  </span>
 </h3>
 
 <div class="col-md-7 project_files_table">

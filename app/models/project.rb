@@ -34,6 +34,16 @@ class Project < ActiveRecord::Base
   end
   
   protected
+
+  after_save :set_default_profile
+
+  def set_default_profile
+    query = "UPDATE projects_users
+  			 SET project_profile_id = 4
+  			 WHERE project_id = #{self.id}"
+
+    ActiveRecord::Base.connection.update_sql(query)
+  end
   
   def timeToString(timestamp_difference)
     case timestamp_difference
