@@ -30,10 +30,11 @@ class User < ActiveRecord::Base
   end
 
   def can_access?(right_label)
+    can_access = false
     profile.rights.each do |right|
-      return true if right.label == right_label
+      can_access = true if right.label == right_label
     end
-    return false
+    return can_access
   end
   
   protected
