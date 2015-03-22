@@ -46,13 +46,14 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   end
 
   create_table "history_user_infos", id: false, force: :cascade do |t|
-    t.integer  "user_id",     limit: 4,  default: 0,  null: false
-    t.string   "user_email",  limit: 50,              null: false
-    t.string   "admin",       limit: 20,              null: false
-    t.string   "from_value",  limit: 20,              null: false
-    t.string   "to_value",    limit: 20,              null: false
-    t.string   "change_type", limit: 50, default: "", null: false
-    t.datetime "created_at",                          null: false
+    t.integer  "user_id",     limit: 4,   default: 0,  null: false
+    t.string   "user_email",  limit: 50,               null: false
+    t.string   "admin",       limit: 20,               null: false
+    t.string   "from_value",  limit: 20,               null: false
+    t.string   "to_value",    limit: 20,               null: false
+    t.string   "change_type", limit: 50,  default: "", null: false
+    t.string   "comment",     limit: 255
+    t.datetime "created_at",                           null: false
   end
 
   create_table "invitations", force: :cascade do |t|
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 20140302124650) do
     t.integer "language_id", limit: 4,   default: 1,     null: false
     t.boolean "activated",   limit: 1,   default: false, null: false
     t.boolean "blacklisted", limit: 1,   default: false, null: false
+    t.boolean "deleted",     limit: 1,   default: false, null: false
     t.integer "reports",     limit: 1,   default: 0,     null: false
     t.string  "token",       limit: 255
   end

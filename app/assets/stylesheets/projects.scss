@@ -5,6 +5,7 @@
 /* index */
 .projects_table, .project_files_table {
 	margin-left: 0px !important;
+    padding-left: 0px !important;
 	transition: width 0.6s;
 	-webkit-transition: width 0.6s;
 	-moz-transition: width 0.6s;
@@ -168,15 +169,15 @@
 }
 
 .pdf_modal > .modal-dialog {
-	width: 930px;
-	height: 958px;
+	width: 950px;
+	height: 988px;
 	overflow-y: auto !important;
 }
 
 .pdf_modal .modal-body {
 	text-align: center;
-	height: 900px;
-	max-height: 910px !important;
+	height: 930px;
+	max-height: 940px !important;
 	overflow-y: auto !important;
 }
 
@@ -190,6 +191,10 @@
 	font-size: 12px;
 	font-weight: normal;
 	color: #999 !important;
+}
+
+.project_description {
+  margin-bottom: 12px;
 }
 
 .save-article-btn {
