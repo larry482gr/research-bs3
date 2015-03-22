@@ -26,7 +26,7 @@
     <tbody>
       <%- @project_files.each do |file| %>
         <tr class="pr_file_row" rel="<%= file.project_id %>">
-          <td class="pr_file" rel="<%= file.id %>"><%= file.is_basic ? (t :main_file) : '' %></td>
+          <td class="pr_file" rel="<%= file.id %>" data-extension="<%= file.extension %>"><%= file.is_basic ? (t :main_file) : '' %></td>
           <td rel="<%= file.filepath %>"><%= file.filename %></td>
           <td><%= file.created_at %></td>
           <td><%= file.updated_at %></td>
@@ -50,6 +50,7 @@
         <%= file_field_tag 'project_file[filename]' %>
         <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
         <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
+        <%= hidden_field_tag 'project_file[extension]' %>
       <% end %>
   <% end %>
 </div>

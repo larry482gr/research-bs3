@@ -1,5 +1,5 @@
 class ProjectFilesController < ApplicationController
-
+  before_action :valid_user
   before_action :set_project_file, only: [:show, :edit, :update, :destroy, :set_main]
 
   # GET /project_files
@@ -11,6 +11,16 @@ class ProjectFilesController < ApplicationController
   # GET /project_files/1
   # GET /project_files/1.json
   def show
+    if not @project_file.project.owner?(@current_user.id) and not @project_file.project.contributor?(@current_user.id)
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    else
+      if @project_file.extension == 'pdf'
+        @updated_at = @project_file.getModificationTime
+      else
+         @project_file.filepath and return
+      end
+    end
   end
 
   # GET /project_files/new
@@ -109,13 +119,20 @@ class ProjectFilesController < ApplicationController
       @project_file = ProjectFile.find(params[:id])
     end
 
+    def valid_user
+      if @current_user.nil?
+        flash[:alert] = :no_access
+        redirect_to :root and return
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_file_params
-      params.require(:project_file).permit(:project_id, :filename, :filepath, :is_basic)
+      params.require(:project_file).permit(:project_id, :filename, :extension, :filepath, :is_basic)
     end
     
     def isUrl?
-      params[:project_file][:filepath][0..6] == "http://"
+      params[:project_file][:filepath][0..6] == 'http://'
     end
     
     def upload_file
@@ -150,8 +167,9 @@ class ProjectFilesController < ApplicationController
           # print "\n\n\n"
         end
       end
-      
+
       params[:project_file][:filepath] = "/project_files/" + params[:project_file][:filepath] + "/" + params[:project_file][:filename]
+      params[:project_file][:filename] = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]
       return file_exists
     end
 end

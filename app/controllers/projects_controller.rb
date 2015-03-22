@@ -1,14 +1,15 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :valid_user
   before_action :set_referer, only: [:show, :edit, :new]
+  before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   # GET /projects
   # GET /projects.json
   def index
-    if @current_user.nil?
-      flash[:alert] = :no_access
-      redirect_to :root and return
-    end
+    # if @current_user.nil?
+    #  flash[:alert] = :no_access
+    #  redirect_to :root and return
+    # end
 
     @projects = @current_user.projects
   end
@@ -35,7 +36,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    if @current_user.nil? or not @project.owner?(@current_user.id)
+    if not @project.owner?(@current_user.id)
       flash[:alert] = :no_access
       redirect_to :root and return
     end
@@ -44,6 +45,10 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
+    if @current_user.nil?
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    end
     @project = @current_user.projects.create(project_params)
 
     respond_to do |format|
@@ -100,6 +105,13 @@ class ProjectsController < ApplicationController
     def set_referer
       session[:return_to] = '/'
       session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    end
+
+    def valid_user
+      if @current_user.nil?
+        flash[:alert] = :no_access
+        redirect_to :root and return
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,10 +1,23 @@
-<p id="notice"><%= notice %></p>
+<h3 class="project_title">
+  <%= @project_file.filename %>
+  <span class="project_updated help-block">
+    <%= "#{(t :created_at)} #{l @project_file.created_at, format: :long} - " %>
+    <%= "#{(t :last_modified)} #{@updated_at}" %>
+  </span>
+</h3>
 
-<p><strong>Project: </strong><%= @project_file.project %></p>
-<p><strong>User: </strong><%= @project_file.user %></p>
-<p><strong>Filename: </strong><%= @project_file.filename %></p>
-<p><strong>Is basic: </strong><%= @project_file.is_basic %></p>
+<div class="col-md-7 project_file">
+  <embed width="100%" height="860" style="border:1px solid #ccc" src="<%= @project_file.filepath %>" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">
+  <!--
+  <%= link_to (t :edit),
+                "/#{Language.find(@current_user.user_info.language_id).locale}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/edit" %>
+    \|
+    -->
+    <%= link_to (t :back), project_path(@project_file.project), :class => 'btn btn-sm btn-default' %>
+</div>
 
-<%= link_to t :edit, edit_project_file_path(@project_file) %>
-\|
-<%= link_to t :back, project_files_path %>
+<div class="col-md-5 search_div">
+  <%=render 'static_pages/search_gs' %>
+</div>
+
+<input id="project_id" type="hidden" value="<%= @project_file.project.id %>" />

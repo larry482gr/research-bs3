@@ -65,6 +65,7 @@ $(document).ready(function(){
       doc_link = $(this).find('td:nth-child(2)').attr('rel');
       project_id = $(this).attr('rel');
       file_id = $(this).find('td:first-child').attr('rel');
+      file_ext = $(this).find('td:first-child').data("extension");
       bootbox.dialog({
           title: I18n.t("file_actions_title"),
           message: I18n.t("file_actions_message") + "\"" + doc_title + "\"" + I18n.t("question_mark"),
@@ -90,11 +91,22 @@ $(document).ready(function(){
                   className: "btn-success",
                   callback: function() {
                       $(".bootbox").on('hidden.bs.modal', function () {
+                          if(file_ext == fileExtensions['application/pdf']) {
+                              window.open('/projects/'+project_id+'/project_files/'+file_id, '_self');
+                          }
+                          else {
+                              // Ajax request to check validity of user and retrieve file_path first.
+                              // then...
+                              // window.open(file_path, '_blank');
+                              window.open(doc_link, '_blank');
+                          }
+                          /*
                           bootbox.dialog({
                               title: doc_title,
                               message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">',
                               className: 'pdf_modal'
                           });
+                          */
                       });
                   }
               }
@@ -131,16 +143,66 @@ $(document).ready(function(){
   }
   
   $('#file_btn').on('click', function() {
-  	if($(this).text() == I18n.t('upload_file'))
-  		$('#upload_form #project_file_filename').click();
-  	else
-  		$('#upload_form').submit();
+  	if($(this).text() == I18n.t('upload_file')) {
+        $('#upload_form #project_file_filename').click();
+    }
+  	else {
+        uploadFile = document.getElementById("project_file_filename").files[0];
+        uploadFileType = uploadFile.type;
+        validFile = false;
+        for(i = 0; i < allowedFileTypes.length; i++) {
+            if(uploadFileType === allowedFileTypes[i]) {
+                $('#project_file_extension').val(fileExtensions[uploadFileType]);
+                validFile = true;
+                break;
+            }
+        }
+
+        if(!validFile) {
+            $('#upload_form #project_file_filename').value = '';
+            $('#project_file_extension').val('');
+            this.form.reset();
+            bootbox.alert('Write message for NOT allowed file type.');
+        }
+        else {
+            $('#upload_form').submit();
+        }
+    }
   });
+
+  var allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                          'application/msword', 'application/vnd.oasis.opendocument.text', 'text/plain', 'text/rtf'];
+
+  var fileExtensions = {
+      'application/pdf' : 'pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'docx',
+      'application/msword' : 'doc',
+      'application/vnd.oasis.opendocument.text' : 'odt',
+      'text/plain' : 'txt',
+      'text/rtf' : 'rtf'
+  };
   
   $('#upload_form #project_file_filename').on('change', function(){
   	if($(this).val() != '') {
-		$('#file_btn').text(I18n.t('upload') + ' ' + $(this).val());
-        $('#file_btn').removeClass('btn-success').addClass('btn-danger');
+        uploadFile = this.files[0];
+        uploadFileType = uploadFile.type;
+        validFile = false;
+        for(i = 0; i < allowedFileTypes.length; i++) {
+            if(uploadFileType === allowedFileTypes[i]) {
+                validFile = true;
+                break;
+            }
+        }
+
+        if(!validFile) {
+            this.value = '';
+            $('#upload_form').reset();
+            bootbox.alert('Write message for NOT allowed file type.');
+        }
+        else {
+            $('#file_btn').text(I18n.t('upload') + ' ' + $(this).val());
+            $('#file_btn').removeClass('btn-success').addClass('btn-danger');
+        }
     }
 	else {
         $('#file_btn').text(I18n.t('upload_file'));
