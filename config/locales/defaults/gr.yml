@@ -36,6 +36,7 @@ gr:
   back: "Επιστροφή"
   english: "Aγγλικά"
   greek: "Ελληνικά"
+  my_projects: "Τα έργα μου"
   time:
       formats:
         short: "%d/%m/%Y"

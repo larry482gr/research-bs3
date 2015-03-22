@@ -36,6 +36,7 @@ en:
   back: "Back"
   english: "English"
   greek: "Greek"
+  my_projects: "My Projects"
   time:
       formats:
         short: "%m-%d-%Y"

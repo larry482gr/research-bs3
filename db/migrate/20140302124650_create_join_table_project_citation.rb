@@ -6,6 +6,6 @@ class CreateJoinTableProjectCitation < ActiveRecord::Migration
       t.index [:citation_id, :project_id]
       t.string :citation_type, :limit => 30
     end
-    execute "ALTER TABLE citations_projects ADD PRIMARY KEY (project_id, citation_id);"
+    execute 'ALTER TABLE citations_projects ADD PRIMARY KEY (project_id, citation_id);'
   end
 end

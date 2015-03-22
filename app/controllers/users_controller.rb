@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   require 'digest/sha1'
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_referer, only: [:show, :edit, :new]
 
   # GET /users
   # GET /users.json
@@ -72,8 +72,8 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    session[:return_to] = '/'
-    session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
@@ -92,8 +92,9 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     @user = User.new
-    session[:return_to] = request.referer unless session[:return_to] != nil
     respond_to do |format|
       format.html { render action: 'new' }
       format.json { render json: @user }
@@ -102,8 +103,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    session[:return_to] = '/'
-    session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
       flash[:alert] = "Sorry! You don't have access to this page."
       redirect_to :root and return
@@ -229,9 +230,9 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
+    def set_referer
+      session[:return_to] = '/'
+      session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

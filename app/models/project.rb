@@ -7,6 +7,25 @@ class Project < ActiveRecord::Base
   
   validates :title, presence: true
   validates :description, presence: true
+
+  def owner?(user_id)
+    puts "\n\n\n"
+    puts User.all()
+
+    query = "SELECT project_profile_id FROM projects_users
+  			     WHERE user_id = #{user_id} AND project_id = #{self.id}"
+    result = ActiveRecord::Base.connection.exec_query(query)
+
+    return result.to_hash[0]['project_profile_id'].to_i == 1 unless result.empty?
+  end
+
+  def contributor?(user_id)
+    query = "SELECT project_profile_id FROM projects_users
+  			     WHERE user_id = #{user_id} AND project_id = #{self.id}"
+    result = ActiveRecord::Base.connection.exec_query(query)
+
+    return result.to_hash[0]['project_profile_id'].to_i == 2 unless result.empty?
+  end
   
   def getModificationTime
   	timestamp_difference = Time.now.to_i - self.updated_at.to_i
@@ -39,7 +58,7 @@ class Project < ActiveRecord::Base
 
   def set_default_profile
     query = "UPDATE projects_users
-  			 SET project_profile_id = 4
+  			 SET project_profile_id = 1
   			 WHERE project_id = #{self.id}"
 
     ActiveRecord::Base.connection.update_sql(query)
