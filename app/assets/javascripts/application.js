@@ -68,13 +68,13 @@ $(document).ready(function(){
         location.href = "/logout";
     });
 
-    $('#search').on('focus', function(){
+    $('#search').on('focus', function() {
         if($( document ).width() > 630)
             $(this).parent().addClass('has-success');
             $(this).css('width', '380px').css('background-color', '#FFF').css('border', '1px solid #67b168');
     });
 
-    $('#search').on('blur', function(){
+    $('#search').on('blur', function() {
         $(this).parent().removeClass('has-success');
         $(this).css('width', '200px').css('background-color', '#EEE').css('border', '1px solid #ccc');
     });

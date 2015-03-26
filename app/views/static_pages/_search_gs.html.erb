@@ -1,7 +1,9 @@
 <form onsubmit="return false;">
   <div class="form-group has-success">
     <div class="input-group search_gs">
-      <input type="text" class="form-control pull-right" id="search_gs_input" aria-describedby="search-input" placeholder="<%= t :search_gs %>" />
+      <input type="text" class="form-control pull-right" id="search_gs_input" aria-describedby="search-input" placeholder="<%= t :search_gs %>"
+        value="<%= @search_gs unless @search_gs.nil? %>"
+      />
       <span class="input-group-addon" id="search_gs_btn">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
       </span>
@@ -15,15 +17,14 @@
 
 <div class="search_gs_results"></div>
 <div class="paging paging_bottom">
-  <div id="paging_gs_results">
-    <form>
-      <div id="rows_div">
-        Rows Per Page: <!-- Add it to translations!!! -->
-        <select class="rowsPerPage btn" name="rowsPerPage">
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-      </div>
-    </form>
-  </div>
+  <div id="paging_gs_results"></div>
+  <form>
+    <div id="rows_div">
+      Rows Per Page: <!-- Add it to translations!!! -->
+      <select class="rowsPerPage btn btn-sm btn-default" name="rowsPerPage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </form>
 </div>

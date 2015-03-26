@@ -12,6 +12,8 @@ class ProjectsController < ApplicationController
     # end
 
     @projects = @current_user.projects
+
+    @search_gs = session[:search_gs] unless session[:search_gs].nil?
   end
 
   # GET /projects/1
@@ -27,6 +29,9 @@ class ProjectsController < ApplicationController
     if not @owner
       @contributor = @project.contributor?(@current_user.id)
     end
+
+    @search_gs = session[:search_gs] unless session[:search_gs].nil?
+    session.delete(:search_gs)
   end
 
   # GET /projects/new

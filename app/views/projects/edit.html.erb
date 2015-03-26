@@ -1,7 +1,9 @@
 <h1>Editing project</h1>
 
-<%= render 'form' %>
+<div class="col-md-6">
+  <%= render 'form' %>
+</div>
 
-<%= link_to (t :show), @project %>
-\|
-<%= link_to (t :back), projects_path %>
+<div class="col-md-12">
+  <%= link_to (t :back),  @project %>
+</div>

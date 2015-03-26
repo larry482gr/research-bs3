@@ -16,25 +16,37 @@
         <th><%= (t :filename) %></th>
         <th><%= (t :created_at) %></th>
         <th><%= (t :last_modified) %></th>
-        <!--
-        <th></th>
-        <th></th>
-        <th></th>
-        -->
+        <%- if @owner or @contributor %>
+          <th></th>
+        <% end %>
+        <%- if @owner %>
+          <th></th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
       <%- @project_files.each do |file| %>
         <tr class="pr_file_row" rel="<%= file.project_id %>">
-          <td class="pr_file" rel="<%= file.id %>" data-extension="<%= file.extension %>"><%= file.is_basic ? (t :main_file) : '' %></td>
-          <td rel="<%= file.filepath %>"><%= file.filename %></td>
-          <td><%= file.created_at %></td>
-          <td><%= file.updated_at %></td>
-          <!--
-          <td><%= link_to (t :show), @project %></td>
-          <td><%= link_to (t :edit), edit_project_path(@project) %></td>
-          <td><%= link_to (t :delete), @project, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
-          -->
+          <td class="pr_file" rel="<%= file.id %>">
+            <%- if @owner or @contributor %>
+              <%= file.is_basic ? "[#{(t :main_file)}]" : '' %>
+            <% end %>
+          </td>
+          <td class="pr_file"><%= file.filename %></td>
+          <td class="pr_file"><%= file.created_at %></td>
+          <td class="pr_file"><%= file.updated_at %></td>
+          <%- if @owner or @contributor %>
+            <td>
+              <%- if @owner or @current_user.id == file.user_id %>
+                <%= link_to (t :edit), edit_project_project_file_path(file.project_id, file.id), :class => 'btn btn-xs btn-warning' %>
+              <% end %>
+            </td>
+          <% end %>
+          <%- if @owner %>
+            <td>
+              <%= link_to (t :delete), project_project_file_path(file.project, file.id), :class => 'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' } %>
+            </td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
@@ -47,7 +59,7 @@
   <%- if @owner or @contributor %>
       <%# link_to (t :back), @project,  :class => 'btn btn-sm btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' } %>
       <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
-        <%= file_field_tag 'project_file[filename]' %>
+        <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
         <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
         <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
         <%= hidden_field_tag 'project_file[extension]' %>
@@ -59,6 +71,4 @@
     <div class="col-md-5 search_div">
       <%=render 'static_pages/search_gs' %>
     </div>
-
-    <input id="project_id" type="hidden" value="<%= @project.id %>" />
 <% end %>

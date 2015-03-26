@@ -2,6 +2,14 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.project_file {
+  padding-left: 0px !important;
+}
+
+.project_file > embed {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
 
 .citation-modal {
 	width: 700px !important;

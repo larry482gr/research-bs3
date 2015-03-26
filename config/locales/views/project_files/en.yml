@@ -1,6 +1,6 @@
 en:
   filename: "Filename"
-  main_file: "[Main File]"
+  main_file: "Main File"
   file_actions_title: "File Actions"
   file_actions_message: "What would you like to do with "
   set_main_file: "Set as Main File"
@@ -14,3 +14,8 @@ en:
   save_citation: "Save citation"
   saving_citation: "Saving citation..."
   saved_citation: "Citation saved"
+  file_edit_no_access: "As a collaborator of this project you can only edit files uploaded by you."
+  file_delete_no_access: "Only project owner(s) can delete files."
+  pre_file_delete_success: "File"
+  post_file_delete_success: "successfully deleted"
+  file_delete_error: "An error occurred while deleting your file. Please try again and if this error persists contact our support department."

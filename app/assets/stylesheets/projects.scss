@@ -12,8 +12,12 @@
 	-o-transition: width 0.6s;
 }
 
-.projects_table, .project_files_table table tbody tr {
-	cursor: pointer;
+.projects_table table tbody tr {
+  cursor: pointer;
+}
+
+.project_files_table table tbody tr .pr_file {
+  cursor: pointer;
 }
 
 .search_div {
@@ -199,10 +203,6 @@
 
 .save-article-btn {
 	float: right;
-}
-
-#project_file_filename {
-	display: none;
 }
 
 #upload_form {

@@ -1,6 +1,6 @@
 class UserInfo < ActiveRecord::Base
   belongs_to :user, touch: true
-  has_one :language
+  belongs_to :language
   
   include Tokenable
 

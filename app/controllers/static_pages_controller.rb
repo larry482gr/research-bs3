@@ -23,23 +23,27 @@ class StaticPagesController < ApplicationController
   end
   
   def search_scholar
-    url_extention = "com"
+    url_extension = 'com'
     if I18n.locale != :en
-      url_extention = I18n.locale
+      url_extension = I18n.locale
       # puts I18n.locale
     end
-    
-    question	= params[:question].gsub(" ", "+")
+
+    if request.referer.to_s.end_with?('projects')
+      session[:search_gs] = params[:question]
+    end
+
+    question	= params[:question].gsub(' ', '+')
     start		= params[:start]
     num			= params[:num]
 
-    doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extention}/scholar?q=#{question}&start=#{start}&num=#{num}")))
-    doc.encoding = "UTF-8"
+    doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")))
+    doc.encoding = 'UTF-8'
     
 		response = doc.to_s
-		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extention}/")
+		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
 		# Remove code that causes ajax request error. (13/01/2015)
-		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", "")
+		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
 
 		result_indexes = []
 
@@ -48,12 +52,12 @@ class StaticPagesController < ApplicationController
 		end
 
 		if result_indexes.empty?
-			total_results = "0"
+			total_results = '0'
 			@results = t(:no_results)
 		else
 			total_results_index = []
 			@results = []
-			is_numeric_regex = /^[\d]*(\.|\,[\d]*){0,1}$/
+			is_numeric_regex = /^[\d]*(\.|,[\d]*)*$/
 
 			response[result_indexes.last..response.size].to_enum(:scan,/<script>/i).map do |m,|
 				result_indexes << $`.size + result_indexes.last - 1
@@ -69,7 +73,7 @@ class StaticPagesController < ApplicationController
 
 			total_results_array = response[total_results_index[0]..total_results_index[1]].split
 
-			total_results = ""
+			total_results = ''
 			total_results_array.each do |item|
 				if is_numeric_regex === item
 					total_results = item
@@ -79,7 +83,7 @@ class StaticPagesController < ApplicationController
 			result_indexes[0..result_indexes.size-2].each_with_index do |value, index|
 				@results << response[value..result_indexes[index+1]-4]
 			end
-		end
+    end
 
 		respond_to do |format|
 			format.js { render json: { results: @results, total: total_results.gsub(',', '.') } }
@@ -101,7 +105,7 @@ class StaticPagesController < ApplicationController
       
     else    
       doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
-	  doc.encoding = "UTF-8"
+	  doc.encoding = 'UTF-8'
 	  response = doc.to_s
 	
 	  result_indexes = []
@@ -154,12 +158,12 @@ class StaticPagesController < ApplicationController
     
         
     respond_to do |format|
-	  if result < 1
-	    format.js { render json: "{ \"id\": \"success\" }" }
-	  else
-	    format.js { render json: "{ \"id\": \"error\" }" }
-	  end
-	end
+      if result < 1
+        format.js { render json: "{ \"id\": \"success\" }" }
+      else
+        format.js { render json: "{ \"id\": \"error\" }" }
+      end
+    end
   end
   
 end

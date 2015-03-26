@@ -12,13 +12,13 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     return unless session[:id]
-    @current_user ||= User.find_by_password(session[:id])
+    @current_user ||= User.find_by('password = ? AND email = ?', session[:id], session[:email])
   end
 
   def set_locale
     if @current_user != nil
       begin
-        language = Language.find(@current_user.user_info.language_id)
+        language = Language.find(@current_user.language.id)
         params[:locale] = language.locale
       rescue ActiveRecord::RecordNotFound
         params[:locale] = 'en'

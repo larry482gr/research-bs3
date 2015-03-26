@@ -35,6 +35,7 @@ class UsersController < ApplicationController
         end
       else
         session[:id] = @user.password
+        session[:email] = @user.email
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
@@ -66,6 +67,8 @@ class UsersController < ApplicationController
 
   def logout
     session.delete(:id)
+    session.delete(:email)
+    session.delete(:search_gs)
     redirect_to :root
   end
 
@@ -133,7 +136,7 @@ class UsersController < ApplicationController
         warning_list += '<li>' + warning + '</li>'
       end
       warning_list += '</ul>'
-      warning_message = 'Registration failed because:<br/>'
+      warning_message = '<h4>Registration failed because:</h4>'
       flash[:alert] = (warning_message + warning_list).html_safe
 
       @user = User.new
@@ -161,7 +164,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
-        if @current_user.can_access?('user_edit')
+        if @current_user != @user and @current_user.can_access?('user_edit')
           if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
             @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: @user.profile_id, to_value: admin_params[:profile_id], change_type: 'profile'})
           end
@@ -174,10 +177,6 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def change_profile
-
   end
 
   # DELETE /users/1

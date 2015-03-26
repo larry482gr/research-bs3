@@ -7,13 +7,23 @@
 </h3>
 
 <div class="col-md-7 project_file">
-  <embed width="100%" height="860" style="border:1px solid #ccc" src="<%= @project_file.filepath %>" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">
-  <!--
-  <%= link_to (t :edit),
-                "/#{Language.find(@current_user.user_info.language_id).locale}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/edit" %>
-    \|
-    -->
-    <%= link_to (t :back), project_path(@project_file.project), :class => 'btn btn-sm btn-default' %>
+  <object width="100%" height="860"
+         data="
+            <%- if @project_file.filepath[0..3] == 'http' %>
+              <%= @project_file.filepath %>
+            <%- else %>
+              <%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>
+            <% end %>
+            "
+         alt="<%= @project_file.extension %>" type="<%= @filetype %>">
+    <a href="<%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>">No Support?</a>
+  </object>
+
+  <%- if @can_edit %>
+    <%= link_to (t :edit), edit_project_project_file_path(@project_file.project, @project_file), :class => 'btn btn-sm btn-warning' %>
+  <% end %>
+
+  <%= link_to (t :back), project_path(@project_file.project), :class => 'btn btn-sm btn-default' %>
 </div>
 
 <div class="col-md-5 search_div">

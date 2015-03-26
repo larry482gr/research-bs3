@@ -11,6 +11,7 @@ Researchgr::Application.routes.draw do
       resources :project_files do
         member do
           post :set_main
+          get :get_file
         end
       end
     end

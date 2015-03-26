@@ -24,14 +24,14 @@
 			else
 				prev_disabled = 'disabled';
 				
-			previous = '<button title="PreviousPage" class="btn btn-mini previousPage" '+prev_disabled+'>&laquo; Previous</button>';
+			previous = '<button title="PreviousPage" class="btn btn-sm previousPage" '+prev_disabled+'>&laquo; Previous</button>';
 				
 			if(currentPage != totalPages)
 				next_disabled = '';
 			else
 				next_disabled = 'disabled';
 				
-			next = '<button title="NextPage" class="btn btn-mini nextPage"'+next_disabled+'>Next &raquo;</button>';
+			next = '<button title="NextPage" class="btn btn-sm nextPage"'+next_disabled+'>Next &raquo;</button>';
 		}
 		
 		var paging = previous;
@@ -40,7 +40,7 @@
 				current = 'btn-primary';
 			else
 				current = '';
-			paging = paging + '<button class="btn btn-mini number ' + current + '" title="' + page + '">' + page + '</button>';
+			paging = paging + '<button class="btn btn-sm number ' + current + '" title="' + page + '">' + page + '</button>';
 		}
 		paging = paging + next;
 		

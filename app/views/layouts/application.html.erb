@@ -77,11 +77,11 @@
   <div id="main">
     <%- if flash[:notice] %>
         <div id="notice" class="message">
-          <%= (t flash[:notice]) %>
+          <%= flash[:notice].html_safe %>
         </div>
     <%- elsif flash[:alert] %>
         <div id="alert" class="message">
-          <%= (t flash[:alert]) %>
+          <%= flash[:alert].html_safe %>
         </div>
     <% end %>
     <%= yield %>
