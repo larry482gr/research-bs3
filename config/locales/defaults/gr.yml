@@ -26,8 +26,8 @@ gr:
   no_results: "Δε βρέθηκαν αποτελέσματα για την αναζήτησή σας."
   save: "Αποθήκευση"
   cancel: "Ακύρωση"
-  yes: "Ναι"
-  no: "Όχι"
+  word_yes: "Ναι"
+  word_no: "Όχι"
   question_mark: ";"
   show: "Προβολή"
   edit: "Επεξεργασία"
@@ -37,7 +37,29 @@ gr:
   english: "Aγγλικά"
   greek: "Ελληνικά"
   my_projects: "Τα έργα μου"
+  owner: "Μέλος"
+  collaborator: "Συνεργάτης"
+  send: "Αποστολή"
   time:
       formats:
         short: "%d/%m/%Y"
         long: "%d/%m/%Y (%H:%m:%S)"
+
+  more_than: "περισσότερο από"
+  ago: "πριν"
+  few_seconds: "πριν από λίγα δευτερόλεπτα"
+  year:
+    one: "1 έτος"
+    other: "%{count} έτη"
+  month:
+    one: "1 μήνα"
+    other: "%{count} μήνες"
+  day:
+    one: "1 μέρα"
+    other: "%{count} μέρες"
+  hour:
+    one: "1 ώρα"
+    other: "%{count} ώρες"
+  minute:
+    one: "1 λεπτό"
+    other: "%{count} λεπτά"

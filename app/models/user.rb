@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :projects
   has_many :project_files
+
+  has_many :invitations
   
   has_many :history_user_infos
   has_many :history_projects

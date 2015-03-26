@@ -6,6 +6,7 @@ en:
   created_at: "Created at"
   last_modified: "Last modified"
   private: "Private"
+  invite_user: "Invite User"
   create_project: "Create New Project"
   search_gs: "Search for a book, article or paper"
   upload: "Upload"

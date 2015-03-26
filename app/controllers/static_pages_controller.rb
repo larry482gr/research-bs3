@@ -57,7 +57,7 @@ class StaticPagesController < ApplicationController
 		else
 			total_results_index = []
 			@results = []
-			is_numeric_regex = /^[\d]*(\.|,[\d]*)*$/
+			is_numeric_regex = /^[\d]*((\.|,)?[\d]*)*$/
 
 			response[result_indexes.last..response.size].to_enum(:scan,/<script>/i).map do |m,|
 				result_indexes << $`.size + result_indexes.last - 1
@@ -75,10 +75,8 @@ class StaticPagesController < ApplicationController
 
 			total_results = ''
 			total_results_array.each do |item|
-				if is_numeric_regex === item
-					total_results = item
-				end
-			end
+        total_results = item unless is_numeric_regex.match(item).nil?
+      end
 
 			result_indexes[0..result_indexes.size-2].each_with_index do |value, index|
 				@results << response[value..result_indexes[index+1]-4]

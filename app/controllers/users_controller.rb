@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     if @current_user.nil? or not @current_user.can_access?('user_list')
-      flash[:alert] = :no_access
+      flash[:alert] = (t :no_access)
       redirect_to :root and return
     else
       if @current_user.owner?
@@ -226,6 +226,26 @@ class UsersController < ApplicationController
   def search
     @user = User.find_by(username: params[:search_terms[:username]], email: params[:search_terms[:email]])
     redirect_to user_path(@user)
+  end
+
+  def autocomplete
+    @users = nil
+    unless @current_user.nil?
+      if @current_user.owner?
+        @users = User.select('email').where('id != ?', @current_user.id).order('email')
+      elsif @current_user.admin?
+        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
+        # @users = User.order('profile_id, username').where('profile_id >= ?', 2)
+        # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
+      else
+        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
+      end
+    end
+
+    respond_to do |format|
+      format.js {}
+      format.json { render json: @users }
+    end
   end
 
   private

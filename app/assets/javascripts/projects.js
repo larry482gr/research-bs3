@@ -10,8 +10,28 @@ $(document).ready(function() {
       'text/plain' : 'txt',
       'text/rtf' : 'rtf'
   };
+
+  $('#invite-user-btn').on('click', function() {
+      if($('#invite-user-div').is(':hidden')) {
+          $('.left-div').removeClass('col-md-10').addClass('col-md-8');
+          $('.right-div').removeClass('col-md-2').addClass('col-md-4');
+          $('#invite-user-div').delay(400).slideDown('fast');
+
+          $('#invitation_email').val('');
+          $('#invitation_profile').find('option[value="2"]').attr("selected",true);
+          $('#invitation_profile option').each(function() {
+             $(this).html(I18n.t($(this).html()));
+          });
+      }
+      else {
+          $('#invite-user-div').slideUp('fast', function(){
+              $('.left-div').removeClass('col-md-8').addClass('col-md-10');
+              $('.right-div').removeClass('col-md-4').addClass('col-md-2');
+          });
+      }
+  });
   
-  $('.projects_table .table tr').on('click', function(){
+  $('.projects_table .table tr').on('click', function() {
 	 link = $(this).attr('id');
 	 //alert(link);
 	 location.href = link;
@@ -138,4 +158,5 @@ $(document).ready(function() {
           }
       });
   }
+    // checkInvitations();
 });

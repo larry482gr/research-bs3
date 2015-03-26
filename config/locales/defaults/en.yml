@@ -26,8 +26,8 @@ en:
   no_results: "No results found."
   save: "Save"
   cancel: "Cancel"
-  yes: "Yes"
-  no: "No"
+  word_yes: "Yes"
+  word_no: "No"
   question_mark: "?"
   show: "Show"
   edit: "Edit"
@@ -37,7 +37,30 @@ en:
   english: "English"
   greek: "Greek"
   my_projects: "My Projects"
+  owner: "Member"
+  collaborator: "Collaborator"
+  send: "Send"
+
   time:
       formats:
         short: "%m-%d-%Y"
         long: "%m-%d-%Y (%H:%m:%S)"
+
+  more_than: "more than"
+  ago: "ago"
+  few_seconds: "a few seconds ago"
+  year:
+    one: "1 year"
+    other: "%{count} years"
+  month:
+    one: "1 month"
+    other: "%{count} months"
+  day:
+    one: "1 day"
+    other: "%{count} days"
+  hour:
+    one: "1 hour"
+    other: "%{count} hours"
+  minute:
+    one: "1 minute"
+    other: "%{count} minutes"

@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
 //= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require turbolinks
@@ -22,7 +23,7 @@
 //= require_tree .
 
 $(document).ready(function(){
-    // PNotify.prototype.options.styling = "fontawesome";
+    PNotify.prototype.options.styling = "fontawesome";
 
     $('.container').on('click', '#sign-in', function() {
         var message_text = '<form class="form-horizontal">'+
@@ -130,40 +131,4 @@ $(document).ready(function(){
             });
         }
     });
-
-    /*
-    $(function(){
-        new PNotify({
-            title: 'Regular Notice',
-            text: 'Check me out! I\'m a notice.'
-        });
-    });
-    */
 });
-
-function signIn() {
-    $("#warning").remove();
-    $.ajax({
-        url: "check_login",
-        cache: false,
-        type: "post",
-        data: "user[username]=" + $('#inputUsername').val() + "&user[password]=" + $('#inputPassword').val(),
-        dataType: "json",
-        success: function(user) {
-            if (user.id > 0) {
-                location.href = "projects"; // "http://localhost:3000";
-            }
-            else if (user.id == 0){
-                $(".modal").modal("hide");
-                $("#main").prepend("<div id='alert' class='message'>Please activate your account by following the link you will find at your email.</div>");
-            }
-            else if (user.id == -1){
-                $(".modal").modal("hide");
-                $("#main").prepend("<div id='alert' class='message'>Your account has been blacklisted. Please contact us at <a href='mailto:info@research.org.gr'>info@research.org.gr</a> if you need more information.</div>");
-            }
-            else{
-                $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);
-            }
-        }
-    });
-}

@@ -185,7 +185,7 @@ class ProjectFilesController < ApplicationController
 
     def valid_user
       if @current_user.nil?
-        flash[:alert] = :no_access
+        flash[:alert] = (t :no_access)
         redirect_to :root and return
       end
     end

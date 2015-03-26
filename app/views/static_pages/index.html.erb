@@ -4,4 +4,6 @@
   <h2>ResearchGr</h2>
 </div>
 
-<%= render ('users/registration_form') %>
+<%- if @current_user.nil? %>
+  <%= render ('users/registration_form') %>
+<% end %>

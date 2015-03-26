@@ -1,7 +1,10 @@
 class Project < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_and_belongs_to_many :citations
+
   has_many :project_files
+  has_many :invitations
+
   has_many :history_reports
   has_many :history_projects
   

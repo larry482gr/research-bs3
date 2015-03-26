@@ -32,20 +32,6 @@ $(document).ready(function() {
         });
     }
 
-    $('#search_gs_input').on('focus', function() {
-        if($(".search_div").hasClass("col-md-5"))
-            $(this).css('width', '100%');
-    });
-
-    $('#search_gs_input').on('blur', function() {
-        if ($(this).val().length == 0) {
-            $('.projects_table').removeClass("col-md-4").addClass("col-md-7");
-            $('.search_div').removeClass("col-md-8").addClass("col-md-5");
-            if($(".search_gs_results").text().length == 0)
-                $(this).css('width', '280px');
-        }
-    });
-
     // Current page
     $('.paging').on('click', '.number', function() {
         var pageNumber = $(this).attr('title');
@@ -185,7 +171,7 @@ function saveCitation(citation_type, doc_id) {
 
 // Override Google Scholar's functions
 function gs_sva(doc_id, doc_num) {
-    if (typeof $('#project_id').val() != "undefined"){
+    if (typeof $('#project_id').val() !== "undefined") {
         element_link = $('.container').find('#gs_svl' + doc_num);
         doc_title = element_link.parent().parent().parent().find('h3').find('a').text();
         doc_link = element_link.parent().parent().parent().prev().find('.gs_md_wp').find('a').attr('href');

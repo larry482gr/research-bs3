@@ -4,16 +4,30 @@
 
 /* index */
 .projects_table, .project_files_table {
-	margin-left: 0px !important;
-    padding-left: 0px !important;
 	transition: width 0.6s;
 	-webkit-transition: width 0.6s;
 	-moz-transition: width 0.6s;
 	-o-transition: width 0.6s;
 }
 
+.projects_table, .project_files_table tr th, td {
+  padding: 6px !important;
+}
+
+.projects_table, .project_files_table tr th.center, td.center {
+  vertical-align: middle !important;
+}
+
+.projects_table, .project_files_table table thead tr th {
+  white-space: nowrap;
+}
+
 .projects_table table tbody tr {
   cursor: pointer;
+}
+
+.project_files_table table tbody tr td:first-child {
+  white-space: nowrap;
 }
 
 .project_files_table table tbody tr .pr_file {
@@ -21,47 +35,51 @@
 }
 
 .search_div {
-	transition: width 0.6s;
-	-webkit-transition: width 0.6s;
-	-moz-transition: width 0.6s;
-	-o-transition: width 0.6s;
+  padding: 0px;
+  margin-top: 20px;
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
 }
 
 #exact_match_div {
-	@media screen and (min-width: 767px) {
-		float: right;
-	}
+  padding: 0px !important;
+}
+
+#exact_match_div > .checkbox > label {
+  padding-left: 0px;
+  padding-right: 15px;
 }
 
 #exact_match {
-	margin-top: 0px;
+    margin-top: 3px;
+	margin-left: 4px;
 }
 
 .create_project {
 	color: #FFF !important;
 }
 
-.search_div {
-	@media screen and (max-width: 767px) {
-		margin-top: 20px;
-		border-top: 1px solid #999;
-	}
-}
-
 .search_gs_results {
-	@media screen and (min-width: 767px) {
-		margin-top: 40px;
-	}
+  padding: 0px;
 }
 
 .search_gs {
 	width: 100%;
 	@media screen and (min-width: 767px) {
-		text-align: right;
+
 	}
 	@media screen and (max-width: 767px) {
 		margin-top: 10px;
 	}
+}
+
+#search_gs_form {
+  padding-top: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
+  border-top: 1px solid #999999;
 }
 
 #rows_div {
@@ -71,7 +89,6 @@
 }
 
 #search_gs_input {
-	width: 280px;
 	transition: width 0.4s;
 	-webkit-transition: width 0.4s;
 	-moz-transition: width 0.4s;
@@ -149,7 +166,8 @@
 }
 
 .paging_bottom {
-	margin-top: 30px;
+  padding: 0px;
+  margin-top: 20px;
 }
 
 #paging_gs_results {
@@ -187,8 +205,56 @@
 
 /* show */
 
+.left-div {
+  padding: 0px;
+
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
+
+}
+
+.right-div {
+  @media screen and (min-width: 767px) {
+    padding-right: 0px;
+  }
+  @media screen and (max-width: 768px) {
+    padding-left: 0px;
+  }
+
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
+}
+
 .project_title {
-	line-height: 26px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  line-height: 26px;
+}
+
+#invite-user-div {
+  display: none;
+}
+
+#invite-user-btn {
+  margin-bottom: 8px;
+}
+
+.invite-user {
+  @media screen and (min-width: 767px) {
+    text-align: right;
+  }
+  @media screen and (max-width: 768px) {
+    padding-left: 0px;
+    margin-top: 10px;
+  }
+}
+
+#invite-user-form {
+  margin-bottom: 10px;
 }
 
 .project_updated {
