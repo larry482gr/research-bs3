@@ -1,0 +1,8 @@
+en:
+  invitations: "Invitations"
+  no_invitation_access: "Sorry! You don't have the appropriate rights to invite people to this project."
+  invitation_sent: "Invitation successfully sent to"
+  invitation_fail: "Invitation failed to be sent."
+  accept: "Accept"
+  discard: "Discard"
+  report: "Report user"

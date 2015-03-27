@@ -58,6 +58,17 @@ class Project < ActiveRecord::Base
     
     return ActiveRecord::Base.connection.insert_sql(query)
   end
+
+  def add_user(user_id, project_profile)
+    self_id = ActiveRecord::Base.connection.quote(self.id)
+    user_id = ActiveRecord::Base.connection.quote(user_id)
+    project_profile = ActiveRecord::Base.connection.quote(project_profile)
+
+    query = "INSERT INTO projects_users
+  			 VALUES (#{user_id}, #{self_id}, #{project_profile})"
+
+    ActiveRecord::Base.connection.update_sql(query)
+  end
   
   protected
 

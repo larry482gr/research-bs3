@@ -110,3 +110,31 @@
 .left {
   text-align: left;
 }
+
+.nav > li > a.active {
+  color: #337ab7 !important;
+}
+
+.badge.active {
+  background-color: #337ab7;
+  color: #ffffff;
+}
+
+.invitation-popover {
+  width: 340px !important;
+  max-width: 360px !important;
+}
+
+.invitation-popover-text {
+  padding-top: 6px;
+  margin-bottom: 8px;
+}
+
+.invitation-popover-buttons {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #999999;
+}
+
+.invitation-accept-btn {
+  margin-right: 4px;
+}

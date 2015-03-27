@@ -23,7 +23,7 @@
 //= require_tree .
 
 $(document).ready(function(){
-    PNotify.prototype.options.styling = "fontawesome";
+    // PNotify.prototype.options.styling = "fontawesome";
 
     $('.container').on('click', '#sign-in', function() {
         var message_text = '<form class="form-horizontal">'+

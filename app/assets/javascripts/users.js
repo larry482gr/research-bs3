@@ -28,6 +28,43 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('.navbar-right').on('click', '.invitation-btn', function() {
+        user_id = $(this).parent().attr('rel');
+        status = '';
+        if($(this).hasClass('btn-success')) {
+            status = 'accepted';
+        }
+        else if($(this).hasClass('btn-danger')) {
+            status = 'discarded';
+        }
+        else if($(this).hasClass('btn-default')) {
+            status = 'reported';
+        }
+
+        $.ajax({
+            url: '/users/'+user_id+'/invitations/'+$(this).attr('rel'),
+            type: 'patch',
+            data: {
+                'invitation[status]': status
+            },
+            dataType: 'json',
+            success: function(result) {
+                if(result.error_code == 0) {
+                    if(result.status == 'accepted') {
+                        location.href = '/projects';
+                    }
+                    else {
+                        location.reload();
+                    }
+                }
+                else {
+                    bootbox.alert("Message was: " + result.error_code);
+                }
+            }
+
+        });
+    });
 });
 
 function checkInvitations() {
@@ -38,6 +75,7 @@ function checkInvitations() {
         dataType: "json",
         success: function(invitations) {
             if (invitations.length > 0) {
+                content = '';
                 for(i = 0; i < invitations.length; i++) {
                     user = '';
                     if(invitations[i].user.first_name != null && invitations[i].user.first_name.trim().length > 0) {
@@ -51,18 +89,36 @@ function checkInvitations() {
                     user = user.trim().length == 0 ? email : user + ' (' + email + ')';
 
 
-                    text = 'You have been invited by ' + user + ' to participate in ' + invitations[i].project.project_title;
+                    text = 'You have been invited by <i>' + user + '</i> to participate in <b>"' + invitations[i].project.project_title + '"</b>';
                     date = invitations[i].date;
-                    $(function() {
-                        new PNotify({
-                            title: 'Invitation (sent at ' + date + ')',
-                            text: text
-                        });
-                    });
+
+                    content += getInvitationRow(invitations[i].user.id, invitations[i].id, text, date);
                 }
+
+                invitation_template = '<div class="popover invitation-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
+
+                $('#invitations-link').popover({
+                    template: invitation_template,
+                    content: content,
+                    html: true,
+                    placement: 'bottom',
+                    trigger: 'focus'
+                });
             }
         }
     });
+}
+
+function getInvitationRow(user_id, id, text, date) {
+    accept_btn  = '<button type="button" class="invitation-btn btn btn-xs btn-success" rel="'+id+'">'+I18n.t("accept")+'</button>';
+    discard_btn = '<button type="button" class="invitation-btn btn btn-xs btn-danger" rel="'+id+'">'+I18n.t("discard")+'</button>';
+    report_btn  = '<button type="button" class="invitation-btn btn btn-xs btn-default pull-right" rel="'+id+'">'+I18n.t("report")+'</button>';
+
+    // invitation  = '<span class="help-block">'+date+'</span>';
+    invitation = '<div class="invitation-popover-text">'+text+'</div>';
+    invitation += '<div class="invitation-popover-buttons" rel="'+user_id+'">'+accept_btn+' '+discard_btn+' '+report_btn+'</div>';
+
+    return invitation;
 }
 
 function signIn() {

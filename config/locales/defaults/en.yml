@@ -40,6 +40,8 @@ en:
   owner: "Member"
   collaborator: "Collaborator"
   send: "Send"
+  try_again: "Please try again."
+  error_persists: "If this error persists contact our support department at... (support_mail)"
 
   time:
       formats:

@@ -34,7 +34,17 @@
       <% end %>
       <ul class="nav navbar-nav navbar-right">
         <%- unless @current_user.nil? %>
-            <li><a href="<%= "/#{Language.find(@current_user.user_info.language_id).locale}/projects" %>"><%= (t :my_projects) %></a></li>
+          <% invitation_count = @current_user.invitations.where('status = ?', 'pending').count %>
+          <%- unless invitation_count.zero? %>
+            <li>
+              <!-- <a href="<%= user_invitations_path(@current_user) %>" class="active" id="invitations-link"><%= (t :invitations) %> <span class="badge active"><%= invitation_count %></span></a> -->
+              <a href="#" class="active" id="invitations-link"><%= (t :invitations) %> <span class="badge active"><%= invitation_count %></span></a>
+              <script type="text/javascript">
+                checkInvitations();
+              </script>
+            </li>
+          <% end %>
+          <li><a href="<%= projects_path %>"><%= (t :my_projects) %></a></li>
         <% end %>
         <!--
         <li><a href="#">Another Link</a></li>
