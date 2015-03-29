@@ -62,15 +62,16 @@ group :test do
   gem 'sqlite3'
 end
 
-group :development, :production do
-  gem 'mysql2'
-end
+# group :development, :production do
+#  gem 'mysql2'
+#end
 
 # For Heroku deployment
-# group :production do
-#   gem 'pg'
-#   gem 'rails_12factor'
-# end
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
+  gem 'puma'
+end
 
 gem 'dynamic_form'
 gem 'pdf-reader'
