@@ -26,4 +26,8 @@ class ApplicationController < ActionController::Base
     end
     I18n.locale = params[:locale]
   end
+
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
 end

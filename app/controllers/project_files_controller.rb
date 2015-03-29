@@ -8,7 +8,8 @@ class ProjectFilesController < ApplicationController
   # GET /project_files
   # GET /project_files.json
   def index
-    redirect_to project_path(Project.find(params[:project_id]))
+    project = Project.find(params[:project_id])
+    redirect_to project_path(project)
   end
 
   # GET /project_files/1
