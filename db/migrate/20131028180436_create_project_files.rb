@@ -6,8 +6,8 @@ class CreateProjectFiles < ActiveRecord::Migration
       t.string :filename, {null: false}
       t.string :extension, {limit: 10, null: false}
       t.string :filepath, {null: false}
-      t.boolean :is_basic
-      t.boolean :is_old
+      t.boolean :is_basic, {null: false, default: false}
+      t.boolean :is_old, {null: false, default: false}
 
       t.timestamps
     end
