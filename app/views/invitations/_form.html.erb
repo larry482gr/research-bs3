@@ -10,6 +10,7 @@
                 <%= email_field_tag 'invitation[email]', nil, { :class => 'form-control', :placeholder => 'Search user by email' } %>
               </div>
             </div>
+            <!--
             <div class="form-group">
               <label for="user-profile" class="col-md-5 control-label">User profile</label>
               <div class="col-md-7">
@@ -17,6 +18,7 @@
                 <%= select_tag 'invitation[profile]', options_from_collection_for_select(ProjectProfile.all, 'id', 'label'), { :include_blank => false, :class => 'form-control' } %>
               </div>
             </div>
+            -->
             <div class="form-group">
               <div class="col-md-offset-8 col-md-4">
                 <button type="submit" class="btn btn-sm btn-success"><%= (t :send) %></button>
@@ -25,30 +27,6 @@
         <% end %>
     <% end %>
 
-    <!--
-    <form id="invite-user-form" class="form-horizontal" onsubmit="return false;">
-      <div class="form-group">
-        <label for="user-email" class="col-md-5 control-label">User email</label>
-        <div class="col-md-7">
-          <input type="email" class="form-control" id="user-email" name="invitation[user_id]" placeholder="Search user by email">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="user-profile" class="col-md-5 control-label">User profile</label>
-        <div class="col-md-7">
-          <select class="form-control" id="user-profile" name="invitation[profile]">
-            <option value="1"><%= (t :owner) %></option>
-            <option value="2"><%= (t :collaborator) %></option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-offset-8 col-md-4">
-          <button type="submit" class="btn btn-sm btn-success"><%= (t :send) %></button>
-        </div>
-      </div>
-    </form>
-    -->
   </div>
 
   <script type="text/javascript">

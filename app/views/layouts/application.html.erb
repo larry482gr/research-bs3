@@ -39,6 +39,16 @@
             <li>
               <!-- <a href="<%= user_invitations_path(@current_user) %>" class="active" id="invitations-link"><%= (t :invitations) %> <span class="badge active"><%= invitation_count %></span></a> -->
               <a href="#" class="active" id="invitations-link"><%= (t :invitations) %> <span class="badge active"><%= invitation_count %></span></a>
+              <input type='hidden' id='discard-options' value='
+                <%- (t :discard_comment).each do |option| %>
+                <%= "<option value=\"#{option}\">#{option}</option>" %>
+                <% end %>
+              '>
+              <input type='hidden' id='report-options' value='
+                <%- (t :report_comment).each do |option| %>
+                <%= "<option value=\"#{option}\">#{option}</option>" %>
+                <% end %>
+              '>
               <script type="text/javascript">
                 checkInvitations();
               </script>

@@ -31,39 +31,17 @@ $(document).ready(function() {
 
     $('.navbar-right').on('click', '.invitation-btn', function() {
         user_id = $(this).parent().attr('rel');
-        status = '';
+        invitation_id = $(this).attr('rel');
+
         if($(this).hasClass('btn-success')) {
-            status = 'accepted';
+            updateInvitation(user_id, invitation_id, 'accepted', null);
         }
         else if($(this).hasClass('btn-danger')) {
-            status = 'discarded';
+            invitationModal(user_id, invitation_id, 'discard');
         }
         else if($(this).hasClass('btn-default')) {
-            status = 'reported';
+            invitationModal(user_id, invitation_id, 'report');
         }
-
-        $.ajax({
-            url: '/users/'+user_id+'/invitations/'+$(this).attr('rel'),
-            type: 'patch',
-            data: {
-                'invitation[status]': status
-            },
-            dataType: 'json',
-            success: function(result) {
-                if(result.error_code == 0) {
-                    if(result.status == 'accepted') {
-                        location.href = '/projects';
-                    }
-                    else {
-                        location.reload();
-                    }
-                }
-                else {
-                    bootbox.alert("Message was: " + result.error_code);
-                }
-            }
-
-        });
     });
 });
 
@@ -121,6 +99,99 @@ function getInvitationRow(user_id, id, text, date) {
     return invitation;
 }
 
+function invitationModal(user_id, invitation_id, status) {
+    other_position = status == "discard" ? 2 : 3;
+    var message_text = '<form id="abort-invitation" onsubmit="return false;">' +
+        '<div class="form-group">' +
+        '<label class="control-label" for="reason">'+I18n.t("reason")+'</label>' +
+        '<select id="reason" name="reason" class="form-control">' +
+        $('#'+status+'-options').val() +
+        '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+            '<textarea class="form-control" rows="2"></textarea>' +
+        '</div>' +
+        '</form>' +
+        '<script type="text/javascript">' +
+            '$("#abort-invitation").on("change", "#reason", function(){' +
+                'if($(this).val() == I18n.t("'+status+'_comment.'+other_position+'")) {' +
+                    '$("#abort-invitation textarea").show();' +
+                    '$("#abort-invitation textarea").before("<div>' +
+                                    '<div><span class=\'help-block\'>'+I18n.t("write_comment")+'</span></div>' +
+                                    '<div><span class=\'help-block error-block\'></span></div>' +
+                                '</div>")' +
+                '}' +
+                'else {' +
+                    '$("#abort-invitation textarea").prev().remove();' +
+                    '$("#abort-invitation textarea").hide();' +
+                '}' +
+            '});' +
+            '$("#abort-invitation textarea").on("focus", function(){' +
+                '$(".modal").find("#abort-invitation .error-block").html("");' +
+            '});'
+        '</script>';
+
+    bootbox.dialog({
+        title: I18n.t(status+"_invitation"),
+        message: message_text,
+        buttons: {
+            cancel: {
+                label: I18n.t("cancel"),
+                className: "btn btn-default",
+            },
+            del: {
+                label: I18n.t("ok"),
+                className: "btn btn-success",
+                callback: function () {
+                    if($('.modal').find('#reason').val() == I18n.t(status+"_comment."+other_position) &&
+                        $('.modal').find("#abort-invitation textarea").val().trim().length == 0) {
+                            $('.modal').find("#abort-invitation .error-block").html(I18n.t("provide_comment"));
+                            return false;
+                    }
+                    else if($('.modal').find('#reason').val() == I18n.t(status+"_comment."+other_position) &&
+                        $('.modal').find("#abort-invitation textarea").val().trim().length > 200) {
+                            $('.modal').find("#abort-invitation .error-block").html(I18n.t("large_comment"));
+                            return false;
+                    }
+                    else {
+                        reason = $('.modal').find('#reason').val();
+                        if(reason == I18n.t(status+"_comment."+other_position)) {
+                            reason += ' (' + $('.modal').find("#abort-invitation textarea").val().trim() + ')';
+                        }
+                        updateInvitation(user_id, invitation_id, status+'ed', reason);
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateInvitation(user_id, invitation_id, status, reason) {
+    $.ajax({
+        url: '/users/'+user_id+'/invitations/'+invitation_id,
+        type: 'patch',
+        data: {
+            'invitation[status]': status,
+            'invitation[reason]': reason
+        },
+        dataType: 'json',
+        success: function(result) {
+            if(result.error_code == 0) {
+                if(result.status == 'accepted') {
+                    location.href = '/projects';
+                }
+                else {
+                    location.reload();
+                }
+            }
+            else {
+                bootbox.alert("Message was: " + result.error_code);
+            }
+        }
+
+    });
+}
+
 function signIn() {
     $("#warning").remove();
     $.ajax({
@@ -164,7 +235,7 @@ function deleteUser(url, comment) {
             }
         },
         error: function(response) {
-            bootbox.alert('Error!!!');
+            bootbox.alert(response);
         }
     });
 }

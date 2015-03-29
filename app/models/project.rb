@@ -5,13 +5,14 @@ class Project < ActiveRecord::Base
   has_many :project_files
   has_many :invitations
 
-  has_many :history_reports
   has_many :history_projects
   
   validates :title, presence: true
   validates :description, presence: true
 
   include TimeElapsed
+
+  MAX_PRIVATE = 5
 
   def owner?(user_id)
     user_id		= ActiveRecord::Base.connection.quote(user_id)

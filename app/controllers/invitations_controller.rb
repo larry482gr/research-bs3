@@ -45,11 +45,17 @@ class InvitationsController < ApplicationController
 
     @user = User.find_by_email(params[:invitation][:email])
 
-    @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id, project_profile_id: params[:invitation][:profile])
-    if @invitation.save
-      notice = "#{(t :invitation_sent)} #{@user.username}"
-    else
-      alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
+    # @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id, project_profile_id: params[:invitation][:profile])
+    begin
+      @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
+      if @invitation.save
+        notice = "#{(t :invitation_sent)} #{@user.username}"
+      else
+        alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
+      end
+    rescue ActiveRecord::RecordNotUnique
+      error_msg = (t :invitation_duplicate).to_s.gsub('_@user@_', @user.username).gsub('_@project@_', @project.title)
+      alert = error_msg
     end
 
     respond_to do |format|
@@ -70,10 +76,20 @@ class InvitationsController < ApplicationController
     end
 
     invitation = Invitation.find(params[:id])
+    if params[:invitation][:reason].empty?
+      params[:invitation][:reason] = nil
+    end
     if invitation.update(invitation_params)
       error_code = 0
       if invitation.status.to_s == 'accepted'
         error_code = 1 unless invitation.project.add_user(invitation.user.id, invitation.project_profile.id)
+      elsif invitation.status.to_s == 'reported'
+        inv_sender = User.find(invitation.from_user)
+        user_reports = inv_sender.user_info.reports + 1
+        error_code = 1 unless inv_sender.user_info.update(:reports => user_reports)
+        if user_reports >= 10
+          error_code = 1 unless inv_sender.user_info.update(:blacklisted => 1)
+        end
       end
     else
       error_code = 1
@@ -95,7 +111,8 @@ class InvitationsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def invitation_params
-    params.require(:invitation).permit(:email, :profile, :status)
+    # params.require(:invitation).permit(:email, :profile, :status, :reason)
+    params.require(:invitation).permit(:email, :status, :reason)
   end
 
   def valid_user

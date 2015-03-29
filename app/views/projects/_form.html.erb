@@ -17,11 +17,18 @@
     <%= f.label :description %>
     <%= f.text_area :description, class: 'form-control' %>
   </div>
-  <div class="field checkbox">
-    <label>
-      <%= f.check_box :is_private %><%= t :private %>
-    </label>
-  </div>
+  <%- if @private_count < Project::MAX_PRIVATE %>
+      <div class="field checkbox">
+        <label>
+          <%= f.check_box :is_private %><%= (t :private) %>
+        </label>
+        <span class="help-block">
+          <%= "#{(t :max_private)} <b>#{Project::MAX_PRIVATE}</b>".html_safe %>
+          <br/>
+          <%= "#{(t :users_private)} <b>#{@private_count}</b>".html_safe %>
+        </span>
+      </div>
+  <% end %>
   <div class="actions">
     <%= f.submit (t :save), class: 'btn btn-small btn-success' %>
     <%= link_to (t :back), projects_path, {class: 'btn btn-mini btn-default'} %>

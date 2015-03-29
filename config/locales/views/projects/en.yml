@@ -6,6 +6,8 @@ en:
   created_at: "Created at"
   last_modified: "Last modified"
   private: "Private"
+  max_private: "Maximum private projects:"
+  users_private: "Currently owned private projects:"
   invite_user: "Invite User"
   create_project: "Create New Project"
   search_gs: "Search for a book, article or paper"

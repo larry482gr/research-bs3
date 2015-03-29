@@ -15,7 +15,7 @@ class StaticPagesController < ApplicationController
     end
     
     @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: @current_user.id, username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: @current_user.profile_id)
-    @projects = Project.where("title LIKE :title", title: "%#{params[:question]}%")
+    @projects = Project.where("title LIKE :title AND is_private = :private", { title: "%#{params[:question]}%", private: 0 })
     
     respond_to do |format|
 	  	format.json { render json: { :users => @users, :projects => @projects } }

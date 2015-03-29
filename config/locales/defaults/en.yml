@@ -26,6 +26,7 @@ en:
   no_results: "No results found."
   save: "Save"
   cancel: "Cancel"
+  ok: "Ok"
   word_yes: "Yes"
   word_no: "No"
   question_mark: "?"
@@ -42,6 +43,9 @@ en:
   send: "Send"
   try_again: "Please try again."
   error_persists: "If this error persists contact our support department at... (support_mail)"
+  write_comment: "Write a comment"
+  provide_comment: "In this case you <b>must</b> provide a comment"
+  large_comment: "Your comment should not exceed 200 characters"
 
   time:
       formats:

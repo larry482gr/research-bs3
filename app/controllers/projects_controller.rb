@@ -21,14 +21,19 @@ class ProjectsController < ApplicationController
   def show
     # session[:return_to] = '/'
     # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
-  	@updated_at = @project.getModificationTime
-  	@project_files = @project.project_files
-
     @owner = @project.owner?(@current_user.id)
 
     if not @owner
       @contributor = @project.contributor?(@current_user.id)
     end
+
+    if not (@owner or @contributor) and @project.is_private
+      flash[:alert] = (t :no_access)
+      redirect_to :root and return
+    end
+
+    @updated_at = @project.getModificationTime
+    @project_files = @project.project_files
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
     session.delete(:search_gs)
@@ -37,6 +42,10 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @project = Project.new
+    @private_count = 0
+    @current_user.projects.each do |project|
+      @private_count += 1 if project.is_private and project.owner?(@current_user.id)
+    end
   end
 
   # GET /projects/1/edit

@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
   
   has_many :history_user_infos
   has_many :history_projects
-  has_many :history_reports
 
   accepts_nested_attributes_for :user_info
   

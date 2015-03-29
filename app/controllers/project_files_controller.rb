@@ -15,7 +15,7 @@ class ProjectFilesController < ApplicationController
   # GET /project_files/1.json
   def show
     if not (@project_file.project.owner?(@current_user.id) or @project_file.project.contributor?(@current_user.id))
-      flash[:alert] = :no_access
+      flash[:alert] = t :no_access
       if is_url?(@project_file.filepath)
         session[:search_gs] = @project_file.filename
         redirect_to projects_path and return
@@ -45,7 +45,7 @@ class ProjectFilesController < ApplicationController
   # GET /project_files/1/edit
   def edit
     if not @can_edit
-      flash[:alert] = :file_edit_no_access
+      flash[:alert] = t :file_edit_no_access
       redirect_to project_path(Project.find(params[:project_id]))
     end
   end
@@ -77,7 +77,7 @@ class ProjectFilesController < ApplicationController
   def create
     @project = Project.find(params[:project_id])
     if not (@project.owner?(@current_user.id) or @project.contributor?(@current_user.id))
-      flash[:alert] = :no_access
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @project = Project.find(params[:project_id])
@@ -114,7 +114,7 @@ class ProjectFilesController < ApplicationController
   # noinspection RubyArgCount
   def update
     if not @can_edit
-      flash[:alert] = :file_edit_no_access
+      flash[:alert] = t :file_edit_no_access
       redirect_to project_path(Project.find(params[:project_id]))
     end
     respond_to do |format|
@@ -133,14 +133,14 @@ class ProjectFilesController < ApplicationController
   # noinspection RubyArgCount
   def destroy
     if not @project_file.project.owner?(@current_user.id)
-      alert = :file_delete_no_access
+      alert = t :file_delete_no_access
     else
       project = @project_file.project
       filename = @project_file.filename
 
       if delete_file
         if not @project_file.destroy
-          alert = :file_delete_error
+          alert = t :file_delete_error
         else
           notice = "#{(t :pre_file_delete_success)} \"#{filename}\" #{(t :post_file_delete_success)}"
         end
@@ -185,7 +185,7 @@ class ProjectFilesController < ApplicationController
 
     def valid_user
       if @current_user.nil?
-        flash[:alert] = (t :no_access)
+        flash[:alert] = t :no_access
         redirect_to :root and return
       end
     end
