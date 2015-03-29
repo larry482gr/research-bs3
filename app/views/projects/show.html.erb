@@ -26,15 +26,17 @@
       </thead>
       <tbody>
       <%- @project_files.each do |file| %>
+          <% column_class = (@owner or @contributor) ? 'pr_file' : 'vis_file' %>
+          <% search_class = (file.filepath.to_s.start_with?('http') and not file.is_basic) ? 's_file' : nil %>
           <tr class="pr_file_row" rel="<%= file.project_id %>">
-            <td class="pr_file" rel="<%= file.id %>">
+            <td class="<%= "#{column_class} #{search_class}" %>" rel="<%= file.id unless (column_class.start_with? 'vis' and search_class.nil?) %>">
               <%- if @owner or @contributor %>
                   <%= file.is_basic ? "[#{(t :main_file)}]" : '' %>
               <% end %>
             </td>
-            <td class="pr_file"><%= file.filename %></td>
+            <td class="<%= "#{column_class} #{search_class}" %>"><%= file.filename %></td>
             <!-- <td class="pr_file"><%= file.created_at %></td> -->
-            <td class="pr_file center"><%= file.getModificationTime %></td>
+            <td class="<%= "#{column_class} #{search_class}" %> center"><%= file.getModificationTime %></td>
             <%- if @owner or @contributor %>
                 <td class="center">
                   <%- if @owner or @current_user.id == file.user_id %>

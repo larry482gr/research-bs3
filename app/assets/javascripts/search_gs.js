@@ -9,27 +9,46 @@ $(document).ready(function() {
     }
 
     if (!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
-        $('.container').on('click', '.gs_md_wp', function(e){
+        $('.container').on('click', '.gs_md_wp', function(e) {
+            e.preventDefault();
             doc_title = $(this).parent().next().find('h3').find('a').text();
             doc_link = $(this).find('a').attr('href');
             if(doc_link.substr(doc_link.length-3).toLowerCase() === 'pdf') {
-                e.preventDefault();
-                save_file = '<form class="save-article-form" action="/projects/'+$('#project_id').val()+'/project_files"'+
-                    'onsubmit="selectProject(); return false;" method="post" style="width: 900px; margin: 10px auto;">'+
-                    '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />'+
-                    '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />'+
-                    '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
-                    '<input type="submit" class="save-article-btn btn btn-primary" value="Save" />'+
-                    '</form>';
-
-                bootbox.dialog({
-                    title: doc_title,
-                    message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
-                    save_file,
-                    className: 'pdf_modal'
-                });
+                showEmbededFile(doc_title, doc_link);
+            }
+            else {
+                window.open($(this).attr('href'), '_blank');
             }
         });
+
+        $('.container').on('click', '.gs_rt a', function(e) {
+            e.preventDefault();
+            doc_title = $(this).text();
+            doc_link = $(this).attr('href');
+            if(doc_link.substr(doc_link.length-3).toLowerCase() === 'pdf') {
+                showEmbededFile(doc_title, doc_link);
+            }
+            else {
+                window.open($(this).attr('href'), '_blank');
+            }
+        });
+
+        function showEmbededFile(doc_title, doc_link) {
+            save_file = '<form class="save-article-form" action="/projects/'+$('#project_id').val()+'/project_files"'+
+            'onsubmit="selectProject(); return false;" method="post" style="width: 900px; margin: 10px auto;">'+
+            '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />'+
+            '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />'+
+            '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
+            '<input type="submit" class="save-article-btn btn btn-primary" value="Save" />'+
+            '</form>';
+
+            bootbox.dialog({
+                title: doc_title,
+                message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
+                save_file,
+                className: 'pdf_modal'
+            });
+        }
     }
 
     // Current page
@@ -97,11 +116,6 @@ $(document).ready(function() {
             dataType: "json",
             beforeSend: function(){
                 $('.search_gs_results').animate({opacity: 0.2});
-                if($('.projects_table').hasClass("col-md-7")){
-                    $('.projects_table').removeClass("col-md-7").addClass("col-md-4");
-                    $('.search_div').removeClass("col-md-5").addClass("col-md-8");
-                    $("#search_gs_input").css('width', '100%');
-                }
             },
             success: function(response) {
                 if (response.total == 0) {
@@ -114,9 +128,23 @@ $(document).ready(function() {
                     }
                 }
 
+                checkValidSave();
                 $('.search_gs_results').animate({opacity: 1});
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
+            }
+        });
+    }
+
+    function checkValidSave() {
+        $.each($('.container span.gs_nph'), function() {
+            doc_link = $(this).parent().parent().prev().find('.gs_md_wp').find('a').attr('href');
+            if(typeof doc_link === "undefined") {
+                doc_link = $(this).parent().parent().find('.gs_rt').find('a').attr('href');
+            }
+
+            if(doc_link.substr(doc_link.length-3).toLowerCase() !== 'pdf') {
+                $(this).remove();
             }
         });
     }
@@ -175,11 +203,18 @@ function gs_sva(doc_id, doc_num) {
         element_link = $('.container').find('#gs_svl' + doc_num);
         doc_title = element_link.parent().parent().parent().find('h3').find('a').text();
         doc_link = element_link.parent().parent().parent().prev().find('.gs_md_wp').find('a').attr('href');
+
+        if(typeof doc_link === "undefined") {
+            doc_link = element_link.parent().parent().parent().find('.gs_rt').find('a').attr('href');
+        }
+        doc_extension = doc_link.substr(doc_link.lastIndexOf('.')+1).toLowerCase();
+
         // alert(doc_link);
-        save_file = '<form id="save_gs_link" action="/projects/'+$('#project_id').val()+'/project_files" method="post">'+
-        '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />'+
-        '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />'+
-        '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
+        save_file = '<form id="save_gs_link" action="/projects/'+$('#project_id').val()+'/project_files" method="post">' +
+        '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />' +
+        '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />' +
+        '<input id="project_file_extension" type="hidden" name="project_file[extension]" value="'+doc_extension+'">' +
+        '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />' +
         '</form>';
         element_link.after(save_file);
         $('.container #save_gs_link').submit();

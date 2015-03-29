@@ -8,6 +8,8 @@ en:
   set_main_file_suffix: " as this project's main file"
   invalid_main_file: "You can only set an uploaded file as the project's main file."
   view_file: "View File"
+  search_file_title: "Search File"
+  search_file_message: "Would you like to search for"
   choose_project_article: "You must choose a Project in order to save a particular article."
   choose_project_cite: "You must choose a Project in order to cite a particular article."
   citations_for: "Citations for: "

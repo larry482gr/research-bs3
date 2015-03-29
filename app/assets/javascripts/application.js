@@ -40,6 +40,7 @@ $(document).ready(function(){
             '</div>'+
             '<div id="sign-in-error" class="col-md-offset-2 col-md-9"></div>'+
             '</div>'+
+            '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
             '<div class="form-group">'+
             '<div class="controls col-md-offset-2 col-md-6">'+
             '<button type="button" class="btn btn-success" id="sign-in-btn">'+I18n.t("sign_in")+'</button>'+

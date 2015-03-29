@@ -7,6 +7,7 @@ $(document).ready(function() {
                 '<select id="reason" name="reason" class="form-control">'+
                     $('#delete-user-options').val()+
                 '</select>'+
+                '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
             '</div>'+
             '</form>';
 
@@ -111,6 +112,7 @@ function invitationModal(user_id, invitation_id, status) {
         '<div class="form-group">' +
             '<textarea class="form-control" rows="2"></textarea>' +
         '</div>' +
+        '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
         '</form>' +
         '<script type="text/javascript">' +
             '$("#abort-invitation").on("change", "#reason", function(){' +

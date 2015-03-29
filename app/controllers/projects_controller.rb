@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
     #  redirect_to :root and return
     # end
 
-    @projects = @current_user.projects
+    @projects = @current_user.projects.order('updated_at DESC')
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
   end
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     end
 
     @updated_at = @project.getModificationTime
-    @project_files = @project.project_files
+    @project_files = @project.project_files.where('is_old = ?', 0).order('updated_at DESC')
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
     session.delete(:search_gs)
@@ -102,6 +102,15 @@ class ProjectsController < ApplicationController
       flash[:alert] = :no_access
       redirect_to :root and return
     else
+      @project.project_files.each do |file|
+        file.destroy
+      end
+      @project.invitations.each do |invitation|
+        invitation.destroy
+      end
+
+      # TODO delete project's directory?
+
       @project.destroy
       respond_to do |format|
         format.html { redirect_to projects_url }

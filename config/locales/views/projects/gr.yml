@@ -11,8 +11,8 @@ gr:
   invite_user: "Πρόσκληση Χρήστη"
   create_project: "Δημιουργία Νέου Έργου"
   search_gs: "Αναζήτηση βιβλίου, άρθρου ή εργασίας"
-  upload: "Αποστολή"
-  upload_file: "Αποστολή αρχείου..."
+  upload: "Μεταφόρτωση"
+  upload_file: "Μεταφόρτωση αρχείου..."
   time:
     formats:
       short: "%d/%m/%Y"

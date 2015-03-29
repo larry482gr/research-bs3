@@ -16,11 +16,11 @@ class ProjectFilesController < ApplicationController
   # GET /project_files/1.json
   def show
     if not (@project_file.project.owner?(@current_user.id) or @project_file.project.contributor?(@current_user.id))
-      flash[:alert] = t :no_access
       if is_url?(@project_file.filepath)
         session[:search_gs] = @project_file.filename
         redirect_to projects_path and return
       else
+        flash[:alert] = t :no_access
         redirect_to :root and return
       end
     else
@@ -48,21 +48,17 @@ class ProjectFilesController < ApplicationController
     if not @can_edit
       flash[:alert] = t :file_edit_no_access
       redirect_to project_path(Project.find(params[:project_id]))
+    elsif is_url?(@project_file.filepath)
+      respond_to do |format|
+        format.html { redirect_to @project_file.project, alert: 'You cannot edit linked files.' }
+        format.json { render json: @project_file.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # noinspection RubyArgCount
   def set_main
     if @project_file.filepath[0..14] == '/project_files/'
-      project_id = params[:project_id]
-
-      project = Project.find(project_id)
-      project_files = project.project_files
-
-      project_files.each do |file|
-        file.update(is_basic: nil)
-      end
-
       @project_file.update(is_basic: 1) ? response = 1 : response = 0
     else
       response = t :invalid_main_file
@@ -85,8 +81,9 @@ class ProjectFilesController < ApplicationController
     is_new = false
     # uploaded_io = params[:project_file][:filename]
     
-    (file_exists = upload_file) unless is_url?(params[:project_file][:filepath])
-    
+    (file_exists = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
+
+
     @project_file = @project.project_files.where(project_file_params)
     
     if @project_file.empty?
@@ -116,11 +113,14 @@ class ProjectFilesController < ApplicationController
   def update
     if not @can_edit
       flash[:alert] = t :file_edit_no_access
-      redirect_to project_path(Project.find(params[:project_id]))
+      redirect_to project_path(@project_file.project)
+    elsif is_url?(@project_file.filepath)
+      flash[:alert] = 'You cannot edit linked files.'
+      redirect_to @project_file.project
     end
     respond_to do |format|
-      if @project_file.update(project_file_params)
-        format.html { redirect_to project_project_file_path(@project_file.project, @project_file), notice: 'Project file was successfully updated.' }
+      if update_file and @project_file.update(project_file_params)
+        format.html { redirect_to project_path(@project_file.project), notice: 'Project file was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit', notice: 'Project file was not updated.' }
@@ -201,17 +201,22 @@ class ProjectFilesController < ApplicationController
       params[:project_file][:filename] = params[:project_file][:filename].original_filename
       FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0755
       output_path = Rails.root.join('private', 'project_files', params[:project_file][:filepath], params[:project_file][:filename])
-      projectFile = ProjectFile.find_by_filename(params[:project_file][:filename])
+
+      # tmp_filename = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]
+      projectFile = ProjectFile.find_by_filepath('/project_files/' + params[:project_file][:filepath] + '/' + params[:project_file][:filename])
 
       if projectFile and projectFile.is_basic
-        new_filename = "#{projectFile.updated_at.to_time.to_i.to_s}_#{params[:project_file][:filename]}"
+        new_filename = "#{projectFile.updated_at.to_time.to_i}_#{projectFile.filename}.#{projectFile.extension}"
         old_file = output_path
         new_file = Rails.root.join('private', 'project_files', params[:project_file][:filepath], new_filename)
         File.rename(old_file, new_file)
-        projectFile.filepath= Rails.root.join('private', 'project_files', params[:project_file][:filepath], new_filename)
-        projectFile.filename= new_filename
-        projectFile.is_basic= nil
+        projectFile.filepath = '/project_files/' + params[:project_file][:filepath] + '/' + new_filename
+        projectFile.filename = new_filename[0..new_filename.rindex('.')-1]
+        projectFile.is_old = 1
         projectFile.save!
+
+        # New file should also be a basic file
+        params[:project_file][:is_basic] = 1
       end
 
       if !File.file?(output_path)
@@ -228,9 +233,17 @@ class ProjectFilesController < ApplicationController
         end
       end
 
-      params[:project_file][:filepath] = '/project_files/' + params[:project_file][:filepath] + "/" + params[:project_file][:filename]
+      params[:project_file][:filepath] = '/project_files/' + params[:project_file][:filepath] + '/' + params[:project_file][:filename]
       params[:project_file][:filename] = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]
       return file_exists
+    end
+
+    def update_file
+      old_file = "#{Rails.root}/private#{@project_file.filepath}"
+      new_file = "#{Rails.root}/private#{@project_file.filepath.gsub(@project_file.filename, params[:project_file][:filename])}"
+      if File.rename(old_file, new_file)
+        params[:project_file][:filepath] = @project_file.filepath.gsub(@project_file.filename, params[:project_file][:filename])
+      end
     end
 
     def delete_file

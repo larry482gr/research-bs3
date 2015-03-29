@@ -1,16 +1,4 @@
 $(document).ready(function() {
-  var allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                          'application/msword', 'application/vnd.oasis.opendocument.text', 'text/plain', 'text/rtf'];
-
-  var fileExtensions = {
-      'application/pdf' : 'pdf',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'docx',
-      'application/msword' : 'doc',
-      'application/vnd.oasis.opendocument.text' : 'odt',
-      'text/plain' : 'txt',
-      'text/rtf' : 'rtf'
-  };
-
   $('#invite-user-btn').on('click', function() {
       if($('#invite-user-div').is(':hidden')) {
           $('.left-div').removeClass('col-md-10').addClass('col-md-8');
@@ -67,13 +55,45 @@ $(document).ready(function() {
                   className: "btn-success",
                   callback: function() {
                       $(".bootbox").on('hidden.bs.modal', function () {
-                          window.open('/projects/'+project_id+'/project_files/'+file_id, '_self');
+                          openFile(project_id, file_id);
                       });
                   }
               }
           }
       });
   });
+
+  $('.container').on('click', '.vis_file', function() {
+    if($(this).hasClass('s_file')) {
+        row_element = $(this).parent();
+        project_id = row_element.attr('rel');
+        file_id = row_element.find('td:first-child').attr('rel');
+        doc_title = row_element.find('td:nth-child(2)').text();
+        bootbox.dialog({
+            title: I18n.t("search_file_title"),
+            message: I18n.t("search_file_message") + " \"" + doc_title + "\"" + I18n.t("question_mark"),
+            buttons: {
+                cancel: {
+                    label: I18n.t("cancel"),
+                    className: "btn-default",
+                },
+                view_file: {
+                    label: I18n.t("ok"),
+                    className: "btn-primary",
+                    callback: function() {
+                        $(".bootbox").on('hidden.bs.modal', function () {
+                            openFile(project_id, file_id);
+                        });
+                    }
+                }
+            }
+        });
+    }
+  });
+
+  function openFile(project_id, file_id) {
+      window.open('/projects/'+project_id+'/project_files/'+file_id, '_self');
+  }
   
   $('#file_btn').on('click', function() {
   	if($(this).text() == I18n.t('upload_file')) {
@@ -143,7 +163,6 @@ $(document).ready(function() {
           },
           success: function(response) {
               if(response == 1) {
-                  $(".pr_file").text("");
                   $(".pr_file[rel="+file_id+"]").text('[' + I18n.t("main_file") + ']');
               }
               else if(response == 0) {
