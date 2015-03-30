@@ -62,9 +62,9 @@ group :test do
   gem 'sqlite3'
 end
 
-# group :development, :production do
-#  gem 'mysql2'
-#end
+group :development do
+  gem 'mysql2'
+end
 
 # For Heroku deployment
 group :production do

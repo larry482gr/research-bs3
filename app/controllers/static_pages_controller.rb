@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  require 'rubygems'
   require 'open-uri'
   require 'nokogiri'
   
@@ -37,7 +38,13 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-    doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")))
+    # headers = {'User-Agent' => 'Ruby'}
+    # begin
+    #   doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
+    # rescue Exception=>e
+    #   puts "Error: #{e}"
+    # end
+    doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     doc.encoding = 'UTF-8'
     
 		response = doc.to_s
@@ -102,7 +109,7 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else    
-      doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
+      doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), 'User-Agent' => 'Ruby'))
 	  doc.encoding = 'UTF-8'
 	  response = doc.to_s
 	
