@@ -38,16 +38,15 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-    # headers = {'User-Agent' => 'Ruby'}
-    # begin
-    #   doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
-    # rescue Exception=>e
-    #   puts "Error: #{e}"
-    # end
-
-    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0'
-    doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent), nil, 'UTF-8')
+    headers = {'User-Agent' => 'Ruby'}
+    begin
+      doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
+    rescue Exception=>e
+      puts "Error: #{e}"
+    end
+    # url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    # user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0'
+    # doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent), nil, 'UTF-8')
     #doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     #doc.encoding = 'UTF-8'
     
@@ -113,16 +112,13 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else
-      url = URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
-      user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0'
-      doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent), nil, 'UTF-8')
-      # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), 'User-Agent' => 'Ruby'))
-      # doc.encoding = 'UTF-8'
-      response = doc.to_s
+      doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
+	  doc.encoding = 'UTF-8'
+	  response = doc.to_s
 
-      result_indexes = []
+	  result_indexes = []
 
-      response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
+	  response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
 	    result_indexes << $`.size+16
 	  end
 	
