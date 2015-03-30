@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     end
 
     @updated_at = @project.getModificationTime
-    @project_files = @project.project_files.where('is_old = ?', 0).order('updated_at DESC')
+    @project_files = @project.project_files.where('is_old = ?', false).order('updated_at DESC')
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
     session.delete(:search_gs)
