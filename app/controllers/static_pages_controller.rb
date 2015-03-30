@@ -38,7 +38,7 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-    headers = {'User-Agent' => 'Ruby'}
+    headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
     begin
       doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
     rescue Exception=>e
