@@ -112,13 +112,21 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else
-      doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
-	  doc.encoding = 'UTF-8'
-	  response = doc.to_s
+      headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
+      begin
+        doc = open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), headers).read
+      rescue Exception=>e
+        puts "Error: #{e}"
+      end
 
-	  result_indexes = []
+      # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
+      # doc.encoding = 'UTF-8'
 
-	  response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
+      response = doc.to_s
+
+      result_indexes = []
+
+      response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
 	    result_indexes << $`.size+16
 	  end
 	
