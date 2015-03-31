@@ -76,3 +76,6 @@ end
 gem 'dynamic_form'
 gem 'pdf-reader'
 gem 'docsplit'
+
+gem 'rack-utf8_sanitizer'
+gem 'handle_invalid_percent_encoding_requests'

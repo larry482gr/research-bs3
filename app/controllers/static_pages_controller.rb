@@ -38,17 +38,19 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
+=begin
     headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
     begin
       doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
     rescue Exception=>e
       puts "Error: #{e}"
     end
-    # url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
-    # user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0'
-    # doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent), nil, 'UTF-8')
-    #doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
-    #doc.encoding = 'UTF-8'
+=end
+    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    user_agent = 'Ruby'
+    doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent))
+    # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
+    doc.encoding = 'UTF-8'
     
 		response = doc.to_s
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
