@@ -61,6 +61,12 @@ class StaticPagesController < ApplicationController
     rescue EncodingError
       response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
     end
+
+    respond_to do |format|
+      format.js { render json: { results: response, total: 10 } }
+    end
+
+    return
 =begin
     FileUtils.mkdir_p Rails.root.join('private', 'scholar_response'), :mode => 0755
     output_path = Rails.root.join('private', 'scholar_response', 'index.html')
