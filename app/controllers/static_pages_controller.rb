@@ -46,11 +46,13 @@ class StaticPagesController < ApplicationController
       puts "Error: #{e}"
     end
 =end
-    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
-    # user_agent = 'Firefox'
-    doc = Nokogiri::HTML(open(url, 'User-Agent' => 'firefox'))
-    # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
+
+    url = URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
+    doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
     doc.encoding = 'UTF-8'
+
+    # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
+    # doc.encoding = 'UTF-8'
     
 		response = doc.to_s
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
@@ -114,12 +116,18 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else
+=begin
       headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
       begin
-        doc = open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), headers).read
+        doc = open(URI.encode("https://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), headers).read
       rescue Exception=>e
         puts "Error: #{e}"
       end
+=end
+
+      url = URI.encode("https://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}").to_s
+      doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
+      doc.encoding = 'UTF-8'
 
       # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
       # doc.encoding = 'UTF-8'
