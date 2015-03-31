@@ -140,12 +140,6 @@ class StaticPagesController < ApplicationController
 			end
     end
 
-    @results.each do |result|
-      puts "\n\n"
-      puts result
-      puts "\n\n"
-    end
-
 		respond_to do |format|
 			format.js { render json: { results: @results, total: total_results.gsub(',', '.') } }
 		end
