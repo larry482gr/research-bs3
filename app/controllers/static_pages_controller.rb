@@ -40,16 +40,23 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-    uri = URI("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    uri = URI.parse("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
     # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
     # doc = Net::HTTP.get_response(url)
 
-    req = Net::HTTP::Get.new(uri)
-    req['User-Agent'] = 'Firefox'
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    req = Net::HTTP::Get.new(uri.request_uri)
 
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-      http.request(req)
-    }
+    res = http.request(req)
+
+    # req = Net::HTTP::Get.new(uri)
+    # req['User-Agent'] = 'Firefox'
+
+    # res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+    #   http.request(req)
+    # }
 
     response = res.body
     begin
