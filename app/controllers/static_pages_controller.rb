@@ -45,7 +45,6 @@ class StaticPagesController < ApplicationController
     # doc = Net::HTTP.get_response(url)
 
     req = Net::HTTP::Get.new(uri)
-    req['User-Agent'] = 'Firefox'
 
     res = Net::HTTP.start(uri.hostname, uri.port) {|http|
       http.request(req)
@@ -68,7 +67,7 @@ class StaticPagesController < ApplicationController
       file.write(response)
     end
 =end
-    # puts doc.body if doc.is_a?(Net::HTTPSuccess)
+    puts response if res.is_a?(Net::HTTPSuccess)
 
 =begin
     headers = { 'User-Agent' => 'Firefox' }
