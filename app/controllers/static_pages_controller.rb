@@ -94,16 +94,15 @@ class StaticPagesController < ApplicationController
     end
 =end
 
-    url = URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
+    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
     # doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
-    # doc = Nokogiri::HTML(open(url))
-    doc = open(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
-    # doc.encoding = 'UTF-8'
+    doc = Nokogiri::HTML(open(url))
+    doc.encoding = 'UTF-8'
 
     # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     # doc.encoding = 'UTF-8'
 
-    response = doc
+    response = doc.to_s
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
