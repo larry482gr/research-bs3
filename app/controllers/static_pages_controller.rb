@@ -46,9 +46,9 @@ class StaticPagesController < ApplicationController
       puts "Error: #{e}"
     end
 =end
-    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
-    user_agent = 'Ruby'
-    doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent))
+    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
+    # user_agent = 'Firefox'
+    doc = Nokogiri::HTML(open(url, 'User-Agent' => 'firefox'))
     # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     doc.encoding = 'UTF-8'
     
