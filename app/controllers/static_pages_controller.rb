@@ -2,6 +2,8 @@ class StaticPagesController < ApplicationController
   require 'rubygems'
   require 'open-uri'
   require 'nokogiri'
+  require 'net/http'
+  require 'uri'
   
   def index
      @user = User.new
@@ -38,23 +40,54 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-=begin
-    headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
+    uri = URI("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
+    # doc = Net::HTTP.get_response(url)
+
+    req = Net::HTTP::Get.new(uri)
+    req['User-Agent'] = 'Firefox'
+
+    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+      http.request(req)
+    }
+
+    response = res.body
     begin
-      doc = open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
+      cleaned = res.body.dup.force_encoding('UTF-8')
+      unless cleaned.valid_encoding?
+        cleaned = res.body.encode( 'UTF-8', 'Windows-1251' )
+      end
+      response = cleaned
+    rescue EncodingError
+      response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
+    end
+=begin
+    FileUtils.mkdir_p Rails.root.join('private', 'scholar_response'), :mode => 0755
+    output_path = Rails.root.join('private', 'scholar_response', 'index.html')
+    File.open(output_path, 'wb+') do |file|
+      file.write(response)
+    end
+=end
+    # puts doc.body if doc.is_a?(Net::HTTPSuccess)
+
+=begin
+    headers = { 'User-Agent' => 'Firefox' }
+    begin
+      doc = open(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
     rescue Exception=>e
       puts "Error: #{e}"
     end
 =end
-
+=begin
     url = URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
     doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
     doc.encoding = 'UTF-8'
 
     # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     # doc.encoding = 'UTF-8'
-    
-		response = doc.to_s
+=end
+
+    # response = doc.body
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
