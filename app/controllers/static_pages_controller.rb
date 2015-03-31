@@ -40,24 +40,23 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-=begin
-    uri = URI.parse("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    uri = URI.parse("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
     # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
     # doc = Net::HTTP.get_response(url)
-
+=begin
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     req = Net::HTTP::Get.new(uri.request_uri)
 
     res = http.request(req)
-
-    # req = Net::HTTP::Get.new(uri)
+=end
+    req = Net::HTTP::Get.new(uri)
     # req['User-Agent'] = 'Firefox'
 
-    # res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-    #   http.request(req)
-    # }
+    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+      http.request(req)
+    }
 
     response = res.body
     begin
@@ -70,12 +69,6 @@ class StaticPagesController < ApplicationController
       response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
     end
 
-    respond_to do |format|
-      format.js { render json: { results: response, total: 10 } }
-    end
-
-    return
-=end
 =begin
     FileUtils.mkdir_p Rails.root.join('private', 'scholar_response'), :mode => 0755
     output_path = Rails.root.join('private', 'scholar_response', 'index.html')
@@ -94,6 +87,7 @@ class StaticPagesController < ApplicationController
     end
 =end
 
+=begin
     url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
     # doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
     doc = Nokogiri::HTML(open(url))
@@ -101,8 +95,9 @@ class StaticPagesController < ApplicationController
 
     # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
     # doc.encoding = 'UTF-8'
+=end
 
-    response = doc.to_s
+    # response = doc.to_s
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
@@ -122,7 +117,7 @@ class StaticPagesController < ApplicationController
 			is_numeric_regex = /^[\d]*((\.|,)?[\d]*)*$/
 
 			response[result_indexes.last..response.size].to_enum(:scan,/<script>/i).map do |m,|
-				result_indexes << $`.size + result_indexes.last - 1
+				result_indexes << $`.size + result_indexes.last
 			end
 
 			response.to_enum(:scan,/<div id="gs_ab_md">/i).map do |m,|
@@ -141,8 +136,14 @@ class StaticPagesController < ApplicationController
       end
 
 			result_indexes[0..result_indexes.size-2].each_with_index do |value, index|
-				@results << response[value..result_indexes[index+1]-4]
+				@results << response[value..result_indexes[index+1]-1]
 			end
+    end
+
+    @results.each do |result|
+      puts "\n\n"
+      puts result
+      puts "\n\n"
     end
 
 		respond_to do |format|
