@@ -32,7 +32,7 @@ class StaticPagesController < ApplicationController
       # puts I18n.locale
     end
 
-    if request.referer.to_s.end_with?('projects')
+    if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
       session[:search_gs] = params[:question]
     end
 
