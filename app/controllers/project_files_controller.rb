@@ -59,7 +59,7 @@ class ProjectFilesController < ApplicationController
   # noinspection RubyArgCount
   def set_main
     if @project_file.filepath[0..14] == '/project_files/'
-      @project_file.update(is_basic: 1) ? response = 1 : response = 0
+      @project_file.update(is_basic: true) ? response = 1 : response = 0
     else
       response = t :invalid_main_file
     end
@@ -212,11 +212,11 @@ class ProjectFilesController < ApplicationController
         File.rename(old_file, new_file)
         projectFile.filepath = '/project_files/' + params[:project_file][:filepath] + '/' + new_filename
         projectFile.filename = new_filename[0..new_filename.rindex('.')-1]
-        projectFile.is_old = 1
+        projectFile.is_old = true
         projectFile.save!
 
         # New file should also be a basic file
-        params[:project_file][:is_basic] = 1
+        params[:project_file][:is_basic] = true
       end
 
       if !File.file?(output_path)

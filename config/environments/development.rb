@@ -21,7 +21,7 @@ Researchgr::Application.configure do
     :address => "127.0.0.1",
     :port => 25,
     :enable_starttls_auto => true,
-    :domain => "research.com",
+    # :domain => "research.com",
   }
   config.action_mailer.perform_deliveries = :true #try to force sending in development 
   config.action_mailer.raise_delivery_errors = :true 

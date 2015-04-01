@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     if @user
       @user_info = @user.user_info
       if @user_info.token == params[:token]
-        @user_info.activated = 1
+        @user_info.activated = true
         @user_info.token = nil
         @user_info.save
         session[:id] = @user.password
