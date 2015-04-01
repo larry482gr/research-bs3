@@ -1,7 +1,7 @@
 class StaticPagesController < ApplicationController
-  require 'rubygems'
-  require 'open-uri'
-  require 'nokogiri'
+  # require 'rubygems'
+  # require 'open-uri'
+  # require 'nokogiri'
   require 'net/http'
   require 'uri'
   
