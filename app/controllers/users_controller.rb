@@ -58,6 +58,7 @@ class UsersController < ApplicationController
         @user_info.token = nil
         @user_info.save
         session[:id] = @user.password
+        session[:email] = @user.email
         notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
         redirect_to(projects_path, :notice => notices.join('<br/>').html_safe) and return
       end
