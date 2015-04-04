@@ -85,7 +85,7 @@ describe UsersController do
       it "redirects to root path with notice" do
         controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => user_attributes}, valid_session
-        flash[:notice].should be_kind_of("Welcome to ResearchGr")
+        flash[:notice].should =~ /^Welcome to ResearchGr(.)*/i
         response.should redirect_to(root_path)
       end
     end
@@ -103,7 +103,7 @@ describe UsersController do
         User.any_instance.stub(:save).and_return(false)
         controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => { "username" => "invalid value" }}, valid_session
-        flash[:alert].should be_kind_of("Registration failed because:")
+        flash[:alert].should =~ /^Registration failed because:(.)*/i
         response.should redirect_to(root_path)
       end
     end
