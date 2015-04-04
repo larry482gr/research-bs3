@@ -24,6 +24,7 @@ describe UsersController do
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
+  let(:user_attributes) { { 'username' => 'MyNewString', 'email' => 'new_email@localhost.home', 'password' => 'my_secret_pass...again!', 'profile_id' => '3'} }
   before(:each) do
     @current_user = User.create! valid_attributes
     UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
@@ -67,21 +68,22 @@ describe UsersController do
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new User" do
+      it "owner creates a new User" do
         expect {
-          post :create, {:user => valid_attributes}, valid_session
+          post :create, {:user => user_attributes}, valid_session
         }.to change(User, :count).by(1)
       end
 
       it "assigns a newly created user as @user" do
-        post :create, {:user => valid_attributes}, valid_session
+        post :create, {:user => user_attributes}, valid_session
         assigns(:user).should be_a(User)
         assigns(:user).should be_persisted
       end
 
       it "redirects to the created user" do
-        post :create, {:user => valid_attributes}, valid_session
-        response.should redirect_to(User.last)
+        post :create, {:user => user_attributes}, valid_session
+        flash[:notice].should eq("Welcome to ResearchGr #{user_attributes[:username]}!")
+        response.should redirect_to(root_path)
       end
     end
 
@@ -89,7 +91,7 @@ describe UsersController do
       it "assigns a newly created but unsaved user as @user" do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { "username" => "invalid value" }}, valid_session
+        post :create, {:user => user_attributes}, valid_session
         assigns(:user).should be_a_new(User)
       end
 
@@ -97,7 +99,8 @@ describe UsersController do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
         post :create, {:user => { "username" => "invalid value" }}, valid_session
-        response.should render_template("new")
+        flash[:alert].should be_kind_of('Registration failed because:')
+        response.should redirect_to(root_path)
       end
     end
   end
@@ -111,7 +114,7 @@ describe UsersController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         User.any_instance.should_receive(:update).with({ "username" => "MyNewString" })
-        put :update, {:id => @current_user.to_param, :user => { "username" => "MyNewString" }}, valid_session
+        put :update, {:id => @current_user.id, :user => { "username" => "MyNewString" }}, valid_session
       end
 
       it "assigns the requested user as @user" do
@@ -122,7 +125,7 @@ describe UsersController do
 
       it "redirects to the user" do
         # user = User.create! valid_attributes
-        put :update, {:id => @current_user.to_param, :user => valid_attributes}, valid_session
+        put :update, {:id => @current_user.id, :user => valid_attributes}, valid_session
         response.should redirect_to(@current_user)
       end
     end
@@ -150,13 +153,13 @@ describe UsersController do
     it "destroys the requested user" do
       # user = User.create! valid_attributes
       expect {
-        delete :destroy, {:id => @current_user.to_param}, valid_session
+        delete :destroy, {:id => @current_user.id}, valid_session
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
       # user = User.create! valid_attributes
-      delete :destroy, {:id => @current_user.to_param}, valid_session
+      delete :destroy, {:id => @current_user.id}, valid_session
       response.should redirect_to(users_url)
     end
   end
