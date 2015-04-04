@@ -23,8 +23,8 @@ describe UsersController do
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
-  let(:user_attributes) { { 'username' => 'MyNewString', 'email' => 'new_email@localhost.home', 'password' => 'my_secret_pass...again!', 'profile_id' => '3'} }
+  let(:valid_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => 1} }
+  let(:user_attributes) { { 'username' => 'MyNewString', 'email' => 'newemail@localhost.home', 'password' => 'my_new_secret_pass', 'profile_id' => 3} }
   before(:each) do
     @current_user = User.create! valid_attributes
     UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
@@ -67,10 +67,10 @@ describe UsersController do
   end
 
   describe "POST create" do
-    describe "with valid params" do
+    describe "with valid params," do
       it "owner creates a new User" do
         expect {
-          post :create, {:user => user_attributes}, valid_session
+          post :create, {:user => user_attributes}#, valid_session
         }.to change(User, :count).by(1)
       end
 
