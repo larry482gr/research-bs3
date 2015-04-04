@@ -24,11 +24,17 @@ describe ProjectFilesController do
   # ProjectFile. As you add validations to ProjectFile, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) { { "project" => "" } }
+  let(:user_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
+  before(:each) do
+    @current_user = User.create! user_attributes
+    UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ProjectFilesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+
 
   describe "GET index" do
     it "assigns all project_files as @project_files" do
