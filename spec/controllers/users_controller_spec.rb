@@ -70,17 +70,20 @@ describe UsersController do
     describe "with valid params," do
       it "owner creates a new User" do
         expect {
-          post :create, {:user => user_attributes}#, valid_session
+          controller.request.stub referer: 'http://www.whatever.com'
+          post :create, {:user => user_attributes}, valid_session
         }.to change(User, :count).by(1)
       end
 
       it "assigns a newly created user as @user" do
+        controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => user_attributes}, valid_session
         assigns(:user).should be_a(User)
         assigns(:user).should be_persisted
       end
 
       it "redirects to the created user" do
+        controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => user_attributes}, valid_session
         flash[:notice].should eq("Welcome to ResearchGr #{user_attributes[:username]}!")
         response.should redirect_to(root_path)
@@ -98,6 +101,7 @@ describe UsersController do
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
+        controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => { "username" => "invalid value" }}, valid_session
         flash[:alert].should be_kind_of('Registration failed because:')
         response.should redirect_to(root_path)
