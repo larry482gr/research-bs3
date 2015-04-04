@@ -103,7 +103,7 @@ describe UsersController do
         User.any_instance.stub(:save).and_return(false)
         controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => { "username" => "invalid value" }}, valid_session
-        flash[:alert].should =~ /^Registration failed because:(.)*/i
+        flash[:alert].should =~ /(.)*Registration failed because:(.)*/i
         response.should redirect_to(root_path)
       end
     end
