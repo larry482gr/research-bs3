@@ -26,6 +26,7 @@ describe UsersController do
   let(:valid_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass' } }
   before(:each) do
     @current_user = User.create! valid_attributes
+    UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
   end
 
   # This should return the minimal set of values that should be in the session
