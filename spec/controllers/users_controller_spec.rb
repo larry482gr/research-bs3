@@ -82,10 +82,10 @@ describe UsersController do
         assigns(:user).should be_persisted
       end
 
-      it "redirects to the created user" do
+      it "redirects to root path with notice" do
         controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => user_attributes}, valid_session
-        flash[:notice].should eq("Welcome to ResearchGr #{user_attributes[:username]}!")
+        flash[:notice].should be_kind_of("Welcome to ResearchGr")
         response.should redirect_to(root_path)
       end
     end
@@ -98,12 +98,12 @@ describe UsersController do
         assigns(:user).should be_a_new(User)
       end
 
-      it "re-renders the 'new' template" do
+      it "redirects to root path with alert" do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
         controller.request.stub referer: 'http://www.whatever.com'
         post :create, {:user => { "username" => "invalid value" }}, valid_session
-        flash[:alert].should be_kind_of('Registration failed because:')
+        flash[:alert].should be_kind_of("Registration failed because:")
         response.should redirect_to(root_path)
       end
     end
@@ -123,7 +123,7 @@ describe UsersController do
 
       it "assigns the requested user as @user" do
         #user = User.create! valid_attributes
-        put :update, {:id => @current_user.to_param, :user => valid_attributes}, valid_session
+        put :update, {:id => @current_user.id, :user => valid_attributes}, valid_session
         assigns(:user).should eq(@current_user)
       end
 
