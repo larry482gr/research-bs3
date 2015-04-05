@@ -33,7 +33,7 @@ describe ProjectFilesController do
     @project = Project.create! project_attributes
   end
 
-  let(:valid_attributes) { { "project" => @project, "user" => @current_user, "filename" => "MyFilename", "filepath" => "/project_files/0/1/test_file.txt" } }
+  let(:valid_attributes) { { "project_id" => @project.id, "user_id" => @current_user.id, "filename" => "MyFilename", "filepath" => "/project_files/0/1/test_file.txt" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
