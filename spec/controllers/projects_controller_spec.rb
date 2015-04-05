@@ -39,7 +39,7 @@ describe ProjectsController do
     it "assigns all projects as @projects" do
       project = Project.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:projects).should eq([project])
+      assigns(:projects).should eq(project)
     end
   end
 
