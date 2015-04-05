@@ -23,7 +23,7 @@ describe ProjectsController do
   # This should return the minimal set of attributes required to create a valid
   # Project. As you add validations to Project, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "title" => "MyString" } }
+  let(:valid_attributes) { { "title" => "MyTitle", "description" => "MyDescription" } }
   let(:user_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
   before(:each) do
     @current_user = User.create! user_attributes

@@ -2,6 +2,9 @@ class ProjectFile < ActiveRecord::Base
   belongs_to :project, touch: true
   belongs_to :user
 
+  validates :filename, presence: true
+  validates :filepath, presence: true
+
   include TimeElapsed
 
   before_create :set_extension

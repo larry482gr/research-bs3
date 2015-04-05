@@ -145,7 +145,7 @@ class UsersController < ApplicationController
     end
     if @current_user == nil or @current_user.can_access?('user_create')
       @user_info = UserInfo.create(:user_id => @user.id)
-      UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver
+      UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
     notices = ["Welcome to ResearchGr #{params[:user][:username]}!"]
     redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
