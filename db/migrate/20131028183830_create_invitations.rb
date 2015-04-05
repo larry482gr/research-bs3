@@ -8,8 +8,8 @@ class CreateInvitations < ActiveRecord::Migration
       t.string :status, {limit: 10, null: false}
       t.string :reason, {limit: 255, default: nil}
 
-      t.timestamps
+      t.timestamps null: false
     end
-    execute "ALTER TABLE invitations ADD PRIMARY KEY (user_id, from_user, project_id);"
+    execute 'ALTER TABLE invitations ADD PRIMARY KEY (user_id, from_user, project_id);'
   end
 end

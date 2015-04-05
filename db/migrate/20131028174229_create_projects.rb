@@ -5,7 +5,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :description, {limit: 5000, default: nil}
       t.boolean :is_private, {null: false, default: false}
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

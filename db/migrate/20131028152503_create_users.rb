@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email, {limit: 50, null: false, unique: true}
       t.references :profile, {index: true, null: false}
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

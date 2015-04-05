@@ -9,7 +9,7 @@ class CreateProjectFiles < ActiveRecord::Migration
       t.boolean :is_basic, {null: false, default: false}
       t.boolean :is_old, {null: false, default: false}
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end
