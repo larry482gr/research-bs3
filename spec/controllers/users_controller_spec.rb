@@ -38,7 +38,7 @@ describe UsersController do
   describe "GET index" do
     it "assigns all users as @users" do
       #user = User.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, {}, valid_session, format: :html
       assigns(:users).should eq([@current_user])
     end
   end
@@ -46,14 +46,14 @@ describe UsersController do
   describe "GET show" do
     it "assigns the requested user as @user" do
       # user = User.create! valid_attributes
-      get :show, {:id => @current_user.to_param}, valid_session
+      get :show, {:id => @current_user.to_param}, valid_session, format: :html
       assigns(:user).should eq(@current_user)
     end
   end
 
   describe "GET new" do
     it "assigns a new user as @user" do
-      get :new, {}, valid_session
+      get :new, {}, valid_session, format: :html
       assigns(:user).should be_a_new(User)
     end
   end
@@ -61,7 +61,7 @@ describe UsersController do
   describe "GET edit" do
     it "assigns the requested user as @user" do
       # user = User.create! valid_attributes
-      get :edit, {:id => @current_user.to_param}, valid_session
+      get :edit, {:id => @current_user.to_param}, valid_session, format: :html
       assigns(:user).should eq(@current_user)
     end
   end
@@ -71,20 +71,20 @@ describe UsersController do
       it "owner creates a new User" do
         expect {
           controller.request.stub referer: 'http://www.whatever.com'
-          post :create, {:user => user_attributes}, valid_session
+          post :create, {:user => user_attributes}, valid_session, format: :html
         }.to change(User, :count).by(1)
       end
 
       it "assigns a newly created user as @user" do
         controller.request.stub referer: 'http://www.whatever.com'
-        post :create, {:user => user_attributes}, valid_session
+        post :create, {:user => user_attributes}, valid_session, format: :html
         assigns(:user).should be_a(User)
         assigns(:user).should be_persisted
       end
 
       it "redirects to root path with notice" do
         controller.request.stub referer: 'http://www.whatever.com'
-        post :create, {:user => user_attributes}, valid_session
+        post :create, {:user => user_attributes}, valid_session, format: :html
         flash[:notice].should =~ /^Welcome to ResearchGr(.)*/i
         response.should redirect_to(root_path)
       end
@@ -94,7 +94,7 @@ describe UsersController do
       it "assigns a newly created but unsaved user as @user" do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { :username => 'InvalidUserUsername' }}, valid_session
+        post :create, {:user => { :username => 'InvalidUserUsername' }}, valid_session, format: :html
         assigns(:user).should be_a_new(User)
       end
 
@@ -102,7 +102,7 @@ describe UsersController do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
         controller.request.stub referer: 'http://www.whatever.com'
-        post :create, {:user => { "username" => "invalid value" }}, valid_session
+        post :create, {:user => { "username" => "invalid value" }}, valid_session, format: :html
         flash[:alert].should =~ /(.)*Registration failed because:(.)*/i
         response.should redirect_to(root_path)
       end
@@ -118,20 +118,20 @@ describe UsersController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         User.any_instance.should_receive(:update).with({ "username" => "MyNewString" })
-        put :update, {:id => @current_user.id, :user => { "username" => "MyNewString" }}, valid_session
+        put :update, {:id => @current_user.id, :user => { "username" => "MyNewString" }}, valid_session, format: :html
       end
 
       it "assigns the requested user as @user" do
         user = User.create! user_attributes
         UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
         UserInfo.create(:user_id => user.id, :activated => true, :token => nil)
-        put :update, { :id => user.id, :user => { "username" => "MyNewUsername" } }, valid_session
+        put :update, { :id => user.id, :user => { "username" => "MyNewUsername" } }, valid_session, format: :html
         assigns(:user).should eq(user)
       end
 
       it "redirects to the user" do
         # user = User.create! valid_attributes
-        put :update, { :id => @current_user.to_param, :user => { "email" => "new_mail@mail.home" } }, valid_session
+        put :update, { :id => @current_user.to_param, :user => { "email" => "new_mail@mail.home" } }, valid_session, format: :html
         response.should redirect_to(@current_user)
       end
     end
@@ -142,7 +142,7 @@ describe UsersController do
         UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.id, :user => { "username" => "invalid value" }}, valid_session
+        put :update, {:id => user.id, :user => { "username" => "invalid value" }}, valid_session, format: :html
         assigns(:user).should eq(user)
       end
 
@@ -150,7 +150,7 @@ describe UsersController do
         # user = User.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @current_user.to_param, :user => { "username" => "invalid value" }}, valid_session
+        put :update, {:id => @current_user.to_param, :user => { "username" => "invalid value" }}, valid_session, format: :html
         response.should render_template("edit")
       end
     end
@@ -161,14 +161,14 @@ describe UsersController do
       user = User.create! user_attributes
       UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
       expect {
-        delete :destroy, { :id => user.id }, valid_session
+        delete :destroy, { :id => user.id }, valid_session, format: :html
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
       user = User.create! user_attributes
       UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
-      delete :destroy, { :id => user.id }, valid_session
+      delete :destroy, { :id => user.id }, valid_session, format: :html
       response.should redirect_to(users_url)
     end
   end
