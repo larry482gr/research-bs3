@@ -123,7 +123,7 @@ describe UsersController do
 
       it "assigns the requested user as @user" do
         #user = User.create! valid_attributes
-        put :update, {:user => valid_attributes}, valid_session
+        put :update, {:params => { :id => @current_user.id, :user => valid_attributes} }, valid_session
         assigns(:user).should eq(@current_user)
       end
 
