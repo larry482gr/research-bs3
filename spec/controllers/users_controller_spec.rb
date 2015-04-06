@@ -123,6 +123,7 @@ describe UsersController do
 
       it "assigns the requested user as @user" do
         user = User.create! user_attributes
+        UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
         UserInfo.create(:user_id => user.id, :activated => true, :token => nil)
         put :update, { :id => user.id, :user => { "username" => "MyNewUsername" } }, valid_session
         assigns(:user).should eq(user)
@@ -138,6 +139,7 @@ describe UsersController do
     describe "with invalid params" do
       it "assigns the user as @user" do
         user = User.create! user_attributes
+        UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
         put :update, {:id => user.id, :user => { "username" => "invalid value" }}, valid_session
@@ -157,6 +159,7 @@ describe UsersController do
   describe "DELETE destroy" do
     it "destroys the requested user" do
       user = User.create! user_attributes
+      UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
       expect {
         delete :destroy, { :id => user.id }, valid_session
       }.to change(User, :count).by(-1)
@@ -164,6 +167,7 @@ describe UsersController do
 
     it "redirects to the users list" do
       user = User.create! user_attributes
+      UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
       delete :destroy, { :id => user.id }, valid_session
       response.should redirect_to(users_url)
     end
