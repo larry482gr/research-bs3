@@ -124,13 +124,13 @@ describe UsersController do
       it "assigns the requested user as @user" do
         user = User.create! user_attributes
         UserInfo.create(:user_id => user.id, :activated => true, :token => nil)
-        put :update, { :user => { :id => user.id, :username => 'MyNewUsername' } }, valid_session
+        put :update, { :id => user.to_param, :user => { :username => 'MyNewUsername' } }, valid_session
         assigns(:user).should eq(@current_user)
       end
 
       it "redirects to the user" do
         # user = User.create! valid_attributes
-        put :update, {:id => @current_user.id, :user => valid_attributes}, valid_session
+        put :update, { :id => @current_user.to_param, :user => { :email => 'new_mail@mail.home' } }, valid_session
         response.should redirect_to(@current_user)
       end
     end
