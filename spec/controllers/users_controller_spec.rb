@@ -94,7 +94,7 @@ describe UsersController do
       it "assigns a newly created but unsaved user as @user" do
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => user_attributes}, valid_session
+        post :create, {:user => { :username => 'InvalidUserUsername' }}, valid_session
         assigns(:user).should be_a_new(User)
       end
 
@@ -123,7 +123,7 @@ describe UsersController do
 
       it "assigns the requested user as @user" do
         #user = User.create! valid_attributes
-        put :update, {:id => @current_user.id, :user => valid_attributes}, valid_session
+        put :update, {:user => valid_attributes}, valid_session
         assigns(:user).should eq(@current_user)
       end
 
