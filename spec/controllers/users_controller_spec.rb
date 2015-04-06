@@ -124,24 +124,24 @@ describe UsersController do
       it "assigns the requested user as @user" do
         user = User.create! user_attributes
         UserInfo.create(:user_id => user.id, :activated => true, :token => nil)
-        put :update, { :id => user.to_param, :user => { :username => 'MyNewUsername' } }, valid_session
-        assigns(:user).should eq(@current_user)
+        put :update, { :id => user.id, :user => { "username" => "MyNewUsername" } }, valid_session
+        assigns(:user).should eq(user)
       end
 
       it "redirects to the user" do
         # user = User.create! valid_attributes
-        put :update, { :id => @current_user.to_param, :user => { :email => 'new_mail@mail.home' } }, valid_session
+        put :update, { :id => @current_user.to_param, :user => { "email" => "new_mail@mail.home" } }, valid_session
         response.should redirect_to(@current_user)
       end
     end
 
     describe "with invalid params" do
       it "assigns the user as @user" do
-        # user = User.create! valid_attributes
+        user = User.create! user_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @current_user.to_param, :user => { "username" => "invalid value" }}, valid_session
-        assigns(:user).should eq(@current_user)
+        put :update, {:id => user.id, :user => { "username" => "invalid value" }}, valid_session
+        assigns(:user).should eq(user)
       end
 
       it "re-renders the 'edit' template" do
@@ -156,15 +156,15 @@ describe UsersController do
 
   describe "DELETE destroy" do
     it "destroys the requested user" do
-      # user = User.create! valid_attributes
+      user = User.create! user_attributes
       expect {
-        delete :destroy, {:id => @current_user.id}, valid_session
+        delete :destroy, { :id => user.id }, valid_session
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
-      # user = User.create! valid_attributes
-      delete :destroy, {:id => @current_user.id}, valid_session
+      user = User.create! user_attributes
+      delete :destroy, { :id => user.id }, valid_session
       response.should redirect_to(users_url)
     end
   end
