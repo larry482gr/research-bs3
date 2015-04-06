@@ -54,13 +54,16 @@ group :development, :test do
   gem 'launchy'
 end
 
+group :production, :test do
+  gem 'pg'
+end
+
 group :test do
   gem 'cucumber-rails', :require => false
   gem 'cucumber-rails-training-wheels'
   gem 'factory_girl'
   gem 'factory_girl_rails', :require => false
   gem 'rspec-activemodel-mocks', '~> 1.0.1'
-  gem 'sqlite3'
 end
 
 group :development do
@@ -70,7 +73,6 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'puma'
-  gem 'pg'
 end
 
 gem 'dynamic_form'
