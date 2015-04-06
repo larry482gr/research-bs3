@@ -1,6 +1,6 @@
 Researchgr::Application.routes.draw do
   scope '(:locale)', locale: /en|gr/ do
-    
+
     resources :users do
       resources :user_info
       resources :projects

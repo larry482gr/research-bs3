@@ -161,14 +161,14 @@ describe UsersController do
       user = User.create! user_attributes
       UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
       expect {
-        delete user_path, { :id => user.id }, valid_session, format: :json
+        delete :destroy, { :id => user.id }, valid_session, format: :json
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
       user = User.create! user_attributes
       UserInfo.create!(:user_id => user.id, :activated => true, :token => nil)
-      delete user_path, { :id => user.id }, valid_session, format: :json
+      delete :destroy, { :id => user.id }, valid_session, format: :json
       response.should redirect_to(users_url)
     end
   end

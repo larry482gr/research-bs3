@@ -49,13 +49,9 @@ end
 group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.0'
   gem 'simplecov'
   gem 'launchy'
-end
-
-group :production, :test do
-  gem 'pg'
 end
 
 group :test do
@@ -64,6 +60,7 @@ group :test do
   gem 'factory_girl'
   gem 'factory_girl_rails', :require => false
   gem 'rspec-activemodel-mocks', '~> 1.0.1'
+  gem 'sqlite3'
 end
 
 group :development do
@@ -73,6 +70,7 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'puma'
+  gem 'pg'
 end
 
 gem 'dynamic_form'
