@@ -34,12 +34,16 @@ $(document).ready(function() {
         });
 
         function showEmbededFile(doc_title, doc_link) {
+            doc_extension = doc_link.substr(doc_link.lastIndexOf('.')+1).toLowerCase();
             save_file = '<form class="save-article-form" action="/projects/'+$('#project_id').val()+'/project_files"'+
             'onsubmit="selectProject(); return false;" method="post" style="width: 900px; margin: 10px auto;">'+
+            '<div class="form-group pull-right">'+
             '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />'+
             '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />'+
+            '<input type="hidden" name="project_file[extension]" value="'+doc_extension+'">' +
             '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
             '<input type="submit" class="save-article-btn btn btn-primary" value="Save" />'+
+            '</div>'+
             '</form>';
 
             bootbox.dialog({

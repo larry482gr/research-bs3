@@ -16,6 +16,7 @@
         <th><%= (t :filename) %></th>
         <!-- <th><%= (t :created_at) %></th> -->
         <th class="center"><%= (t :last_modified) %></th>
+        <th class="center"></th>
         <%- if @owner or @contributor %>
             <th class="center"></th>
         <% end %>
@@ -37,6 +38,11 @@
             <td class="<%= "#{column_class} #{search_class}" %>"><%= file.filename %></td>
             <!-- <td class="pr_file"><%= file.created_at %></td> -->
             <td class="<%= "#{column_class} #{search_class}" %> center"><%= file.getModificationTime %></td>
+            <td class="center">
+              <%- if file.is_basic and file.project.project_files.where('reference = ?', file.id).count > 0 %>
+                <%= link_to (t :show_history), "/projects/#{file.project_id}/project_files/#{file.id}/show_history", :class => 'btn btn-xs btn-primary' %>
+              <% end %>
+            </td>
             <%- if @owner or @contributor %>
                 <td class="center">
                   <%- if @owner or @current_user.id == file.user_id %>

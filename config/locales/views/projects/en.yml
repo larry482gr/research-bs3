@@ -5,6 +5,7 @@ en:
   description: "Description"
   created_at: "Created at"
   last_modified: "Last modified"
+  show_history: "Show History"
   private: "Private"
   max_private: "Maximum private projects:"
   users_private: "Currently owned private projects:"

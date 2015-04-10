@@ -1,0 +1,46 @@
+<%# provide(:title, (t :projects)) %>
+
+<div class="col-md-12 left-div">
+  <h3><%= @project_file.filename %></h3>
+  <div class="file_history_table">
+    <table class="table table-condensed table-hover">
+      <thead>
+      <tr>
+        <th><%= (t :filename) %></th>
+        <th><%= (t :created_by) %></th>
+        <th><%= (t :created_at) %></th>
+        <th><%= (t :last_modified) %></th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr data-project="<%= @project_file.project.id %>" data-file="<%= @project_file.id %>">
+          <td><%= @project_file.filename %></td>
+          <td>
+            <%- if @project_file.user.user_info.first_name.nil? and @project_file.user.user_info.last_name.nil? %>
+                <%= @project_file.user.username %>
+            <%- else %>
+                <%= "#{@project_file.user.user_info.first_name} #{@project_file.user.user_info.last_name} (#{@project_file.user.username})" %>
+            <% end %>
+          </td>
+          <td><%= "#{l @project_file.created_at, format: :long}" %></td>
+          <td><%= "#{l @project_file.updated_at, format: :long}" %></td>
+        </tr>
+      <%- @old_files.each do |file| %>
+          <tr data-project="<%= file.project.id %>" data-file="<%= file.id %>">
+            <td><%= file.filename %></td>
+            <td>
+              <%- if @project_file.user.user_info.first_name.nil? and @project_file.user.user_info.last_name.nil? %>
+                  <%= @project_file.user.username %>
+              <%- else %>
+                  <%= "#{@project_file.user.user_info.first_name} #{@project_file.user.user_info.last_name} (#{@project_file.user.username})" %>
+              <% end %>
+            </td>
+            <td><%= "#{l file.created_at, format: :long}" %></td>
+            <td><%= "#{l file.updated_at, format: :long}" %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= link_to (t :back), session[:return_to], :class => 'btn btn-sm btn-default' %>
+  </div>
+</div>

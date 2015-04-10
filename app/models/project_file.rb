@@ -17,7 +17,7 @@ class ProjectFile < ActiveRecord::Base
 
   def set_extension
     if self.extension.nil?
-      self.extension = self.filepath.to_s[self.filepath.to_s.rindex('.')..self.filepath.to_s.length-1]
+      self.extension = self.filepath.to_s[self.filepath.to_s.rindex('.')+1..self.filepath.to_s.length-1]
     end
   end
 end

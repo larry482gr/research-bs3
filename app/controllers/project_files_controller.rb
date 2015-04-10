@@ -1,9 +1,10 @@
 class ProjectFilesController < ApplicationController
   before_action :valid_user
-  before_action :set_project_file, only: [:show, :edit, :update, :destroy, :set_main, :get_file]
+  before_action :set_project_file, only: [:show, :show_history, :edit, :update, :destroy, :set_main, :get_file]
   before_action :allowed_file_types, only: :show
   before_action :can_edit, only:  [:show, :edit, :update]
   before_action :set_extension_info, only: [:show, :get_file]
+  before_action :set_referer, only: [:show, :edit, :show_history]
 
   # GET /project_files
   # GET /project_files.json
@@ -25,11 +26,21 @@ class ProjectFilesController < ApplicationController
       end
     else
       if @project_file.extension.in?(@allowed_file_types)
-        @updated_at = @project_file.getModificationTime
+
+        # @file_size = File.size("#{Rails.root}/private#{@project_file.filepath}").to_f
       else
         send_file "#{Rails.root}/private#{@project_file.filepath}" and return
         # "private#{@project_file.filepath}" and return
       end
+    end
+  end
+
+  def show_history
+    if not (@project_file.project.owner?(@current_user.id) or @project_file.project.contributor?(@current_user.id))
+      flash[:alert] = t :no_access
+      redirect_to :root and return
+    else
+      @old_files = @project_file.project.project_files.where('reference = ?', @project_file.id).order('id DESC')
     end
   end
 
@@ -77,12 +88,11 @@ class ProjectFilesController < ApplicationController
       flash[:alert] = t :no_access
       redirect_to :root and return
     end
-    @project = Project.find(params[:project_id])
+
     is_new = false
     # uploaded_io = params[:project_file][:filename]
-    
-    (file_exists = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
 
+    (uploaded_file_params = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
 
     @project_file = @project.project_files.where(project_file_params)
     
@@ -91,13 +101,28 @@ class ProjectFilesController < ApplicationController
       @project_file.user_id = @current_user.id
       @project_file.save
       is_new = true
+      unless ((uploaded_file_params.nil? and uploaded_file_params[:file_id].nil?) or not @project_file.is_basic)
+        ActiveRecord::Base.record_timestamps = false
+        begin
+          old_main = @project.project_files.find(uploaded_file_params[:file_id])
+          old_main.reference = @project_file.id
+          old_main.save
+          old_files = @project.project_files.where('reference = ?', uploaded_file_params[:file_id])
+          old_files.each do |f|
+            f.reference = @project_file.id
+            f.save
+          end
+        ensure
+          ActiveRecord::Base.record_timestamps = true  # don't forget to enable it again!
+        end
+      end
     end
     
     respond_to do |format|
       if is_new
         format.html { redirect_to @project, notice: 'Article was successfully saved.' }
         format.json { render action: 'show', status: :created, location: @project }
-      elsif file_exists
+      elsif uploaded_file_params[:file_exists]
         format.html { redirect_to @project, alert: 'An identical file has been already uploaded.' }
         format.json { render action: 'show', status: :unprocessable_entity, location: @project }
       else
@@ -136,6 +161,7 @@ class ProjectFilesController < ApplicationController
     if not @project_file.project.owner?(@current_user.id)
       alert = t :file_delete_no_access
     else
+      file_id = @project_file.id
       project = @project_file.project
       filename = @project_file.filename
 
@@ -143,6 +169,13 @@ class ProjectFilesController < ApplicationController
         if not @project_file.destroy
           alert = t :file_delete_error
         else
+          history_files = project.project_files.where('reference = ?', file_id)
+          history_files.each do |f|
+            @project_file = f
+            delete_file
+            @project_file.destroy
+          end
+
           notice = "#{(t :pre_file_delete_success)} \"#{filename}\" #{(t :post_file_delete_success)}"
         end
       end
@@ -163,6 +196,11 @@ class ProjectFilesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_file_params
       params.require(:project_file).permit(:project_id, :filename, :extension, :filepath, :is_basic)
+    end
+
+    def set_referer
+      session[:return_to] = '/'
+      session[:return_to] = request.referer
     end
 
     def allowed_file_types
@@ -197,6 +235,7 @@ class ProjectFilesController < ApplicationController
     
     def upload_file
       file_exists = true
+      id = 0
       uploaded_io = params[:project_file][:filename]
       params[:project_file][:filename] = params[:project_file][:filename].original_filename
       FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0755
@@ -210,13 +249,18 @@ class ProjectFilesController < ApplicationController
         old_file = output_path
         new_file = Rails.root.join('private', 'project_files', params[:project_file][:filepath], new_filename)
         File.rename(old_file, new_file)
-        projectFile.filepath = '/project_files/' + params[:project_file][:filepath] + '/' + new_filename
-        projectFile.filename = new_filename[0..new_filename.rindex('.')-1]
-        projectFile.is_old = true
-        projectFile.save!
+        ActiveRecord::Base.record_timestamps = false
+        begin
+          projectFile.filepath = '/project_files/' + params[:project_file][:filepath] + '/' + new_filename
+          projectFile.filename = new_filename[0..new_filename.rindex('.')-1]
+          projectFile.save!
+        ensure
+          ActiveRecord::Base.record_timestamps = true  # don't forget to enable it again!
+        end
 
         # New file should also be a basic file
         params[:project_file][:is_basic] = true
+        id = projectFile.id
       end
 
       if !File.file?(output_path)
@@ -235,7 +279,7 @@ class ProjectFilesController < ApplicationController
 
       params[:project_file][:filepath] = '/project_files/' + params[:project_file][:filepath] + '/' + params[:project_file][:filename]
       params[:project_file][:filename] = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]
-      return file_exists
+      return { :file_exists => file_exists, :file_id => id }
     end
 
     def update_file
@@ -247,11 +291,15 @@ class ProjectFilesController < ApplicationController
     end
 
     def delete_file
-      filepath = "#{Rails.root}/private#{@project_file.filepath}"
-      if File.file?(filepath)
-        return File.delete(filepath)
+      if is_url? @project_file.filepath
+        return true
       else
-        return false
+        filepath = "#{Rails.root}/private#{@project_file.filepath}"
+        if File.file?(filepath)
+          return File.delete(filepath)
+        else
+          return false
+        end
       end
     end
 end

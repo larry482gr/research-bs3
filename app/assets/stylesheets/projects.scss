@@ -192,14 +192,14 @@
 
 .pdf_modal > .modal-dialog {
 	width: 950px;
-	height: 988px;
+	height: 998px;
 	overflow-y: auto !important;
 }
 
 .pdf_modal .modal-body {
 	text-align: center;
-	height: 930px;
-	max-height: 940px !important;
+	height: 940px;
+	max-height: 950px !important;
 	overflow-y: auto !important;
 }
 
@@ -265,10 +265,6 @@
 
 .project_description {
   margin-bottom: 12px;
-}
-
-.save-article-btn {
-	float: right;
 }
 
 #upload_form {

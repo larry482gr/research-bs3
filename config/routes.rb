@@ -14,6 +14,7 @@ Researchgr::Application.routes.draw do
         member do
           post :set_main
           get :get_file
+          get :show_history
         end
       end
     end

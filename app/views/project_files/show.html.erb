@@ -1,13 +1,67 @@
-<h3 class="project_title">
-  <%= @project_file.filename %>
-  <span class="project_updated help-block">
-    <%= "#{(t :created_at)} #{l @project_file.created_at, format: :long} - " %>
-    <%= "#{(t :last_modified)} #{@updated_at}" %>
-  </span>
-</h3>
+<%- if @project_file.reference > 0 %>
+  <% refFile = ProjectFile.find(@project_file.reference) %>
+  <div class="col-md-6">
+    <h3 class="project_title">
+      <%# "#{refFile.filename} (#{number_to_human_size(@file_size, precision: 2)})" %>
+      <%= refFile.filename %>
+      <span class="project_updated help-block">
+        <%= "#{(t :created_at)} #{l refFile.created_at, format: :long} - " %>
+        <%= "#{(t :last_modified)} #{refFile.getModificationTime}" %>
+      </span>
+    </h3>
+  </div>
+<% end %>
 
-<div class="col-md-7 project_file">
-  <object width="100%" height="860"
+<div class="col-md-6">
+  <h3 class="project_title">
+    <%# "#{@project_file.filename} (#{number_to_human_size(@file_size, precision: 2)})" %>
+    <%= @project_file.filename %>
+    <span class="project_updated help-block">
+      <%= "#{(t :created_at)} #{l @project_file.created_at, format: :long} - " %>
+      <%= "#{(t :last_modified)} #{@project_file.getModificationTime}" %>
+    </span>
+  </h3>
+</div>
+
+<%- if @project_file.reference > 0 %>
+    <%
+       def get_extension_info extension
+         type = ''
+         case extension
+           when 'pdf'
+             type = 'application/pdf'
+           when 'txt'
+             type = 'text/plain'
+         end
+         return type
+       end
+    %>
+    <div class="col-md-6 project_file">
+      <object id="object-left" width="100%" height="860"
+              data="
+            <%- if refFile.filepath[0..3] == 'http' %>
+              <%= refFile.filepath %>
+            <%- else %>
+              <%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>
+            <% end %>
+            "
+              alt="<%= refFile.extension %>" type="<%= get_extension_info refFile.extension %>">
+        <a href="<%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>">No Support?</a>
+      </object>
+
+      <%- if @can_edit %>
+          <%= link_to (t :edit), edit_project_project_file_path(refFile.project, refFile), :class => 'btn btn-sm btn-warning' %>
+      <% end %>
+
+      <%= link_to (t :back), session[:return_to], :class => 'btn btn-sm btn-default' %>
+    </div>
+    <% colClass = 'col-md-6' %>
+<%- else %>
+    <% colClass = 'col-md-8' %>
+<% end %>
+
+<div class="<%= colClass %> project_file">
+  <object id="object-right" width="100%" height="860"
          data="
             <%- if @project_file.filepath[0..3] == 'http' %>
               <%= @project_file.filepath %>
@@ -18,12 +72,6 @@
          alt="<%= @project_file.extension %>" type="<%= @filetype %>">
     <a href="<%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>">No Support?</a>
   </object>
-
-  <%- if @can_edit %>
-    <%= link_to (t :edit), edit_project_project_file_path(@project_file.project, @project_file), :class => 'btn btn-sm btn-warning' %>
-  <% end %>
-
-  <%= link_to (t :back), project_path(@project_file.project), :class => 'btn btn-sm btn-default' %>
 </div>
 <!--
 <div class="col-md-5 search_div">
