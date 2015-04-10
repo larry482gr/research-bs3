@@ -27,6 +27,7 @@ test/tmp
 test/version_tmp
 public/assets
 private/
+cron/
 # Gemfile.lock
 
 # YARD artifacts

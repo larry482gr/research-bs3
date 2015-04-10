@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     end
 
     @updated_at = @project.getModificationTime
-    @project_files = @project.project_files.where('is_old = ?', false).order('updated_at DESC')
+    @project_files = @project.project_files.where('reference = ?', 0).order('updated_at DESC')
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
     session.delete(:search_gs)
@@ -42,10 +42,7 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @project = Project.new
-    @private_count = 0
-    @current_user.projects.each do |project|
-      @private_count += 1 if project.is_private and project.owner?(@current_user.id)
-    end
+    @private_count = private_count
   end
 
   # GET /projects/1/edit
@@ -54,6 +51,8 @@ class ProjectsController < ApplicationController
       flash[:alert] = :no_access
       redirect_to :root and return
     end
+
+    @private_count = private_count
   end
 
   # POST /projects
@@ -140,5 +139,14 @@ class ProjectsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
       params.require(:project).permit(:title, :description, :is_private)
+    end
+
+    def private_count
+      private_count = 0
+      @current_user.projects.each do |project|
+        private_count += 1 if project.is_private and project.owner?(@current_user.id)
+      end
+
+      return private_count
     end
 end

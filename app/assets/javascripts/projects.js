@@ -30,16 +30,28 @@ $(document).ready(function() {
       project_id = row_element.attr('rel');
       file_id = row_element.find('td:first-child').attr('rel');
       doc_title = row_element.find('td:nth-child(2)').text();
+      main_btn_txt = row_element.find('td:first-child').text().trim().length == 0 ? I18n.t("set_main_file") : I18n.t("unset_main_file");
       bootbox.dialog({
           title: I18n.t("file_actions_title"),
-          message: I18n.t("file_actions_message") + "\"" + doc_title + "\"" + I18n.t("question_mark"),
+          message: I18n.t("file_actions_message") + '"' + doc_title + '"' + I18n.t("question_mark"),
           buttons: {
               set_main: {
-                  label: I18n.t("set_main_file"),
+                  label: main_btn_txt,
                   className: "btn-danger",
                   callback: function() {
+                      btn_text = $(this).find('.btn-danger').text().trim().toLowerCase();
+                      should_set = btn_text.substring(0, btn_text.indexOf(' ')) == 'set' ? true : false;
+                      if(should_set) {
+                          text_prefix = I18n.t("set_main_file_prefix");
+                          text_suffix = I18n.t("set_main_file_suffix");
+                      }
+                      else {
+                          text_prefix = I18n.t("unset_main_file_prefix");
+                          text_suffix = I18n.t("unset_main_file_suffix");
+                      }
+
                       $(".bootbox").on('hidden.bs.modal', function () {
-                          bootbox.confirm(I18n.t("set_main_file_prefix") + '"' + doc_title + '"' + I18n.t("set_main_file_suffix") +
+                          bootbox.confirm(text_prefix + '"' + doc_title + '"' + text_suffix +
                                           I18n.t("question_mark"), function(result) {
                               if(result) {
                                   $(".bootbox").on('hidden.bs.modal', function () {
@@ -137,7 +149,7 @@ $(document).ready(function() {
 
         if(!validFile) {
             this.value = '';
-            $('#upload_form').reset();
+            // $('#upload_form').reset();
             bootbox.alert('Write message for NOT allowed file type.');
         }
         else {
