@@ -10,6 +10,36 @@
 	-o-transition: width 0.6s;
 }
 
+.projects_table, .project_files_table table {
+  margin: 20px 0px !important;
+}
+
+.project_files_table div.col-md-12, p.citation-text, div.citation-button {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.project_files_table p.citation-text {
+  margin-bottom: 20px;
+}
+
+.project_files_table table caption {
+  color: #333;
+  font-size: large;
+  font-weight: bold;
+}
+
+div.citations-header {
+  color: #333;
+  font-size: large;
+  font-weight: bold;
+  margin: 20px 0px !important;
+}
+
+div.citations-body {
+  margin-bottom: 20px;
+}
+
 .projects_table, .project_files_table tr th, td {
   padding: 6px !important;
 }
@@ -216,10 +246,10 @@
 }
 
 .right-div {
-  @media screen and (min-width: 767px) {
+  @media screen and (min-width: 992px) {
     padding-right: 0px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 991px) {
     padding-left: 0px;
   }
 
@@ -244,10 +274,10 @@
 }
 
 .invite-user {
-  @media screen and (min-width: 767px) {
+  @media screen and (min-width: 992px) {
     text-align: right;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 991px) {
     padding-left: 0px;
     margin-top: 10px;
   }
@@ -269,4 +299,9 @@
 
 #upload_form {
 	float: right;
+}
+
+.no-project-files {
+  margin: 40px 0px;
+  font-weight: bold;
 }

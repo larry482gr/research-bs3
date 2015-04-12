@@ -165,7 +165,7 @@ function showCitationsModal(doc_id, doc_num, citations) {
             "<a href='#' class='citation-save' id='citation_mla' onclick='return saveCitation(\"citation_mla\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "<div class='citation'><div class='citation-type' rel='citation_apa'>APA</div><div class='citation-body'>" + citations[1] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_apa' onclick='return saveCitation(\"citation_apa\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
-            "<div class='citation'><div class='citation-type' rel='citation_chicago'>Chicago</div><div class='citation-body'>" + citations[2] + "<br/>"+
+            "<div class='citation'><div class='citation-type' rel='citation_chicago'>ISO 690</div><div class='citation-body'>" + citations[2] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_chicago' onclick='return saveCitation(\"citation_chicago\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "",
             className: "citation-modal"
@@ -176,7 +176,7 @@ function showCitationsModal(doc_id, doc_num, citations) {
             title: I18n.t("citations_for") + '"' + doc_title + '"',
             message: "<div class='citation'><div class='citation-type'>MLA</div><div class='citation-body'>" + citations[0] + "</div></div>"+
             "<div class='citation'><div class='citation-type'>APA</div><div class='citation-body'>" + citations[1] + "</div></div>"+
-            "<div class='citation'><div class='citation-type'>Chicago</div><div class='citation-body'>" + citations[2] + "</div></div>",
+            "<div class='citation'><div class='citation-type'>ISO 690</div><div class='citation-body'>" + citations[2] + "</div></div>",
             className: "citation-modal"
         });
     }
@@ -194,6 +194,7 @@ function saveCitation(citation_type, doc_id) {
         },
         success: function(response) {
             $('#'+citation_type).text(I18n.t("saved_citation"));
+            location.reload();
         },
         error: function(response) {
             alert("Error!!!");

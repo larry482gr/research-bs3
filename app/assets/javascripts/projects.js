@@ -1,8 +1,8 @@
 $(document).ready(function() {
   $('#invite-user-btn').on('click', function() {
       if($('#invite-user-div').is(':hidden')) {
-          $('.left-div').removeClass('col-md-10').addClass('col-md-8');
-          $('.right-div').removeClass('col-md-2').addClass('col-md-4');
+          $('.left-div').removeClass('col-md-10').addClass('col-md-7');
+          $('.right-div').removeClass('col-md-2').addClass('col-md-5');
           $('#invite-user-div').delay(400).slideDown('fast');
 
           $('#invitation_email').val('');
@@ -13,8 +13,8 @@ $(document).ready(function() {
       }
       else {
           $('#invite-user-div').slideUp('fast', function(){
-              $('.left-div').removeClass('col-md-8').addClass('col-md-10');
-              $('.right-div').removeClass('col-md-4').addClass('col-md-2');
+              $('.left-div').removeClass('col-md-7').addClass('col-md-10');
+              $('.right-div').removeClass('col-md-5').addClass('col-md-2');
           });
       }
   });

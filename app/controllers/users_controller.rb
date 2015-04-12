@@ -60,7 +60,7 @@ class UsersController < ApplicationController
         session[:id] = @user.password
         session[:email] = @user.email
         notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
-        redirect_to(projects_path, :notice => notices.join('<br/>').html_safe) and return
+        redirect_to(projects_path, :notice => notices.join('<br/>')) and return
       end
     end
     flash[:alert] = :activation_error_html
@@ -79,12 +79,12 @@ class UsersController < ApplicationController
     # session[:return_to] = '/'
     # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
-      flash[:alert] = "Sorry! You don't have access to this page."
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = 'Sorry! You cannot view info of a user who has higher profile than you.'
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     begin
@@ -110,12 +110,12 @@ class UsersController < ApplicationController
     # session[:return_to] = '/'
     # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
-      flash[:alert] = "Sorry! You don't have access to this page."
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
   end
@@ -124,7 +124,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     if request.referer.nil? or (@current_user != nil and not @current_user.can_access?('user_create'))
-      flash[:alert] = "Sorry! You don't have access to this page."
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
 
@@ -147,7 +147,7 @@ class UsersController < ApplicationController
       @user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
-    notices = ["Welcome to ResearchGr #{params[:user][:username]}!"]
+    notices = ["Welcome to ResearchGr #{params[:user][:username]}!", 'An email was just sent to you with instructions to activate your account.']
     redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
   end
 
@@ -155,12 +155,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
-      flash[:alert] = "Sorry! You don't have access to this page."
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = 'Sorry! You cannot edit a user who has the same or higher role than you.'
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     respond_to do |format|
@@ -171,7 +171,7 @@ class UsersController < ApplicationController
           end
           @user.update(admin_params)
         end
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to @user, notice: (t :user_updated) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -184,12 +184,12 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_delete'))
-      flash[:alert] = "Sorry! You don't have access to this page."
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = 'Sorry! You cannot delete a user who has the same or higher role than you.'
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
 
@@ -215,7 +215,7 @@ class UsersController < ApplicationController
           format.json { render json: "{ \"deleted\": \"0\" }" }
         end
       else
-        flash[:alert] = 'An error occured while trying to delete your account'
+        flash[:alert] = "#{(t :user_delete_error)} #{(t :try_again)} #{(t :error_persists)}"
         respond_to do |format|
           format.html { redirect_to :root }
           format.json { head :no_content }

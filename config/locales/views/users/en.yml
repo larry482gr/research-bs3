@@ -22,6 +22,8 @@ en:
   list_users: "List Users"
   new_user: "New User"
   create_user: "Create User"
+  user_updated: "User was successfully updated."
+  user_delete_error: 'An error occured while trying to delete your account'
   delete_user: "Delete User"
   delete_comment:
     - "User request"

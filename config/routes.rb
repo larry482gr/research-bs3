@@ -17,6 +17,7 @@ Researchgr::Application.routes.draw do
           get :show_history
         end
       end
+      resources :citations
     end
     
     post 'check_login' => 'users#check_login'

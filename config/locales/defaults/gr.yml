@@ -29,6 +29,7 @@ gr:
   ok: "Ok"
   word_yes: "Ναι"
   word_no: "Όχι"
+  are_you_sure: "Είστε σίγουρος/η"
   question_mark: ";"
   show: "Προβολή"
   edit: "Επεξεργασία"

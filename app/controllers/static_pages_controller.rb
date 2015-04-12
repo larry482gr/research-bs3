@@ -167,8 +167,36 @@ class StaticPagesController < ApplicationController
         puts "Error: #{e}"
       end
 =end
+      uri = URI.parse("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
+      # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
+      # doc = Net::HTTP.get_response(url)
+=begin
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    req = Net::HTTP::Get.new(uri.request_uri)
 
-      url = URI.encode("https://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}").to_s
+    res = http.request(req)
+=end
+      req = Net::HTTP::Get.new(uri)
+      # req['User-Agent'] = 'Firefox'
+
+      res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+        http.request(req)
+      }
+
+      response = res.body
+      begin
+        cleaned = res.body.dup.force_encoding('UTF-8')
+        unless cleaned.valid_encoding?
+          cleaned = res.body.encode( 'UTF-8', 'Windows-1251' )
+        end
+        response = cleaned
+      rescue EncodingError
+        response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
+      end
+=begin
+      url = URI.encode().to_s
       doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
       doc.encoding = 'UTF-8'
 
@@ -176,7 +204,7 @@ class StaticPagesController < ApplicationController
       # doc.encoding = 'UTF-8'
 
       response = doc.to_s
-
+=end
       result_indexes = []
 
       response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
@@ -223,9 +251,7 @@ class StaticPagesController < ApplicationController
     if result < 1
       result = project.insert_citation(doc_id, citation_type)
     end
-    
-    
-        
+
     respond_to do |format|
       if result < 1
         format.js { render json: "{ \"id\": \"success\" }" }

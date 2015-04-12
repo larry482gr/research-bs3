@@ -2,8 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.new_user {
+#new_user {
 	margin-top: 10px;
+}
+
+#new_user > div > input {
+  font-size: medium;
+}
+
+input.new_user {
+  margin-top: 30px;
 }
 
 #sign-in-error {

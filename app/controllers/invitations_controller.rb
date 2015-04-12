@@ -45,16 +45,20 @@ class InvitationsController < ApplicationController
 
     @user = User.find_by_email(params[:invitation][:email])
 
-    # @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id, project_profile_id: params[:invitation][:profile])
-    begin
-      @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
-      if @invitation.save
-        notice = "#{(t :invitation_sent)} #{@user.username}"
-      else
-        alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
+    if @user
+      begin
+        @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
+        if @invitation.save
+          notice = "#{(t :invitation_sent)} #{@user.username}"
+        else
+          alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
+        end
+      rescue ActiveRecord::RecordNotUnique
+        error_msg = (t :invitation_duplicate).to_s.gsub('_@user@_', @user.username).gsub('_@project@_', @project.title)
+        alert = error_msg
       end
-    rescue ActiveRecord::RecordNotUnique
-      error_msg = (t :invitation_duplicate).to_s.gsub('_@user@_', @user.username).gsub('_@project@_', @project.title)
+    else
+      error_msg = (t :invitation_user_restriction)
       alert = error_msg
     end
 

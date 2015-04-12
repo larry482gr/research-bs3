@@ -32,8 +32,8 @@ class ProjectsController < ApplicationController
       redirect_to :root and return
     end
 
-    @updated_at = @project.getModificationTime
     @project_files = @project.project_files.where('reference = ?', 0).order('updated_at DESC')
+    @project_citations = get_citations.sort {|x,y| x['cit']<=>y['cit']}
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
     session.delete(:search_gs)
@@ -148,5 +148,9 @@ class ProjectsController < ApplicationController
       end
 
       return private_count
+    end
+
+    def get_citations
+      return @project.get_citations
     end
 end

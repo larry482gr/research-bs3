@@ -14,6 +14,11 @@ en:
   search_gs: "Search for a book, article or paper"
   upload: "Upload"
   upload_file: "Upload file..."
+  no_project_files: "Oops! This project has no files yet."
+  project_files: "Project Files"
+  project_citations: "Project Citations"
+  citation_deleted: "Citation successfully deleted."
+  cite_delete_error: "There was an error deleting the citation."
   time:
     formats:
       short: "%m-%d-%Y"

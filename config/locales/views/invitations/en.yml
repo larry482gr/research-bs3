@@ -3,6 +3,7 @@ en:
   no_invitation_access: "Sorry! You don't have the appropriate rights to invite people to this project."
   invitation_sent: "Invitation successfully sent to"
   invitation_fail: "Invitation failed to be sent."
+  invitation_user_restriction: "At the moment you can only invite registered users."
   invitation_duplicate: "You have already sent an invitation to _@user@_ for project \"_@project@_\""
   accept: "Accept"
   discard: "Discard"

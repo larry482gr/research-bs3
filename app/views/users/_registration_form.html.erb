@@ -1,4 +1,4 @@
-<div class="col-md-3">
+<div class="col-md-4">
     <%= form_for @user do |f| %>
       <%- if @user.errors.any? do %>
         <div id="error_explanation">
@@ -14,16 +14,16 @@
       <% end %>
       <% end %>
       <div class="form-group">
-        <%= f.text_field :username, :class => 'form-control', :placeholder => (t :username) %>
+        <%= f.text_field :username, :class => 'form-control input-lg', :placeholder => (t :username) %>
       </div>
       <div class="form-group">
-        <%= f.text_field :email, {:class => 'form-control', :placeholder => 'Email', :type => 'email'} %>
+        <%= f.text_field :email, {:class => 'form-control input-lg', :placeholder => 'Email', :type => 'email'} %>
       </div>
       <div class="form-group">
-        <%= f.password_field :password, {:class => 'form-control', :placeholder => (t :password)} %>
+        <%= f.password_field :password, {:class => 'form-control input-lg', :placeholder => (t :password)} %>
       </div>
       <div class="actions">
-        <%= f.submit (t :register), :class => 'btn btn-success btn-block new_user' %>
+        <%= f.submit (t :register), :class => 'btn btn-lg btn-success btn-block new_user' %>
       </div>
     <% end %>
 </div>

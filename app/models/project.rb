@@ -37,6 +37,35 @@ class Project < ActiveRecord::Base
 
     return result.to_hash[0]['project_profile_id'].to_i == 2 unless result.empty?
   end
+
+  def get_citations
+    query = "SELECT citation_id, citation_type FROM citations_projects WHERE project_id = #{self.id} AND citation_type IS NOT NULL"
+    project_citations = ActiveRecord::Base.connection.exec_query(query)
+
+    citations = []
+
+    puts "\nEach do:\n\n"
+    project_citations.each do |cite|
+      query = "SELECT citation_id as id, #{cite['citation_type']} as cit FROM citations WHERE citation_id = '#{cite['citation_id']}'"
+      citation = ActiveRecord::Base.connection.exec_query(query)
+      puts "\n\n"
+      puts citation
+      citations << citation[0]
+    end
+    puts "\n\n\n"
+
+    return citations
+  end
+
+  def insert_citation (doc_id, citation_type)
+    cite_id		= ActiveRecord::Base.connection.quote(doc_id)
+    cite_type	= ActiveRecord::Base.connection.quote(citation_type)
+
+    query = "INSERT INTO citations_projects
+  			 VALUES (#{self.id}, #{cite_id}, #{cite_type})"
+
+    return ActiveRecord::Base.connection.insert_sql(query)
+  end
   
   def update_citation(doc_id, citation_type)
     cite_id		= ActiveRecord::Base.connection.quote(doc_id)
@@ -49,15 +78,15 @@ class Project < ActiveRecord::Base
     
     return ActiveRecord::Base.connection.update_sql(query)
   end
-  
-  def insert_citation (doc_id, citation_type)
-    cite_id		= ActiveRecord::Base.connection.quote(doc_id)
-    cite_type	= ActiveRecord::Base.connection.quote(citation_type)
 
-  	query = "INSERT INTO citations_projects
-  			 VALUES (#{self.id}, #{cite_id}, #{cite_type})"
-    
-    return ActiveRecord::Base.connection.insert_sql(query)
+  def delete_citation(citation_id)
+    cite_id		= ActiveRecord::Base.connection.quote(citation_id)
+
+    query = "DELETE FROM citations_projects
+  			 WHERE project_id = #{self.id}
+  			 AND citation_id = #{cite_id}"
+
+    return ActiveRecord::Base.connection.delete(query)
   end
 
   def add_user(user_id, project_profile)
