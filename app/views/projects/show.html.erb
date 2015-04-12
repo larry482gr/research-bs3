@@ -71,7 +71,9 @@
             <%- @project_citations.each do |citation| %>
               <p class="citation-text col-md-11 col-sm-10 col-xs-10"><%= citation['cit'].html_safe %></p>
               <div class="citation-button col-md-1 col-sm-2 col-xs-2">
-                <%= link_to (t :delete), project_citation_path(@project, citation['id']), :class => 'btn btn-xs btn-danger pull-right', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
+                <%- if @owner %>
+                  <%= link_to (t :delete), project_citation_path(@project, citation['id']), :class => 'btn btn-xs btn-danger pull-right', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
+                <% end %>
               </div>
             <% end %>
           </div>

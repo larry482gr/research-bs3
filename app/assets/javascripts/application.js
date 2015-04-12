@@ -132,4 +132,8 @@ $(document).ready(function(){
             });
         }
     });
+
+    if($('html').height()+60 < $(window).height()) {
+        $('.footer').css('position', 'absolute');
+    }
 });

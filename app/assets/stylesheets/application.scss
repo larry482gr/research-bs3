@@ -44,11 +44,14 @@
 }
 
 .footer {
-  background-color: #f5f5f5;
-  bottom: 0;
+  float: none;
+  clear: both;
   height: 60px;
-  position: absolute;
   width: 100%;
+  position: relative;
+  bottom: 0;
+  background-color: #f5f5f5;
+  border-top: 1px solid #c2c2c2;
 }
 
 .container > .text-muted {
@@ -57,6 +60,10 @@
 
 .loader_icon {
   margin: 0px 4px;
+}
+
+.navbar {
+  margin-bottom: 0px;
 }
 
 #navbar-menu {

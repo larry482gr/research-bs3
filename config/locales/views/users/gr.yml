@@ -16,7 +16,7 @@ gr:
   invalid_credentials: "Το όνομα χρήστη ή ο κωδικός πρόσβασης που καταχωρίσατε δεν είναι έγγυρα."
   activation_error_html: "Oops, we had some problems activating your account! Either it is already activated or an error occured.<br/>Try following the activation link again or directly Sign In. If you see this message again contact our support team at: support@researchgr.com"
   sign_out: "Έξοδος"
-  sign_in_modal: "Είσοδος στο λογαριασμό μου"
+  sign_in_modal: "Είσοδος στο λογαριασμό σας"
   register: "Εγγραφή"
   profile: "Προφίλ"
   list_users: "Προβολή Χρηστών"

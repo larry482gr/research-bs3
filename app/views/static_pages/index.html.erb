@@ -1,14 +1,16 @@
 <%- provide(:title, (t :homepage)) %>
 
 <div class="home-page">
-  <div class="home-bg"></div>
   <div class="home-content">
     <div class="container">
-      <div class="col-md-8 home-text">
+      <div class="col-md-7 col-sm-7 col-xs-7 home-text">
         <h1>
           Research better.<br/>
           Group together.
         </h1>
+        <p>
+          Global collaboration, academic search and research project management all within your browser.
+        </p>
       </div>
 
       <%- if @current_user.nil? %>
@@ -16,8 +18,38 @@
       <% end %>
     </div>
   </div>
+  <div class="home-features">
+    <div class="container">
+        <h2>Key Features</h2>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <h1><p><span class="glyphicon glyphicon-cloud"></span></p></h1>
+          <h4>Research Everywhere</h4>
+          <p class="help-block">
+            Access your projects from practically everywhere.<br/>From your desktop or your mobile device.
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <h1><p><span class="glyphicon glyphicon-user"></span></p></h1>
+          <h4>Group with anyone</h4>
+          <p class="help-block">
+            Invite your colleagues or researchers from around the world<br/>to participate in your project.
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <h1><p><span class="glyphicon glyphicon-search"></span></p></h1>
+          <h4>Search from Giants</h4>
+          <p class="help-block">
+            Search for books, articles or papers from Google Scholar's library.<br/>More academic libraries coming soon.
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <h1><p><span class="glyphicon glyphicon-inbox"></span></p></h1>
+          <h4>Project History</h4>
+          <p class="help-block">
+            Set one or more files as your project/research main files<br/>and keep track or their modifications through time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!--
-ResearchGr is a SaaS application to help research groups easily manage their projects. Most importantly research groups with members located in different geographical locations can share project's content (files, statistics etc.) through an easy to use web application.
--->
