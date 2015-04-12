@@ -1,3 +1,58 @@
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.home-page {
+  height: 360px;
+  min-width: 900px;
+}
+
+.home-content {
+  background-color: rgba(0, 0, 0, 0.99);
+  background-image: url("home-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-top: 40px;
+  height: 360px;
+}
+
+.home-content .home-text {
+  padding-left: 0px;
+  color: #FFFFFF;
+  font-size: large;
+}
+
+.home-content .home-text p {
+  margin-top: 30px;
+  font-size: large;
+}
+
+.home-features > .container h2 {
+  margin-top: 60px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.home-features > .container h4 {
+  margin-top: 20px;
+}
+
+.home-features > .container h1 > p >span {
+  height: 80px;
+  width: 80px;
+  border: 1px solid #CCCCCC;
+  border-radius: 40px;
+  font-size: 40px;
+  color: #5cb85c;
+  padding: 20px;
+}
+
+.home-features > .container h1, h4 {
+  text-align: center;
+  margin-top: 0px;
+}
+
+.home-features > .container p {
+  text-align: center;
+  margin-bottom: 40px;
+}

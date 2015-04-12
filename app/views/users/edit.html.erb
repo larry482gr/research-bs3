@@ -1,0 +1,10 @@
+<h1>Editing user</h1>
+
+<div class="col-md-4">
+  <%= render 'edit_form' %>
+</div>
+<div class="col-md-12">
+  <%= link_to (t :show), @user %>
+  &ensp;|&ensp;
+  <%= link_to (t :back), session[:return_to] %>
+</div>

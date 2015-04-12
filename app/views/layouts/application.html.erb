@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Researchgr | <%= yield :title %></title>
+  <title>ResearchGr | <%= yield :title %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -20,44 +20,61 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<% :root %>">ResearchGr</a>
+      <%- if @current_user.nil? %>
+        <% home_path = root_path %>
+      <%- else %>
+        <% home_path = projects_path %>
+      <% end %>
+      <a class="navbar-brand" href="<%= home_path %>">ResearchGr</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="collapsible-navbar">
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" id="search" class="form-control" placeholder="<%= (t :search) %>" autocomplete="off">
-        </div>
-      </form>
+      <%- unless @current_user.nil? %>
+        <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
+          <div class="form-group">
+            <input type="text" id="search" class="form-control" placeholder="<%= (t :search) %>" autocomplete="off">
+          </div>
+        </form>
+      <% end %>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li><a href="#">Another Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-        <%- if (session[:user].nil?) %>
+        <%- unless @current_user.nil? %>
+          <% invitation_count = @current_user.invitations.where('status = ?', 'pending').count %>
+          <%- unless invitation_count.zero? %>
+            <li>
+              <a href="#" class="active" id="invitations-link"><%= (t :invitations) %> <span class="badge active"><%= invitation_count %></span></a>
+              <input type='hidden' id='discard-options' value='
+                <%- (t :discard_comment).each do |option| %>
+                <%= "<option value=\"#{option}\">#{option}</option>" %>
+                <% end %>
+              '>
+              <input type='hidden' id='report-options' value='
+                <%- (t :report_comment).each do |option| %>
+                <%= "<option value=\"#{option}\">#{option}</option>" %>
+                <% end %>
+              '>
+              <script type="text/javascript">
+                $(document).ready(function(){
+                    checkInvitations();
+                });
+              </script>
+            </li>
+          <% end %>
+          <li><a href="<%= projects_path %>"><%= (t :my_projects) %></a></li>
+        <% end %>
+        <%- if @current_user.nil? %>
             <li><button id="sign-in" class="btn btn-success sign-in-out"><%= (t :sign_in) %></button></li>
         <%- else %>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= "#{session[:user]['username']}" %> <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= @current_user.username %> <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <li><a href="<%= user_path(@current_user.id) %>"><%= (t :profile) %></a></li>
+                <%- if @current_user.can_access?('user_list') %>
+                  <li><a href="<%= users_path %>"><%= (t :list_users) %></a></li>
+                <% end %>
                 <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+                <li><%= link_to (t :sign_out), '/logout' %></li>
               </ul>
-            </li>
-            <li>
-              <button id="sign-out" class="btn btn-success sign-in-out"><%= (t :sign_out) %></button>
             </li>
         <% end %>
       </ul>
@@ -65,23 +82,31 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container">
+<%- unless @current_user.nil? %>
+    <div class="container">
+<% end %>
   <div id="main">
     <%- if flash[:notice] %>
         <div id="notice" class="message">
-          <%= (t flash[:notice]) %>
+          <%= flash[:notice].html_safe %>
         </div>
     <%- elsif flash[:alert] %>
         <div id="alert" class="message">
-          <%= (t flash[:alert]) %>
+          <%= flash[:alert].html_safe %>
         </div>
     <% end %>
     <%= yield %>
   </div>
-</div>
+<%- unless @current_user.nil? %>
+    </div>
+<% end %>
 
-<div class="footer container">
-  <h5>Footer Content to be added...</h5>
+<div class="footer">
+  <div class="container">
+    <p class="text-muted">
+      &copy; 2015 ResearchGr
+    </p>
+  </div>
 </div>
 </body>
 </html>

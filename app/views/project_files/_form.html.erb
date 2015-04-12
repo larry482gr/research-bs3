@@ -1,0 +1,27 @@
+<%= form_for [@project_file.project, @project_file] do |f| %>
+  <%- if @project_file.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= "#{pluralize(@project_file.errors.count, "error")} prohibited this project_file from being saved:" %></h2>
+      <ul>
+        <%- @project_file.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field form-group">
+    <%= f.label (t :filename) %>
+    <%= f.text_field :filename, class: 'form-control', value: @project_file.filename %>
+  </div>
+    <!--
+  <div class="field checkbox">
+    <label>
+      <%= f.check_box :is_basic, value: @project_file.is_basic ? 1 : 0 %><%= (t :main_file) %>
+    </label>
+  </div>
+  -->
+  <div class="actions">
+    <%= f.submit (t :save), :class => 'btn btn-sm btn-success' %>
+    <%= link_to (t :back), session[:return_to], :class => 'btn btn-sm btn-default' %>
+  </div>
+<% end %>

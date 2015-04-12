@@ -23,7 +23,12 @@ describe ProjectsController do
   # This should return the minimal set of attributes required to create a valid
   # Project. As you add validations to Project, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "title" => "MyString" } }
+  let(:valid_attributes) { { "title" => "MyTitle", "description" => "MyDescription" } }
+  let(:user_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
+  before(:each) do
+    @current_user = User.create! user_attributes
+    UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -34,14 +39,14 @@ describe ProjectsController do
     it "assigns all projects as @projects" do
       project = Project.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:projects).should eq([project])
+      assigns(:projects).should eq(project)
     end
   end
 
   describe "GET show" do
     it "assigns the requested project as @project" do
       project = Project.create! valid_attributes
-      get :show, {:id => project.to_param}, valid_session
+      get :show, {:id => project.id}, valid_session
       assigns(:project).should eq(project)
     end
   end
@@ -56,7 +61,7 @@ describe ProjectsController do
   describe "GET edit" do
     it "assigns the requested project as @project" do
       project = Project.create! valid_attributes
-      get :edit, {:id => project.to_param}, valid_session
+      get :edit, {:id => project.id}, valid_session
       assigns(:project).should eq(project)
     end
   end
@@ -107,18 +112,18 @@ describe ProjectsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Project.any_instance.should_receive(:update).with({ "title" => "MyString" })
-        put :update, {:id => project.to_param, :project => { "title" => "MyString" }}, valid_session
+        put :update, {:id => project.id, :project => { "title" => "MyString" }}, valid_session
       end
 
       it "assigns the requested project as @project" do
         project = Project.create! valid_attributes
-        put :update, {:id => project.to_param, :project => valid_attributes}, valid_session
+        put :update, {:id => project.id, :project => valid_attributes}, valid_session
         assigns(:project).should eq(project)
       end
 
       it "redirects to the project" do
         project = Project.create! valid_attributes
-        put :update, {:id => project.to_param, :project => valid_attributes}, valid_session
+        put :update, {:id => project.id, :project => valid_attributes}, valid_session
         response.should redirect_to(project)
       end
     end
@@ -128,7 +133,7 @@ describe ProjectsController do
         project = Project.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Project.any_instance.stub(:save).and_return(false)
-        put :update, {:id => project.to_param, :project => { "title" => "invalid value" }}, valid_session
+        put :update, {:id => project.id, :project => { "title" => "invalid value" }}, valid_session
         assigns(:project).should eq(project)
       end
 
@@ -136,7 +141,7 @@ describe ProjectsController do
         project = Project.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Project.any_instance.stub(:save).and_return(false)
-        put :update, {:id => project.to_param, :project => { "title" => "invalid value" }}, valid_session
+        put :update, {:id => project.id, :project => { "title" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end
@@ -146,13 +151,13 @@ describe ProjectsController do
     it "destroys the requested project" do
       project = Project.create! valid_attributes
       expect {
-        delete :destroy, {:id => project.to_param}, valid_session
+        delete :destroy, {:id => project.id}, valid_session
       }.to change(Project, :count).by(-1)
     end
 
     it "redirects to the projects list" do
       project = Project.create! valid_attributes
-      delete :destroy, {:id => project.to_param}, valid_session
+      delete :destroy, {:id => project.id}, valid_session
       response.should redirect_to(projects_url)
     end
   end

@@ -5,5 +5,6 @@ class CreateJoinTableUserProject < ActiveRecord::Migration
       t.index [:project_id, :user_id]
       t.references :project_profile
     end
+    execute 'ALTER TABLE projects_users ADD PRIMARY KEY (user_id,project_id);';
   end
 end

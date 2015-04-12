@@ -23,25 +23,36 @@ describe ProjectFilesController do
   # This should return the minimal set of attributes required to create a valid
   # ProjectFile. As you add validations to ProjectFile, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "project" => "" } }
+  let(:user_attributes) { { 'username' => 'MyString', 'email' => 'email@localhost.home', 'password' => 'my_secret_pass', 'profile_id' => '1'} }
+  let(:project_attributes) { { 'title' => 'MyTitle', 'description' => 'MyDescription'} }
+  before(:each) do
+    @current_user = User.create! user_attributes
+    UserInfo.create(:user_id => @current_user.id, :activated => true, :token => nil)
+  end
+  before(:each) do
+    @project = Project.create! project_attributes
+  end
+
+  let(:valid_attributes) { { "project_id" => @project.id, "user_id" => @current_user.id, "filename" => "MyFilename", "filepath" => "/project_files/0/1/test_file.txt" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ProjectFilesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+
   describe "GET index" do
-    it "assigns all project_files as @project_files" do
+    it "assigns all project_files as project" do
       project_file = ProjectFile.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:project_files).should eq([project_file])
+      get :index, { :project_id => project_file.project }, valid_session
+      assigns(:project).should eq([project_file.project])
     end
   end
 
   describe "GET show" do
     it "assigns the requested project_file as @project_file" do
       project_file = ProjectFile.create! valid_attributes
-      get :show, {:id => project_file.to_param}, valid_session
+      get :show, {:id => project_file.id, :project_id => project_file.project }, valid_session
       assigns(:project_file).should eq(project_file)
     end
   end
@@ -56,7 +67,7 @@ describe ProjectFilesController do
   describe "GET edit" do
     it "assigns the requested project_file as @project_file" do
       project_file = ProjectFile.create! valid_attributes
-      get :edit, {:id => project_file.to_param}, valid_session
+      get :edit, {:id => project_file.id, :project_id => project_file.project }, valid_session
       assigns(:project_file).should eq(project_file)
     end
   end
@@ -107,18 +118,18 @@ describe ProjectFilesController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         ProjectFile.any_instance.should_receive(:update).with({ "project" => "" })
-        put :update, {:id => project_file.to_param, :project_file => { "project" => "" }}, valid_session
+        put :update, {:id => project_file.id, :project_id => project_file.project }, valid_session
       end
 
       it "assigns the requested project_file as @project_file" do
         project_file = ProjectFile.create! valid_attributes
-        put :update, {:id => project_file.to_param, :project_file => valid_attributes}, valid_session
+        put :update, {:id => project_file.id, :project_id => project_file.project }, valid_session
         assigns(:project_file).should eq(project_file)
       end
 
       it "redirects to the project_file" do
         project_file = ProjectFile.create! valid_attributes
-        put :update, {:id => project_file.to_param, :project_file => valid_attributes}, valid_session
+        put :update, {:id => project_file.id, :project_id => project_file.project }, valid_session
         response.should redirect_to(project_file)
       end
     end
@@ -128,7 +139,7 @@ describe ProjectFilesController do
         project_file = ProjectFile.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProjectFile.any_instance.stub(:save).and_return(false)
-        put :update, {:id => project_file.to_param, :project_file => { "project" => "invalid value" }}, valid_session
+        put :update, {:id => project_file.id, :project_id => project_file.project }, valid_session
         assigns(:project_file).should eq(project_file)
       end
 
@@ -136,7 +147,7 @@ describe ProjectFilesController do
         project_file = ProjectFile.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProjectFile.any_instance.stub(:save).and_return(false)
-        put :update, {:id => project_file.to_param, :project_file => { "project" => "invalid value" }}, valid_session
+        put :update, {:id => project_file.id, :project_id => project_file.project }, valid_session
         response.should render_template("edit")
       end
     end
@@ -146,13 +157,13 @@ describe ProjectFilesController do
     it "destroys the requested project_file" do
       project_file = ProjectFile.create! valid_attributes
       expect {
-        delete :destroy, {:id => project_file.to_param}, valid_session
+        delete :destroy, {:id => project_file.id, :project_id => project_file.project }, valid_session
       }.to change(ProjectFile, :count).by(-1)
     end
 
     it "redirects to the project_files list" do
       project_file = ProjectFile.create! valid_attributes
-      delete :destroy, {:id => project_file.to_param}, valid_session
+      delete :destroy, {:id => project_file.id, :project_id => project_file.project }, valid_session
       response.should redirect_to(project_files_url)
     end
   end

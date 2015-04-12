@@ -25,8 +25,49 @@ en:
   search: "Search for a user or project"
   no_results: "No results found."
   save: "Save"
-  yes: "Yes"
-  no: "No"
+  cancel: "Cancel"
+  ok: "Ok"
+  word_yes: "Yes"
+  word_no: "No"
+  are_you_sure: "Are you sure"
   question_mark: "?"
+  show: "Show"
   edit: "Edit"
+  delete: "Delete"
+  reason: "Reason"
   back: "Back"
+  english: "English"
+  greek: "Greek"
+  my_projects: "My Projects"
+  owner: "Member"
+  collaborator: "Collaborator"
+  send: "Send"
+  try_again: "Please try again."
+  error_persists: "If this error persists contact our support department at... (support_mail)"
+  write_comment: "Write a comment"
+  provide_comment: "In this case you <b>must</b> provide a comment"
+  large_comment: "Your comment should not exceed 200 characters"
+
+  time:
+      formats:
+        short: "%m-%d-%Y"
+        long: "%m-%d-%Y (%H:%m:%S)"
+
+  more_than: "more than"
+  ago: "ago"
+  few_seconds: "a few seconds ago"
+  year:
+    one: "1 year"
+    other: "%{count} years"
+  month:
+    one: "1 month"
+    other: "%{count} months"
+  day:
+    one: "1 day"
+    other: "%{count} days"
+  hour:
+    one: "1 hour"
+    other: "%{count} hours"
+  minute:
+    one: "1 minute"
+    other: "%{count} minutes"

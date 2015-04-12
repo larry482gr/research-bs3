@@ -2,26 +2,32 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.project_file {
+  padding-left: 0px !important;
+}
 
-.citation-modal {
-	width: 700px !important;
-	margin-left: -350px !important;
+.project_file > embed {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
 }
 
 .citation {
-	clear: both;
+  clear: both;
 }
 
 .citation-type {
-	float: left;
-	width: 50px;
 	font-weight: bold;
 	color: #666;
-	text-align: right;
 }
 
 .citation-body {
-	float: right;
-	width: 600px;
 	margin-bottom: 20px;
+}
+
+.file_history_table tr {
+  cursor: pointer;
+}
+
+object {
+  margin-bottom: 10px;
 }

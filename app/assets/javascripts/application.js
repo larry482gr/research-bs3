@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
+//= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require bootbox.min
@@ -22,29 +24,31 @@
 
 $(document).ready(function(){
     // PNotify.prototype.options.styling = "fontawesome";
-    $('.container').on('click', '#sign-in', function(){
+
+    $('.container').on('click', '#sign-in', function() {
         var message_text = '<form class="form-horizontal">'+
-            '<div class="control-group">'+
-            '<label class="control-label" for="inputUsername">'+I18n.t("username")+'</label>'+
-            '<div class="controls">'+
-            '<input type="text" id="inputUsername" placeholder="'+I18n.t("username")+'">'+
+            '<div class="form-group">'+
+            '<label class="control-label col-md-2" for="inputUsername">'+I18n.t("username")+'</label>'+
+            '<div class="controls col-md-6">'+
+            '<input type="text" id="inputUsername" class="form-control" placeholder="'+I18n.t("username")+'">'+
             '</div>'+
             '</div>'+
-            '<div class="control-group">'+
-            '<label class="control-label" for="inputPassword">'+I18n.t("password")+'</label>'+
-            '<div class="controls">'+
-            '<input type="password" id="inputPassword" placeholder="'+I18n.t("password")+'">'+
-            '<div id="sign-in-error"></div>'+
+            '<div class="form-group">'+
+            '<label class="control-label col-md-2" for="inputPassword">'+I18n.t("password")+'</label>'+
+            '<div class="controls col-md-6">'+
+            '<input type="password" id="inputPassword" class="form-control" placeholder="'+I18n.t("password")+'">'+
             '</div>'+
+            '<div id="sign-in-error" class="col-md-offset-2 col-md-9"></div>'+
             '</div>'+
-            '<div class="control-group">'+
-            '<div class="controls">'+
+            '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
+            '<div class="form-group">'+
+            '<div class="controls col-md-offset-2 col-md-6">'+
             '<button type="button" class="btn btn-success" id="sign-in-btn">'+I18n.t("sign_in")+'</button>'+
             '</div>'+
             '</div>'+
             '</form>'+
             '<script type="text/javascript">'+
-            '$(".modal").on("shown", function(){'+
+            '$(".modal").on("shown.bs.modal", function(){'+
             '$("#inputUsername").focus();'+
             '});'+
             '$("#sign-in-btn").on("click", function(){'+
@@ -66,13 +70,13 @@ $(document).ready(function(){
         location.href = "/logout";
     });
 
-    $('#search').on('focus', function(){
+    $('#search').on('focus', function() {
         if($( document ).width() > 630)
             $(this).parent().addClass('has-success');
-            $(this).css('width', '258px').css('background-color', '#FFF').css('border', '1px solid #67b168');
+            $(this).css('width', '380px').css('background-color', '#FFF').css('border', '1px solid #67b168');
     });
 
-    $('#search').on('blur', function(){
+    $('#search').on('blur', function() {
         $(this).parent().removeClass('has-success');
         $(this).css('width', '200px').css('background-color', '#EEE').css('border', '1px solid #ccc');
     });
@@ -129,35 +133,7 @@ $(document).ready(function(){
         }
     });
 
-
-    $(function(){
-        new PNotify({
-            title: 'Regular Notice',
-            text: 'Check me out! I\'m a notice.'
-        });
-    });
-
+    if($('html').height()+60 < $(window).height()) {
+        $('.footer').css('position', 'absolute');
+    }
 });
-
-function signIn() {
-    $("#warning").remove();
-    $.ajax({
-        url: "check_login",
-        cache: false,
-        type: "post",
-        data: "user[username]=" + $('#inputUsername').val() + "&user[password]=" + $('#inputPassword').val(),
-        dataType: "json",
-        success: function(user) {
-            if (user.id > 0){
-                location.href = "projects"; // "http://localhost:3000";
-            }
-            else if (user.id == 0){
-                $(".modal").modal("hide");
-                $("#main").prepend("<div id='alert' class='message'>Please activate your account by following the link you will find at your email.</div>");
-            }
-            else{
-                $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);
-            }
-        }
-    });
-}

@@ -29,54 +29,37 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   add_index "citations_projects", ["project_id", "citation_id"], name: "index_citations_projects_on_project_id_and_citation_id", using: :btree
 
   create_table "history_projects", id: false, force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.integer  "project_id",  limit: 4
-    t.string   "from_value",  limit: 20, null: false
-    t.string   "to_value",    limit: 20, null: false
-    t.string   "change_type", limit: 20, null: false
-    t.datetime "datetime"
+    t.integer  "user_id",     limit: 4,  default: 0, null: false
+    t.integer  "project_id",  limit: 4,  default: 0, null: false
+    t.string   "from_value",  limit: 20,             null: false
+    t.string   "to_value",    limit: 20,             null: false
+    t.string   "change_type", limit: 20,             null: false
+    t.datetime "created_at",                         null: false
   end
-
-  add_index "history_projects", ["project_id"], name: "index_history_projects_on_project_id", using: :btree
-  add_index "history_projects", ["user_id"], name: "index_history_projects_on_user_id", using: :btree
-
-  create_table "history_reports", id: false, force: :cascade do |t|
-    t.integer  "user_id",            limit: 4
-    t.integer  "project_id",         limit: 4
-    t.integer  "reported_user",      limit: 4, null: false
-    t.datetime "invitation_sent_at"
-    t.datetime "created_at"
-  end
-
-  add_index "history_reports", ["invitation_sent_at"], name: "index_history_reports_on_invitation_sent_at", using: :btree
-  add_index "history_reports", ["project_id"], name: "index_history_reports_on_project_id", using: :btree
-  add_index "history_reports", ["user_id"], name: "index_history_reports_on_user_id", using: :btree
 
   create_table "history_user_infos", id: false, force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.string   "user_email",  limit: 50, null: false
-    t.string   "admin",       limit: 20
-    t.string   "from_value",  limit: 20, null: false
-    t.string   "to_value",    limit: 20, null: false
-    t.string   "change_type", limit: 20, null: false
-    t.datetime "datetime"
+    t.integer  "user_id",     limit: 4,   default: 0,  null: false
+    t.string   "user_email",  limit: 50,               null: false
+    t.string   "admin",       limit: 20,               null: false
+    t.string   "from_value",  limit: 20,               null: false
+    t.string   "to_value",    limit: 20,               null: false
+    t.string   "change_type", limit: 50,  default: "", null: false
+    t.string   "comment",     limit: 255
+    t.datetime "created_at",                           null: false
   end
 
-  add_index "history_user_infos", ["user_id"], name: "index_history_user_infos_on_user_id", using: :btree
-
-  create_table "invitations", force: :cascade do |t|
-    t.integer  "user_id",            limit: 4
-    t.integer  "from_user",          limit: 4,  null: false
-    t.integer  "project_id",         limit: 4
-    t.integer  "project_profile_id", limit: 4
-    t.string   "status",             limit: 10, null: false
-    t.string   "reason",             limit: 20
+  create_table "invitations", id: false, force: :cascade do |t|
+    t.integer  "user_id",            limit: 4,               null: false
+    t.integer  "from_user",          limit: 4,               null: false
+    t.integer  "project_id",         limit: 4,               null: false
+    t.integer  "project_profile_id", limit: 4,   default: 2, null: false
+    t.string   "status",             limit: 10,              null: false
+    t.string   "reason",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "invitations", ["project_id"], name: "index_invitations_on_project_id", using: :btree
-  add_index "invitations", ["project_profile_id"], name: "index_invitations_on_project_profile_id", using: :btree
   add_index "invitations", ["user_id"], name: "index_invitations_on_user_id", using: :btree
 
   create_table "languages", force: :cascade do |t|
@@ -100,9 +83,11 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id", limit: 4
     t.integer  "user_id",    limit: 4
-    t.string   "filename",   limit: 255, null: false
-    t.string   "filepath",   limit: 255, null: false
-    t.boolean  "is_basic",   limit: 1
+    t.string   "filename",   limit: 255,                 null: false
+    t.string   "extension",  limit: 10,                  null: false
+    t.string   "filepath",   limit: 255,                 null: false
+    t.boolean  "is_basic",   limit: 1,   default: false, null: false
+    t.boolean  "is_old",     limit: 1,   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -116,9 +101,9 @@ ActiveRecord::Schema.define(version: 20140302124650) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "title",       limit: 100,   null: false
+    t.string   "title",       limit: 100,                   null: false
     t.text     "description", limit: 65535
-    t.boolean  "is_private",  limit: 1
+    t.boolean  "is_private",  limit: 1,     default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -137,17 +122,20 @@ ActiveRecord::Schema.define(version: 20140302124650) do
     t.string "description", limit: 50, null: false
   end
 
-  create_table "user_infos", primary_key: "user_id", force: :cascade do |t|
+  create_table "user_infos", force: :cascade do |t|
+    t.integer "user_id",     limit: 4,                   null: false
     t.string  "first_name",  limit: 20
     t.string  "last_name",   limit: 30
     t.integer "language_id", limit: 4,   default: 1,     null: false
     t.boolean "activated",   limit: 1,   default: false, null: false
     t.boolean "blacklisted", limit: 1,   default: false, null: false
+    t.boolean "deleted",     limit: 1,   default: false, null: false
     t.integer "reports",     limit: 1,   default: 0,     null: false
     t.string  "token",       limit: 255
   end
 
   add_index "user_infos", ["language_id"], name: "index_user_infos_on_language_id", using: :btree
+  add_index "user_infos", ["user_id"], name: "index_user_infos_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",   limit: 20, null: false

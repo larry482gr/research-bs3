@@ -1,0 +1,49 @@
+<h1><%= (t :list_users) %></h1>
+
+<div class="users_table">
+  <table class="table table-striped table-condensed table-hover">
+    <!-- <caption>Owners</caption> -->
+    <thead>
+      <tr>
+        <th><%= (t :username) %></th>
+        <th><%= (t :email) %></th>
+        <th><%= (t :first_name) %></th>
+        <th><%= (t :last_name) %></th>
+        <th><%= (t :activated) %></th>
+        <th><%= (t :blacklisted) %></th>
+        <th><%= (t :deleted) %></th>
+        <th><%= (t :created_at) %></th>
+        <th><%= (t :last_modified) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <%- @users.each do |user| %>
+      <tr>
+        <td><%= "#{user.username} (#{user.profile.label})" %></td>
+        <td><%= user.email %></td>
+        <td><%= user.user_info.first_name %></td>
+        <td><%= user.user_info.last_name %></td>
+        <td><%= user.user_info.activated? ? 'Yes' : 'No' %></td>
+        <td><%= user.user_info.blacklisted? ? 'Yes' : 'No' %></td>
+        <td><%= user.user_info.deleted? ? 'Yes' : 'No' %></td>
+        <td><%= "#{l user.created_at, format: :long}" %></td>
+        <td><%= "#{l user.updated_at, format: :long}" %></td>
+        <td><%= link_to (t :show), user_path(user), class: 'btn btn-xs btn-success' %></td>
+        <td><%= link_to (t :edit), edit_user_path(user), class: 'btn btn-xs btn-warning' %></td>
+        <td><button class="btn btn-xs btn-danger delete-user"
+                    rel="<%= "/#{Language.find(@current_user.user_info.language_id).locale}/users/#{user.id}" %>">
+                <%= (t :delete) %>
+            </button>
+        </td>
+          <%# link_to (t :delete), '#', class: 'btn btn-xs btn-danger', id: 'delete_user' %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<br/>
+<%= link_to (t :create_user), new_user_path, class: 'btn btn-success' %>
+<input type='hidden' id='delete-user-options' value='
+  <%- (t :delete_comment).each do |option| %>
+  <%= "<option value=\"#{option}\">#{option}</option>" %>
+  <% end %>
+'>

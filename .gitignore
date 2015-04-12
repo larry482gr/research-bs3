@@ -25,9 +25,10 @@ rdoc
 spec/reports
 test/tmp
 test/version_tmp
-public/project_files/
 public/assets
-Gemfile.lock
+private/
+cron/
+# Gemfile.lock
 
 # YARD artifacts
 .yardoc

@@ -1,0 +1,105 @@
+<div class="col-md-10 col-sm-12 col-xs-12 left-div">
+  <h3 class="project_title">
+    <%= @project.title %>
+    <span class="project_updated help-block">
+      <%= "#{(t :created_at)} #{l @project.created_at, format: :long} - " %>
+      <%= "#{(t :last_modified)} #{@project.getModificationTime}" %>
+    </span>
+  </h3>
+  <div class="project_files_table">
+    <div class="project_description"><%= @project.description %></div>
+    <%- if @project_files.count.zero? %>
+      <h5 class="no-project-files"><%= (t :no_project_files) %></h5>
+    <%- else %>
+        <table class="table table-condensed table-hover">
+          <caption><%= (t :project_files) %></caption>
+          <thead>
+          <tr>
+            <th class="center"></th>
+            <th><%= (t :filename) %></th>
+            <!-- <th><%= (t :created_at) %></th> -->
+            <th class="center"><%= (t :last_modified) %></th>
+            <th class="center"></th>
+            <%- if @owner or @contributor %>
+                <th class="center"></th>
+            <% end %>
+            <%- if @owner %>
+                <th class="center"></th>
+            <% end %>
+          </tr>
+          </thead>
+          <tbody>
+          <%- @project_files.each do |file| %>
+              <% column_class = (@owner or @contributor) ? 'pr_file' : 'vis_file' %>
+              <% search_class = (file.filepath.to_s.start_with?('http') and not file.is_basic) ? 's_file' : nil %>
+              <tr class="pr_file_row" rel="<%= file.project_id %>">
+                <td class="<%= "#{column_class} #{search_class}" %>" rel="<%= file.id unless (column_class.start_with? 'vis' and search_class.nil?) %>">
+                  <%- if @owner or @contributor %>
+                      <%= file.is_basic ? "[#{(t :main_file)}]" : '' %>
+                  <% end %>
+                </td>
+                <td class="<%= "#{column_class} #{search_class}" %>"><%= file.filename %></td>
+                <!-- <td class="pr_file"><%= file.created_at %></td> -->
+                <td class="<%= "#{column_class} #{search_class}" %> center"><%= file.getModificationTime %></td>
+                <td class="center">
+                  <%- if file.is_basic and file.project.project_files.where('reference = ?', file.id).count > 0 %>
+                    <%= link_to (t :show_history), "/projects/#{file.project_id}/project_files/#{file.id}/show_history", :class => 'btn btn-xs btn-primary' %>
+                  <% end %>
+                </td>
+                <%- if @owner or @contributor %>
+                    <td class="center">
+                      <%- if @owner or @current_user.id == file.user_id %>
+                          <%= link_to (t :edit), edit_project_project_file_path(file.project_id, file.id), :class => 'btn btn-xs btn-warning' %>
+                      <% end %>
+                    </td>
+                <% end %>
+                <%- if @owner %>
+                    <td class="center">
+                      <%= link_to (t :delete), project_project_file_path(file.project, file.id), :class => 'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
+                    </td>
+                <% end %>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+
+        <div class="project-citations col-md-12 col-sm-12 col-xs-12">
+          <div class="citations-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <%= (t :project_citations) %>
+          </div>
+          <div class="citations-body col-md-12 col-sm-12 col-xs-12">
+            <%- @project_citations.each do |citation| %>
+              <p class="citation-text col-md-11 col-sm-10 col-xs-10"><%= citation['cit'].html_safe %></p>
+              <div class="citation-button col-md-1 col-sm-2 col-xs-2">
+                <%- if @owner %>
+                  <%= link_to (t :delete), project_citation_path(@project, citation['id']), :class => 'btn btn-xs btn-danger pull-right', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+
+    <%- if @owner %>
+        <%= link_to (t :edit), edit_project_path(@project), :class => 'btn btn-sm btn-warning' %>
+    <% end %>
+    <%= link_to (t :back), projects_path, :class => 'btn btn-sm btn-default' %>
+    <%- if @owner or @contributor %>
+        <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
+            <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
+            <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
+            <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
+            <%= hidden_field_tag 'project_file[extension]' %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
+<div class="col-md-2 col-sm-3 col-xs-12 right-div">
+  <%- if @owner %>
+    <%= render 'invitations/form' %>
+  <% end %>
+</div>
+<%- if @owner or @contributor %>
+  <%=render 'static_pages/search_gs' %>
+<% end %>
+<input type="hidden" id="project_id" value="<%= @project.id %>">

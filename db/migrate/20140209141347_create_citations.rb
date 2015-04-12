@@ -6,6 +6,6 @@ class CreateCitations < ActiveRecord::Migration
       t.text :citation_apa
       t.text :citation_chicago
     end
-    execute "ALTER TABLE citations ADD PRIMARY KEY (citation_id);"
+    execute 'ALTER TABLE citations ADD PRIMARY KEY (citation_id);'
   end
 end

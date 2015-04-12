@@ -1,0 +1,37 @@
+<div class="invite-user col-md-12 collapse-group">
+  <button type="button" id="invite-user-btn" class="btn btn-xs btn-info"><%= (t :invite_user) %></button>
+
+  <div id="invite-user-div">
+    <%- if @owner %>
+        <%= form_tag({controller: 'invitations', action: 'create', project_id: "#{@project.id}"}, id: 'invite-user-form', class: 'form-horizontal') do %>
+            <div class="form-group">
+              <label for="user-email" class="col-md-5 control-label">User email</label>
+              <div class="col-md-7">
+                <%= email_field_tag 'invitation[email]', nil, { :class => 'form-control', :placeholder => 'Search user by email' } %>
+              </div>
+            </div>
+            <!--
+            <div class="form-group">
+              <label for="user-profile" class="col-md-5 control-label">User profile</label>
+              <div class="col-md-7">
+                <%# collection_select 'invitation[profile]', ProjectProfile.all, 'id', 'description', {include_blank: false}, { :class => 'form-control', :value => 2} %>
+                <%= select_tag 'invitation[profile]', options_from_collection_for_select(ProjectProfile.all, 'id', 'label'), { :include_blank => false, :class => 'form-control' } %>
+              </div>
+            </div>
+            -->
+            <div class="form-group">
+              <div class="col-md-offset-8 col-md-4">
+                <button type="submit" class="btn btn-sm btn-success"><%= (t :send) %></button>
+              </div>
+            </div>
+        <% end %>
+    <% end %>
+
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        populateAutocompleteUsers($('#invitation_email'));
+    });
+  </script>
+</div>

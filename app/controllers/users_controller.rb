@@ -1,18 +1,18 @@
 class UsersController < ApplicationController
   require 'digest/sha1'
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_referer, only: [:show, :edit, :new]
 
   # GET /users
   # GET /users.json
   def index
-    if session[:user].nil? or session[:user][:profile] == 3
-      flash[:alert] = :no_access
+    if @current_user.nil? or not @current_user.can_access?('user_list')
+      flash[:alert] = (t :no_access)
       redirect_to :root and return
     else
-      if session[:user][:profile] == 1
-        @users = User.all
+      if @current_user.owner?
+        @users = User.all.order('profile_id, username')
       else
-        @users = User.order('profile_id, username').where(:profile_id => '>= 2')
+        @users = User.order('profile_id, username').where('profile_id >= ?', 2)
         # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
       end
     end
@@ -21,24 +21,30 @@ class UsersController < ApplicationController
   def check_login
     pass = Digest::SHA1.hexdigest(params[:user][:password])
     @user = User.find_by_username(params[:user][:username])
-    @user_info = @user.user_info
-    if @user and pass == @user.password
-      if @user_info.activated
-        session[:user] = {id: @user.id, username: @user.username, profile: @user.profile.id}
-        respond_to do |format|
-          format.js {}
-          format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
-        end
-      else
+    # @user_info = @user.user_info
+    if @user and pass == @user.password and not @user.user_info.deleted?
+      if not @user.user_info.activated?
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"0\" }" }
+        end
+      elsif @user.user_info.blacklisted?
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"id\": \"-1\" }" }
+        end
+      else
+        session[:id] = @user.password
+        session[:email] = @user.email
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
         end
       end
     else
       respond_to do |format|
         format.js {}
-        format.json { render json: "{ \"id\": \"-1\" }" }
+        format.json { render json: "{ \"id\": \"-2\" }" }
       end
     end
   end
@@ -48,56 +54,68 @@ class UsersController < ApplicationController
     if @user
       @user_info = @user.user_info
       if @user_info.token == params[:token]
-        @user_info.activated = 1
+        @user_info.activated = true
         @user_info.token = nil
         @user_info.save
-        session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
+        session[:id] = @user.password
+        session[:email] = @user.email
         notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
-        redirect_to(projects_path, :notice => notices.join('<br/>').html_safe) and return
+        redirect_to(projects_path, :notice => notices.join('<br/>')) and return
       end
     end
     flash[:alert] = :activation_error_html
   end
 
   def logout
-    session.delete(:user)
+    session.delete(:id)
+    session.delete(:email)
+    session.delete(:search_gs)
     redirect_to :root
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    if session[:user].nil? or (session[:user][:profile].to_i > 2 and session[:user][:id].to_i != params[:id].to_i)
-      flash[:alert] = "Sorry! You don't have access to this page."
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    profile = session[:user][:profile].to_i
-    if profile > @user.profile.id.to_i # and session[:user][:id] != @user.id
-      flash[:alert] = "Sorry! You cannot view info of a user who has higher profile than you."
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = t :no_access
       redirect_to :root and return
+    end
+    begin
+      @language = t(Language.find(@user.user_info.language_id).language)
+    rescue ActiveRecord::RecordNotFound
+      @language = Language.find(1).language
     end
   end
 
   # GET /users/new
   def new
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     @user = User.new
-    session[:return_to] = request.referer unless session[:return_to] != nil
     respond_to do |format|
-      format.html # new.html.haml
+      format.html { render action: 'new' }
       format.json { render json: @user }
     end
   end
 
   # GET /users/1/edit
   def edit
-    if request.referer.nil? or (session[:user][:profile].to_i > 2 and session[:user][:id].to_i != params[:id].to_i)
-      flash[:alert] = "Sorry! You don't have access to this page."
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    if session[:user][:profile].to_i > @user.profile.id.to_i and session[:user][:id].to_i != @user.id.to_i
-      flash[:alert] = "Sorry! You cannot edit a user who has the same or higher role than you."
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
   end
@@ -105,79 +123,104 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    if request.referer.nil? or (@current_user != nil and not @current_user.can_access?('user_create'))
+      flash[:alert] = t :no_access
+      redirect_to :root and return
+    end
+
     begin
       @user = User.create!(user_params)
     rescue ActiveRecord::RecordInvalid => validation_error
-      warnings_array = validation_error.message[19..-1].split(", ")
-      warning_list = "<ul>"
+      warnings_array = validation_error.message[19..-1].split(', ')
+      warning_list = '<ul>'
       warnings_array.each do |warning|
-        warning_list += "<li>" + warning + "</li>"
+        warning_list += '<li>' + warning + '</li>'
       end
-      warning_list += "</ul>"
-      warning_message = "Registration failed because:<br/>"
+      warning_list += '</ul>'
+      warning_message = '<h4>Registration failed because:</h4>'
       flash[:alert] = (warning_message + warning_list).html_safe
 
-      session[:username] = params[:user][:username]
-      # session[:password] = params[:user][:password]
-      session[:email] = params[:user][:email]
       @user = User.new
       redirect_to :root and return
     end
-    if session[:user] == nil
-      #user = User.find(:all, :conditions => ['username = ?', params[:user][:username]])
+    if @current_user == nil or @current_user.can_access?('user_create')
       @user_info = UserInfo.create(:user_id => @user.id)
-      #@user_info = UserInfo.create(:user_id => @user.id)
-      UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver
-      # session[:user] = {:id => @user.id, :username => @user.username, :profile => @user.profile.id}
+      UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
-    notices = ["Welcome to ResearchGr #{params[:user][:username]}!"]
-    # flash[:notice] = notices.join("<br/>").html_safe
+    notices = ["Welcome to ResearchGr #{params[:user][:username]}!", 'An email was just sent to you with instructions to activate your account.']
     redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
+      flash[:alert] = t :no_access
+      redirect_to :root and return
+    end
     @user = User.find(params[:id])
-    if !params[:old_pass][:password].empty? or !params[:new_pass][:password].empty?
-      if params[:old_pass][:password].empty? or Digest::SHA1.hexdigest(params[:old_pass][:password]) != @user.password
-        flash[:alert] = "Old password doesn't match your current password!"
-        redirect_to edit_user_path(@user) and return
-      elsif params[:new_pass][:password].empty?
-        flash[:alert] = "You should fill a new password!"
-        redirect_to edit_user_path(@user) and return
-      else
-        params[:user][:password] = Digest::SHA1.hexdigest(params[:new_pass][:password])
-      end
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = t :no_access
+      redirect_to :root and return
     end
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+      if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
+        if @current_user != @user and @current_user.can_access?('user_edit')
+          if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
+            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: @user.profile_id, to_value: admin_params[:profile_id], change_type: 'profile'})
+          end
+          @user.update(admin_params)
+        end
+        format.html { redirect_to @user, notice: (t :user_updated) }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  def change_role
-
-  end
-
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if request.referer.nil? or request.referer.index(Rails.root.to_s) != 0
-      flash[:alert] = 'You think you are a hacker???'
+    if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_delete'))
+      flash[:alert] = t :no_access
       redirect_to :root and return
     end
     @user = User.find(params[:id])
-    @user.destroy
+    if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
+      flash[:alert] = t :no_access
+      redirect_to :root and return
+    end
 
-    respond_to do |format|
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
+    @user.user_info.deleted = 1
+    if @user.user_info.save!
+      if @current_user.can_access?('user_delete')
+        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1, change_type: 'deletion', comment: params[:comment]})
+
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"deleted\": \"1\" }" }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to :root }
+          format.json { head :no_content }
+        end
+      end
+    else
+      if @current_user.can_access?('user_delete')
+        respond_to do |format|
+          format.js {}
+          format.json { render json: "{ \"deleted\": \"0\" }" }
+        end
+      else
+        flash[:alert] = "#{(t :user_delete_error)} #{(t :try_again)} #{(t :error_persists)}"
+        respond_to do |format|
+          format.html { redirect_to :root }
+          format.json { head :no_content }
+        end
+      end
     end
   end
   
@@ -186,14 +229,38 @@ class UsersController < ApplicationController
     redirect_to user_path(@user)
   end
 
+  def autocomplete
+    @users = nil
+    unless @current_user.nil?
+      if @current_user.owner?
+        @users = User.select('email').where('id != ?', @current_user.id).order('email')
+      elsif @current_user.admin?
+        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
+        # @users = User.order('profile_id, username').where('profile_id >= ?', 2)
+        # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
+      else
+        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
+      end
+    end
+
+    respond_to do |format|
+      format.js {}
+      format.json { render json: @users }
+    end
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
+    def set_referer
+      session[:return_to] = '/'
+      session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :email)
+      params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id, :deleted])
+    end
+
+    def admin_params
+      params.require(:user).permit(:profile_id, user_info_attributes: [:id, :activated, :blacklisted])
     end
 end

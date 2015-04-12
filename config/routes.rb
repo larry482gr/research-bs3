@@ -1,23 +1,30 @@
 Researchgr::Application.routes.draw do
   scope '(:locale)', locale: /en|gr/ do
-    
+
     resources :users do
-      resources :user_infos
+      resources :user_info
       resources :projects
       resources :project_files
+      resources :invitations
     end
     
     resources :projects do
+      resources :invitations
       resources :project_files do
         member do
           post :set_main
+          get :get_file
+          get :show_history
         end
       end
+      resources :citations
     end
     
     post 'check_login' => 'users#check_login'
     get 'activate' => 'users#activate'
     get '/logout' => 'users#logout'
+    get '/users_autocomplete' => 'users#autocomplete'
+    get '/invitations' => 'invitations#index'
     get '/:locale' => 'static_pages#index'
     get 'static_pages/search' => 'static_pages#search'
     get 'static_pages/search_scholar' => 'static_pages#search_scholar'

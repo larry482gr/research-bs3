@@ -4,59 +4,112 @@
 
 /* index */
 .projects_table, .project_files_table {
-	margin-left: 0px !important;
 	transition: width 0.6s;
 	-webkit-transition: width 0.6s;
 	-moz-transition: width 0.6s;
 	-o-transition: width 0.6s;
 }
 
-.projects_table, .project_files_table table tbody tr {
-	cursor: pointer;
+.projects_table, .project_files_table table {
+  margin: 20px 0px !important;
+}
+
+.project_files_table div.col-md-12, p.citation-text, div.citation-button {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.project_files_table p.citation-text {
+  margin-bottom: 20px;
+}
+
+.project_files_table table caption {
+  color: #333;
+  font-size: large;
+  font-weight: bold;
+}
+
+div.citations-header {
+  color: #333;
+  font-size: large;
+  font-weight: bold;
+  margin: 20px 0px !important;
+}
+
+div.citations-body {
+  margin-bottom: 20px;
+}
+
+.projects_table, .project_files_table tr th, td {
+  padding: 6px !important;
+}
+
+.projects_table, .project_files_table tr th.center, td.center {
+  vertical-align: middle !important;
+}
+
+.projects_table, .project_files_table table thead tr th {
+  white-space: nowrap;
+}
+
+.projects_table table tbody tr {
+  cursor: pointer;
+}
+
+.project_files_table table tbody tr td:first-child {
+  white-space: nowrap;
+}
+
+.project_files_table table tbody tr .pr_file, .s_file {
+  cursor: pointer;
 }
 
 .search_div {
-	transition: width 0.6s;
-	-webkit-transition: width 0.6s;
-	-moz-transition: width 0.6s;
-	-o-transition: width 0.6s;
+  padding: 0px;
+  margin-top: 20px;
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
 }
 
 #exact_match_div {
-	@media screen and (min-width: 767px) {
-		float: right;
-	}
+  padding: 0px !important;
+}
+
+#exact_match_div > .checkbox > label {
+  padding-left: 0px;
+  padding-right: 15px;
 }
 
 #exact_match {
-	margin-top: 0px;
+    margin-top: 3px;
+	margin-left: 4px;
 }
 
 .create_project {
 	color: #FFF !important;
 }
 
-.search_div {
-	@media screen and (max-width: 767px) {
-		margin-top: 20px;
-		border-top: 1px solid #999;
-	}
-}
-
 .search_gs_results {
-	@media screen and (min-width: 767px) {
-		margin-top: 40px;
-	}
+  padding: 0px;
 }
 
 .search_gs {
 	width: 100%;
 	@media screen and (min-width: 767px) {
-		text-align: right;
+
 	}
 	@media screen and (max-width: 767px) {
 		margin-top: 10px;
 	}
+}
+
+#search_gs_form {
+  padding-top: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
+  border-top: 1px solid #999999;
 }
 
 #rows_div {
@@ -66,7 +119,6 @@
 }
 
 #search_gs_input {
-	width: 280px;
 	transition: width 0.4s;
 	-webkit-transition: width 0.4s;
 	-moz-transition: width 0.4s;
@@ -144,7 +196,8 @@
 }
 
 .paging_bottom {
-	margin-top: 30px;
+  padding: 0px;
+  margin-top: 20px;
 }
 
 #paging_gs_results {
@@ -167,28 +220,75 @@
 	margin: 0px 1px;
 }
 
-.pdf_modal {
-	top: 2% !important;
-	width: 80% !important;
-	height: 900px;
+.pdf_modal > .modal-dialog {
+	width: 950px;
+	height: 998px;
 	overflow-y: auto !important;
-	margin: 0px !important;
-	left: 10% !important;
-	right: 10% !important;
-	position: absolute !important;
 }
 
 .pdf_modal .modal-body {
 	text-align: center;
-	height: 840px;
-	max-height: 850px !important;
+	height: 940px;
+	max-height: 950px !important;
 	overflow-y: auto !important;
 }
 
 /* show */
 
+.left-div {
+  padding: 0px;
+  margin-top: 20px;
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
+}
+
+.left-div > h3 {
+  margin-top: 0px;
+}
+
+.right-div {
+  @media screen and (min-width: 992px) {
+    padding-right: 0px;
+  }
+  @media screen and (max-width: 991px) {
+    padding-left: 0px;
+  }
+
+  margin-top: 20px;
+  transition: width 0.6s;
+  -webkit-transition: width 0.6s;
+  -moz-transition: width 0.6s;
+  -o-transition: width 0.6s;
+}
+
 .project_title {
-	line-height: 26px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  line-height: 26px;
+}
+
+#invite-user-div {
+  display: none;
+}
+
+#invite-user-btn {
+  margin-bottom: 8px;
+}
+
+.invite-user {
+  @media screen and (min-width: 992px) {
+    text-align: right;
+  }
+  @media screen and (max-width: 991px) {
+    padding-left: 0px;
+    margin-top: 10px;
+  }
+}
+
+#invite-user-form {
+  margin-bottom: 10px;
 }
 
 .project_updated {
@@ -197,14 +297,15 @@
 	color: #999 !important;
 }
 
-.save-article-btn {
-	float: right;
-}
-
-#project_file_filename {
-	display: none;
+.project_description {
+  margin-bottom: 12px;
 }
 
 #upload_form {
 	float: right;
+}
+
+.no-project-files {
+  margin: 40px 0px;
+  font-weight: bold;
 }

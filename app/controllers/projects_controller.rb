@@ -1,34 +1,68 @@
 class ProjectsController < ApplicationController
+  before_action :valid_user
+  before_action :set_referer, only: [:show, :edit, :new]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   # GET /projects
   # GET /projects.json
   def index
-    @user = User.find(session[:user]['id'])
-    @projects = @user.projects
+    # if @current_user.nil?
+    #  flash[:alert] = :no_access
+    #  redirect_to :root and return
+    # end
+
+    @projects = @current_user.projects.order('updated_at DESC')
+
+    @search_gs = session[:search_gs] unless session[:search_gs].nil?
   end
 
   # GET /projects/1
   # GET /projects/1.json
   def show
-  	@updated_at = @project.getModificationTime
-  	@project_files = @project.project_files
+    # session[:return_to] = '/'
+    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    @owner = @project.owner?(@current_user.id)
+
+    if not @owner
+      @contributor = @project.contributor?(@current_user.id)
+    end
+
+    if not (@owner or @contributor) and @project.is_private
+      flash[:alert] = (t :no_access)
+      redirect_to :root and return
+    end
+
+    @project_files = @project.project_files.where('reference = ?', 0).order('updated_at DESC')
+    @project_citations = get_citations.sort {|x,y| x['cit']<=>y['cit']}
+
+    @search_gs = session[:search_gs] unless session[:search_gs].nil?
+    session.delete(:search_gs)
   end
 
   # GET /projects/new
   def new
     @project = Project.new
+    @private_count = private_count
   end
 
   # GET /projects/1/edit
   def edit
+    if not @project.owner?(@current_user.id)
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    end
+
+    @private_count = private_count
   end
 
   # POST /projects
   # POST /projects.json
   def create
-    @user = User.find(session[:user][:id])
-    @project = @user.projects.create(project_params)
+    if @current_user.nil?
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    end
+    @project = @current_user.projects.create(project_params)
 
     respond_to do |format|
       if @project.save
@@ -44,13 +78,18 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    respond_to do |format|
-      if @project.update(project_params)
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+    if @current_user.nil? or not @project.owner?(@current_user.id)
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    else
+      respond_to do |format|
+        if @project.update(project_params)
+          format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @project.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -58,10 +97,24 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-    @project.destroy
-    respond_to do |format|
-      format.html { redirect_to projects_url }
-      format.json { head :no_content }
+    if @current_user.nil? or not @project.owner?(@current_user.id)
+      flash[:alert] = :no_access
+      redirect_to :root and return
+    else
+      @project.project_files.each do |file|
+        file.destroy
+      end
+      @project.invitations.each do |invitation|
+        invitation.destroy
+      end
+
+      # TODO delete project's directory?
+
+      @project.destroy
+      respond_to do |format|
+        format.html { redirect_to projects_url }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -71,8 +124,33 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id])
     end
 
+    def set_referer
+      session[:return_to] = '/'
+      session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
+    end
+
+    def valid_user
+      if @current_user.nil?
+        flash[:alert] = (t :no_access)
+        redirect_to :root and return
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
       params.require(:project).permit(:title, :description, :is_private)
+    end
+
+    def private_count
+      private_count = 0
+      @current_user.projects.each do |project|
+        private_count += 1 if project.is_private and project.owner?(@current_user.id)
+      end
+
+      return private_count
+    end
+
+    def get_citations
+      return @project.get_citations
     end
 end

@@ -2,16 +2,18 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   has_one :user_info
-  belongs_to :profile
-  
   has_one :language, through: :user_info
-  
+  belongs_to :profile
+
   has_and_belongs_to_many :projects
   has_many :project_files
+
+  has_many :invitations
   
   has_many :history_user_infos
   has_many :history_projects
-  has_many :history_reports
+
+  accepts_nested_attributes_for :user_info
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :username, presence: true, uniqueness: true
@@ -19,6 +21,22 @@ class User < ActiveRecord::Base
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: true
+
+  def owner?
+    profile.label == Profile::OWNER
+  end
+
+  def admin?
+    profile.label == Profile::ADMIN
+  end
+
+  def can_access?(right_label)
+    can_access = false
+    profile.rights.each do |right|
+      can_access = true if right.label == right_label
+    end
+    return can_access
+  end
   
   protected
   
