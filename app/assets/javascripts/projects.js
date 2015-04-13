@@ -128,7 +128,7 @@ $(document).ready(function() {
             $('#upload_form #project_file_filename').value = '';
             $('#project_file_extension').val('');
             this.form.reset();
-            bootbox.alert('Write message for NOT allowed file type.');
+            bootbox.alert(I18n.t('not_allowed_file'));
         }
         else {
             $('#upload_form').submit();
@@ -151,7 +151,7 @@ $(document).ready(function() {
         if(!validFile) {
             this.value = '';
             // $('#upload_form').reset();
-            bootbox.alert('Write message for NOT allowed file type.');
+            bootbox.alert(I18n.t('not_allowed_file'));
         }
         else {
             $('#file_btn').text(I18n.t('upload') + ' ' + $(this).val());

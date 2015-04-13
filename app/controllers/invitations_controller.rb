@@ -50,6 +50,8 @@ class InvitationsController < ApplicationController
         @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
         if @invitation.save
           notice = "#{(t :invitation_sent)} #{@user.username}"
+          # UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
+          UserMailer.invite_email(@project, @user, @current_user).deliver_now
         else
           alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
         end
