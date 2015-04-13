@@ -241,3 +241,41 @@ function deleteUser(url, comment) {
         }
     });
 }
+
+function populateAutocompleteUsers(element) {
+    $.ajax({
+        url: '/users_autocomplete',
+        type: "get",
+        cache: false,
+        dataType: "json",
+        success: function(users) {
+            element.autocomplete({
+                minLength: 1,
+                source: function(request, response) {
+                    var matches = $.map(users, function(userItem) {
+                        if (userItem.email.toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
+                            return userItem;
+                        }
+                    });
+                    response(matches);
+                },
+                // focus: function(event, ui) {
+                    // element.val(ui.item.email); //  + ' (' + ui.item.username + ')');
+                    // return false;
+                //},
+                select: function(event, ui) {
+                    element.val(ui.item.email); // + ' (' + ui.item.username + ')');
+                    element.attr('rel', ui.item.email);
+                    return false;
+                }
+            })
+                .data("ui-autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .append("<a style='font-size: 12px !important; font-weight: normal; cursor: pointer;'>" +
+                    "<span style='color: #01ade4'>" + item.email.substring(0, element.val().length) + "</span>" +
+                    item.email.substring(element.val().length) /* + " (" + item.username + ')' */ + "</a>")
+                    .appendTo(ul);
+            };
+        }
+    });
+}

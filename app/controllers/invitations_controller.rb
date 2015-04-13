@@ -1,6 +1,5 @@
 class InvitationsController < ApplicationController
   before_action :valid_user
-  before_action :set_invitation, only: [:show, :update]
 
   # GET /invitations
   # GET /invitations.json
@@ -13,7 +12,7 @@ class InvitationsController < ApplicationController
       user_hash = { :id => @current_user.id, :email => user.email, :first_name => user.user_info.first_name, :last_name => user.user_info.first_name }
 
       project = Project.find(inv.project_id)
-      project_hash = { :project_title => project.title, :project_profile => inv.project_profile_id }
+      project_hash = { :id => project.id , :project_title => project.title, :project_profile => inv.project_profile_id }
 
       invitations_array << { :id => inv.id, :user => user_hash, :project => project_hash, :date => "#{l inv.created_at, format: :long}" }
     end
@@ -22,10 +21,6 @@ class InvitationsController < ApplicationController
       format.html { redirect_to root_path }
       format.json { render json: invitations_array }
     end
-  end
-
-  def show
-    @invitation = Invitation.find(params[:id])
   end
 
   # GET /invitations/new
@@ -72,6 +67,7 @@ class InvitationsController < ApplicationController
 
   def update
     user = User.find(params[:user_id])
+
     if @current_user.id != user.id
       error_code = -1
       respond_to do |format|
@@ -85,6 +81,7 @@ class InvitationsController < ApplicationController
     if params[:invitation][:reason].empty?
       params[:invitation][:reason] = nil
     end
+
     if invitation.update(invitation_params)
       error_code = 0
       if invitation.status.to_s == 'accepted'
@@ -109,11 +106,6 @@ class InvitationsController < ApplicationController
   end
 
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_invitation
-    @invitation = Invitation.find(params[:id])
-  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def invitation_params
