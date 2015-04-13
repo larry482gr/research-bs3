@@ -1,6 +1,6 @@
 <%- provide(:title, (t :projects)) %>
 
-<div class="col-md-10 left-div">
+<div class="col-md-12 left-div">
     <h3><%= t :your_projects %></h3>
     <div class="projects_table">
       <table class="table table-condensed table-hover">
@@ -9,18 +9,24 @@
             <th><%= (t :title) %></th>
             <th><%= (t :description) %></th>
             <th><%= (t :private) %></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <%- @projects.each do |project| %>
             <tr id=<%= "projects/#{project.id}" %>>
-              <td><%= project.title %></td>
-              <td><%= project.description %></td>
-              <td>
+              <td class="proj center no-wrap"><%= project.title %></td>
+              <td class="proj"><%= project.description %></td>
+              <td class="proj center">
                 <%- if project.is_private %>
                     <%= (t :word_yes) %>
                 <%- else %>
                     <%= (t :word_no) %>
+                <% end %>
+              </td>
+              <td class="center">
+                <%- if project.owner? @current_user.id %>
+                    <%= link_to (t :delete), project_path(project), :class => 'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
                 <% end %>
               </td>
             </tr>

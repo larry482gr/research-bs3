@@ -3,3 +3,11 @@
 <div class="col-md-6">
   <%= render 'form' %>
 </div>
+
+<script type="text/javascript">
+    $(document).on('page:change', function() {
+        if($('html').height() < $(window).height()) {
+            $('.footer').css('position', 'absolute');
+        }
+    });
+</script>

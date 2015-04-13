@@ -101,15 +101,16 @@ class ProjectsController < ApplicationController
       flash[:alert] = :no_access
       redirect_to :root and return
     else
+      project_directory = "#{Rails.root}/private/project_files/#{@project.id/100}/#{@project.id}"
+      if Dir.exists? project_directory
+        rm_dir = FileUtils.rm_rf project_directory
+      end
+
       @project.project_files.each do |file|
         file.destroy
       end
-      @project.invitations.each do |invitation|
-        invitation.destroy
-      end
 
-      # TODO delete project's directory?
-      project_directory = @project.id%100
+      Invitation.delete_all(:project_id => @project.id)
 
       @project.destroy
       respond_to do |format|

@@ -70,7 +70,7 @@ class ProjectFilesController < ApplicationController
   # noinspection RubyArgCount
   def set_main
     if @project_file.filepath[0..14] == '/project_files/'
-      @project_file.update(is_basic: true) ? response = 1 : response = 0
+      @project_file.update(is_basic: params[:is_basic]) ? response = 1 : response = 0
     else
       response = t :invalid_main_file
     end
@@ -125,7 +125,7 @@ class ProjectFilesController < ApplicationController
         format.html { redirect_to @project, notice: 'Article was successfully saved.' }
         format.json { render action: 'show', status: :created, location: @project }
       elsif uploaded_file_params[:file_exists]
-        format.html { redirect_to @project, alert: 'An identical file has been already uploaded.' }
+        format.html { redirect_to @project, alert: 'An identical file has been already uploaded.<br/>You can set it as "Main File" if you wish to keep track of its modifications.' }
         format.json { render action: 'show', status: :unprocessable_entity, location: @project }
       else
         format.html { redirect_to @project, alert: 'Article failed to be saved. It may already exist in this project.' }
