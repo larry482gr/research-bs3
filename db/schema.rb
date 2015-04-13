@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413200159) do
+ActiveRecord::Schema.define(version: 20150413205547) do
 
   create_table "citations", primary_key: "citation_id", force: :cascade do |t|
     t.text "citation_mla",     limit: 65535
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20150413200159) do
     t.datetime "created_at",                           null: false
   end
 
-  create_table "invitations", id: false, force: :cascade do |t|
+  create_table "invitations", force: :cascade do |t|
     t.integer  "user_id",            limit: 4,                       null: false
     t.integer  "from_user",          limit: 4,                       null: false
     t.integer  "project_id",         limit: 4,                       null: false
