@@ -41,7 +41,7 @@
                 <td class="<%= "#{column_class} #{search_class}" %>"><%= file.filename %></td>
                 <!-- <td class="pr_file"><%= file.created_at %></td> -->
                 <td class="<%= "#{column_class} #{search_class}" %> center"><%= file.getModificationTime %></td>
-                <td class="center">
+                <td class="center show-history">
                   <%- if file.is_basic and file.project.project_files.where('reference = ?', file.id).count > 0 %>
                     <%= link_to (t :show_history), "/projects/#{file.project_id}/project_files/#{file.id}/show_history", :class => 'btn btn-xs btn-primary' %>
                   <% end %>

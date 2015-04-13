@@ -12,16 +12,15 @@ $(document).ready(function() {
           });
       }
       else {
-          $('#invite-user-div').slideUp('fast', function(){
+          $('#invite-user-div').slideUp('fast', function() {
               $('.left-div').removeClass('col-md-7').addClass('col-md-10');
               $('.right-div').removeClass('col-md-5').addClass('col-md-2');
           });
       }
   });
   
-  $('.projects_table .table tr').on('click', function() {
-	 link = $(this).attr('id');
-	 //alert(link);
+  $('.projects_table .table tr td.proj').on('click', function() {
+	 link = $(this).parent().attr('id');
 	 location.href = link;
   });
 
@@ -41,9 +40,11 @@ $(document).ready(function() {
                   callback: function() {
                       btn_text = $(this).find('.btn-danger').text().trim().toLowerCase();
                       should_set = btn_text.substring(0, btn_text.indexOf(' ')) == 'set' ? true : false;
+                      is_basic = 0;
                       if(should_set) {
                           text_prefix = I18n.t("set_main_file_prefix");
                           text_suffix = I18n.t("set_main_file_suffix");
+                          is_basic = 1;
                       }
                       else {
                           text_prefix = I18n.t("unset_main_file_prefix");
@@ -55,7 +56,7 @@ $(document).ready(function() {
                                           I18n.t("question_mark"), function(result) {
                               if(result) {
                                   $(".bootbox").on('hidden.bs.modal', function () {
-                                      setMainFile(project_id, file_id);
+                                      setMainFile(project_id, file_id, is_basic);
                                   });
                               }
                           });
@@ -163,19 +164,25 @@ $(document).ready(function() {
     }
   });
 
-  function setMainFile(project_id, file_id) {
+  function setMainFile(project_id, file_id, is_basic) {
       $.ajax({
           url: "/projects/"+project_id+"/project_files/"+file_id+"/set_main",
           cache: false,
           type: "post",
-          data: { is_basic: 1 },
+          data: { is_basic: is_basic },
           dataType: "text",
           beforeSend: function() {
 
           },
           success: function(response) {
               if(response == 1) {
-                  $(".pr_file[rel="+file_id+"]").text('[' + I18n.t("main_file") + ']');
+                  if(is_basic == 1) {
+                      $(".pr_file[rel="+file_id+"]").text('[' + I18n.t("main_file") + ']');
+                  }
+                  else if(is_basic == 0) {
+                      $(".pr_file[rel="+file_id+"]").text('');
+                      $(".pr_file[rel="+file_id+"]").parent().find('.show-history').html('');
+                  }
               }
               else if(response == 0) {
                   bootbox.alert()("Error!!!" + response);

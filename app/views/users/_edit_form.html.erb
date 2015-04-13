@@ -10,10 +10,10 @@
         </div>
     <% end %>
     <div class="field form-group">
-      <h4>
       <%= f.label (t :username) %>
-      <%= :username %>
-      </h4>
+      <p>
+        <%= @user.username %>
+      </p>
     </div>
     <div class="field form-group">
       <%= f.label (t :email) %>
@@ -41,5 +41,6 @@
     <% end %>
     <div class="actions">
       <button type="submit" name="commit" class="btn btn-sm btn-success"><%= (t :save) %></button>
+      <%= link_to (t :back), @user, class: 'btn btn-sm btn-default' %>
     </div>
 <% end %>
