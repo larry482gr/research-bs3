@@ -109,6 +109,7 @@ class ProjectsController < ApplicationController
       end
 
       # TODO delete project's directory?
+      project_directory = @project.id%100
 
       @project.destroy
       respond_to do |format|

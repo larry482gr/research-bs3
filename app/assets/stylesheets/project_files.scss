@@ -2,13 +2,21 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+h3.project_title {
+  margin-top: 20px;
+}
+
 .project_file {
   padding-left: 0px !important;
 }
 
-.project_file > embed {
+.project_file > object {
   border: 1px solid #ccc;
   margin-bottom: 10px;
+}
+
+.project_file > a, .file_history_table > a {
+  margin-bottom: 40px;
 }
 
 .citation {
@@ -26,8 +34,4 @@
 
 .file_history_table tr {
   cursor: pointer;
-}
-
-object {
-  margin-bottom: 10px;
 }

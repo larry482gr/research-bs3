@@ -32,3 +32,11 @@
 </div>
 
 <%=render 'static_pages/search_gs' %>
+
+<script type="text/javascript">
+    $(document).on('page:change', function() {
+        if($('html').height() < $(window).height()) {
+            $('.footer').css('position', 'absolute');
+        }
+    });
+</script>

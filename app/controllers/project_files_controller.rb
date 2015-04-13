@@ -101,19 +101,21 @@ class ProjectFilesController < ApplicationController
       @project_file.user_id = @current_user.id
       @project_file.save
       is_new = true
-      unless ((uploaded_file_params.nil? and uploaded_file_params[:file_id].nil?) or not @project_file.is_basic)
-        ActiveRecord::Base.record_timestamps = false
-        begin
-          old_main = @project.project_files.find(uploaded_file_params[:file_id])
-          old_main.reference = @project_file.id
-          old_main.save
-          old_files = @project.project_files.where('reference = ?', uploaded_file_params[:file_id])
-          old_files.each do |f|
-            f.reference = @project_file.id
-            f.save
+      unless uploaded_file_params.nil?
+        unless (uploaded_file_params[:file_id].nil? or not @project_file.is_basic)
+          ActiveRecord::Base.record_timestamps = false
+          begin
+            old_main = @project.project_files.find(uploaded_file_params[:file_id])
+            old_main.reference = @project_file.id
+            old_main.save
+            old_files = @project.project_files.where('reference = ?', uploaded_file_params[:file_id])
+            old_files.each do |f|
+              f.reference = @project_file.id
+              f.save
+            end
+          ensure
+            ActiveRecord::Base.record_timestamps = true  # don't forget to enable it again!
           end
-        ensure
-          ActiveRecord::Base.record_timestamps = true  # don't forget to enable it again!
         end
       end
     end
