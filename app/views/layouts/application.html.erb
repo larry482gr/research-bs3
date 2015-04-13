@@ -31,11 +31,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="collapsible-navbar">
       <%- unless @current_user.nil? %>
-        <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
+        <%= form_tag({controller: 'static_pages', action: 'search'}, method: 'get', id: 'search-form', class: 'navbar-form navbar-left', role: 'search') do %>
           <div class="form-group">
-            <input type="text" id="search" class="form-control" placeholder="<%= (t :search) %>" autocomplete="off">
+            <input type="text" id="search" name="q" class="form-control" placeholder="<%= (t :search) %>" autocomplete="off">
           </div>
-        </form>
+        <% end %>
       <% end %>
       <ul class="nav navbar-nav navbar-right">
         <%- unless @current_user.nil? %>
@@ -82,24 +82,28 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<%- unless @current_user.nil? %>
-    <div class="container">
-<% end %>
-  <div id="main">
-    <%- if flash[:notice] %>
+<div id="main">
+  <%- if flash[:notice] %>
+      <div class="container">
         <div id="notice" class="message">
           <%= flash[:notice].html_safe %>
         </div>
-    <%- elsif flash[:alert] %>
+      </div>
+  <%- elsif flash[:alert] %>
+      <div class="container">
         <div id="alert" class="message">
           <%= flash[:alert].html_safe %>
         </div>
-    <% end %>
-    <%= yield %>
-  </div>
-<%- unless @current_user.nil? %>
-    </div>
-<% end %>
+      </div>
+  <% end %>
+  <%- unless @current_user.nil? %>
+      <div class="container">
+  <% end %>
+  <%= yield %>
+  <%- unless @current_user.nil? %>
+      </div>
+  <% end %>
+</div>
 
 <div class="footer">
   <div class="container">

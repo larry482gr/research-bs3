@@ -41,6 +41,14 @@
       <% end %>
       </tbody>
     </table>
-    <%= link_to (t :back), session[:return_to], :class => 'btn btn-sm btn-default' %>
+    <%= link_to (t :back), project_path(@project_file.project), :class => 'btn btn-sm btn-default' %>
   </div>
 </div>
+
+<script type="text/javascript">
+  $(document).on('page:change', function() {
+      if($('html').height() < $(window).height()) {
+          $('.footer').css('position', 'absolute');
+      }
+  });
+</script>

@@ -27,17 +27,17 @@
   font-size: large;
 }
 
-.home-features > .container h2 {
+.home-features h2 {
   margin-top: 60px;
   margin-bottom: 30px;
   text-align: center;
 }
 
-.home-features > .container h4 {
+.home-features h4 {
   margin-top: 20px;
 }
 
-.home-features > .container h1 > p >span {
+.home-features h1 p span {
   height: 80px;
   width: 80px;
   border: 1px solid #CCCCCC;
@@ -47,12 +47,12 @@
   padding: 20px;
 }
 
-.home-features > .container h1, h4 {
+.home-features h1, .home-features h4 {
   text-align: center;
   margin-top: 0px;
 }
 
-.home-features > .container p {
+.home-features p {
   text-align: center;
   margin-bottom: 40px;
 }

@@ -1,0 +1,21 @@
+<h3>Search Results</h3>
+<h4>Projects</h4>
+<%- if @projects.count.zero? %>
+    <%= t :no_results %>
+<%- else %>
+  <ol>
+    <%- @projects.each do |project| %>
+      <li><a href="<%= project_path(project.id) %>"><%= project.title %></a></li>
+    <% end %>
+  </ol>
+<% end %>
+<h4>Users</h4>
+<%- if @users.count.zero? %>
+    <%= t :no_results %>
+<%- else %>
+    <ol>
+      <%- @users.each do |user| %>
+          <li><a href="<%= user_path(user.id) %>"><%= user.username %></a></li>
+      <% end %>
+    </ol>
+<% end %>

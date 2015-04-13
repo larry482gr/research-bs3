@@ -47,6 +47,7 @@ en:
   write_comment: "Write a comment"
   provide_comment: "In this case you <b>must</b> provide a comment"
   large_comment: "Your comment should not exceed 200 characters"
+  search_restriction: "Only registered users can search for other users and/or projects."
 
   time:
       formats:

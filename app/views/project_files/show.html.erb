@@ -72,6 +72,13 @@
          alt="<%= @project_file.extension %>" type="<%= @filetype %>">
     <a href="<%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>">No Support?</a>
   </object>
+  <%- if @project_file.reference == 0 %>
+    <%- if @can_edit %>
+      <%= link_to (t :edit), edit_project_project_file_path(@project_file.project, @project_file), :class => 'btn btn-sm btn-warning' %>
+    <% end %>
+
+    <%= link_to (t :back), session[:return_to], :class => 'btn btn-sm btn-default' %>
+  <% end %>
 </div>
 <!--
 <div class="col-md-5 search_div">

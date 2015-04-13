@@ -26,7 +26,7 @@ Researchgr::Application.routes.draw do
     get '/users_autocomplete' => 'users#autocomplete'
     get '/invitations' => 'invitations#index'
     get '/:locale' => 'static_pages#index'
-    get 'static_pages/search' => 'static_pages#search'
+    get 'search' => 'static_pages#search'
     get 'static_pages/search_scholar' => 'static_pages#search_scholar'
     get 'static_pages/search_citation' => 'static_pages#search_citation'
     get '/static_pages/citation_save' => 'static_pages#citation_save'

@@ -1,26 +1,20 @@
 class StaticPagesController < ApplicationController
-  # require 'rubygems'
-  # require 'open-uri'
-  # require 'nokogiri'
   require 'net/http'
   require 'uri'
+
+  before_action :valid_user, only: [:search, :search_scholar, :search_citation]
   
   def index
-     @user = User.new
+    redirect_to projects_path unless @current_user.nil?
+    @user = User.new
   end
   
   def search
-    if @current_user.nil?
-      respond_to do |format|
-        format.json { render json: { :illegal => "1" } }
-      end
-      return
-    end
-    
-    @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: @current_user.id, username: "#{params[:question]}%", email: "#{params[:question]}%", user_profile: @current_user.profile_id)
-    @projects = Project.where("title LIKE :title AND is_private = :private", { title: "%#{params[:question]}%", private: 0 })
+    @users = User.where("id != :id AND (username LIKE :username OR email LIKE :email) AND profile_id >= :user_profile", id: @current_user.id, username: "#{params[:q]}%", email: "#{params[:q]}%", user_profile: @current_user.profile_id)
+    @projects = Project.where("title LIKE :title AND is_private = :private", { title: "%#{params[:q]}%", private: 0 })
     
     respond_to do |format|
+      format.html { render 'static_pages/search' }
 	  	format.json { render json: { :users => @users, :projects => @projects } }
 		end
   end
@@ -29,7 +23,6 @@ class StaticPagesController < ApplicationController
     url_extension = 'com'
     if I18n.locale != :en
       url_extension = I18n.locale
-      # puts I18n.locale
     end
 
     if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
@@ -41,18 +34,7 @@ class StaticPagesController < ApplicationController
     num			= params[:num]
 
     uri = URI.parse("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
-    # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
-    # doc = Net::HTTP.get_response(url)
-=begin
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    req = Net::HTTP::Get.new(uri.request_uri)
-
-    res = http.request(req)
-=end
     req = Net::HTTP::Get.new(uri)
-    # req['User-Agent'] = 'Firefox'
 
     res = Net::HTTP.start(uri.hostname, uri.port) {|http|
       http.request(req)
@@ -69,35 +51,6 @@ class StaticPagesController < ApplicationController
       response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
     end
 
-=begin
-    FileUtils.mkdir_p Rails.root.join('private', 'scholar_response'), :mode => 0755
-    output_path = Rails.root.join('private', 'scholar_response', 'index.html')
-    File.open(output_path, 'wb+') do |file|
-      file.write(response)
-    end
-=end
-    # puts response if res.is_a?(Net::HTTPSuccess)
-
-=begin
-    headers = { 'User-Agent' => 'Firefox' }
-    begin
-      doc = open(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), headers).read
-    rescue Exception=>e
-      puts "Error: #{e}"
-    end
-=end
-
-=begin
-    url = URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}").to_s
-    # doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
-    doc = Nokogiri::HTML(open(url))
-    doc.encoding = 'UTF-8'
-
-    # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"), 'User-Agent' => 'Ruby'))
-    # doc.encoding = 'UTF-8'
-=end
-
-    # response = doc.to_s
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
@@ -159,27 +112,9 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else
-=begin
-      headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:36.0) Gecko/20100101 Firefox/36.0' }
-      begin
-        doc = open(URI.encode("https://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}"), headers).read
-      rescue Exception=>e
-        puts "Error: #{e}"
-      end
-=end
-      uri = URI.parse("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
-      # site = Net::HTTP.get(URI.encode("https://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}"))
-      # doc = Net::HTTP.get_response(url)
-=begin
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    req = Net::HTTP::Get.new(uri.request_uri)
 
-    res = http.request(req)
-=end
+      uri = URI.parse("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
       req = Net::HTTP::Get.new(uri)
-      # req['User-Agent'] = 'Firefox'
 
       res = Net::HTTP.start(uri.hostname, uri.port) {|http|
         http.request(req)
@@ -195,16 +130,7 @@ class StaticPagesController < ApplicationController
       rescue EncodingError
         response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
       end
-=begin
-      url = URI.encode().to_s
-      doc = Nokogiri::HTML(open(url, 'User-Agent' => 'Firefox'))
-      doc.encoding = 'UTF-8'
 
-      # doc = Nokogiri::HTML(open(URI.encode("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")))
-      # doc.encoding = 'UTF-8'
-
-      response = doc.to_s
-=end
       result_indexes = []
 
       response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
@@ -260,5 +186,13 @@ class StaticPagesController < ApplicationController
       end
     end
   end
-  
+
+  private
+
+  def valid_user
+    if @current_user.nil?
+      flash[:alert] = (t :search_restriction)
+      redirect_to :root and return
+    end
+  end
 end

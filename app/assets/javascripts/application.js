@@ -15,14 +15,14 @@
 //= require jquery-ui
 //= require jquery.turbolinks
 //= require bootstrap-sprockets
-//= require turbolinks
 //= require bootbox.min
+//= require turbolinks
 //= require pnotify.custom.min
 //= require i18n
 //= require i18n/translations
 //= require_tree .
 
-$(document).ready(function(){
+$(document).ready(function() {
     // PNotify.prototype.options.styling = "fontawesome";
 
     $('.container').on('click', '#sign-in', function() {
@@ -81,59 +81,9 @@ $(document).ready(function(){
         $(this).css('width', '200px').css('background-color', '#EEE').css('border', '1px solid #ccc');
     });
 
-    $(document).keypress(function(e){
-        if($('#search').is(':focus') && (e.which == 13 || e.keycode == 13)){
-            var question = $("#search").val();
-            $("#warning").remove();
-            $.ajax({
-                url: "/static_pages/search?question="+question,
-                cache: false,
-                type: "get",
-                dataType: "json",
-                success: function(result) {
-                    if (result.illegal) {
-                        $("#main").prepend("<div id='alert' class='message'>Only registered users can search for other users and/or projects.</div>");
-                    }
-                    else {
-                        header = "<h4>Search Results</h4>";
-                        projects_header = "<h5>Projects</h5>";
-                        users_header = "<h5>Users</h5>";
-                        // Parse Users
-                        users = "";
-                        if (result.users.length == 0)
-                            users = "No results found";
-                        else {
-                            users = "<ol>";
-                            for (i = 0; i < result.users.length; i++)
-                                users += "<li><a href='/users/" + result.users[i].id + "'>" + result.users[i].username + "</a></li>";
-                            users += "</ol>";
-                        }
-
-                        // Parse Projects
-                        projects = "";
-                        if (result.projects.length == 0)
-                            projects = "No results found";
-                        else{
-                            projects = "<ol>";
-                            for (i = 0; i < result.projects.length; i++)
-                                projects += "<li><a href='/projects/" + result.projects[i].id + "'>" + result.projects[i].title + "</a></li>";
-                            projects += "</ol>";
-                        }
-
-                        $('#main').html(
-                            header+
-                            projects_header+
-                            projects+
-                            users_header+
-                            users
-                        );
-                    }
-                }
-            });
+    window.onload=function() {
+        if($('html').height() < $(window).height()) {
+            $('.footer').css('position', 'absolute');
         }
-    });
-
-    if($('html').height()+60 < $(window).height()) {
-        $('.footer').css('position', 'absolute');
     }
 });
