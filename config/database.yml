@@ -12,7 +12,7 @@ development:
   host: localhost
 
 production:
-  adapter: postgresql
+  adapter: mysql2
   database: researchgr
   username: myresearchgroup
   password: r3s3@Rch_Gr0uP
@@ -24,7 +24,7 @@ production:
 
 test: &test
   adapter: sqlite3
-  database: db/test.pg
+  database: db/test.sqlite
   pool: 5
   timeout: 5000
   # username: ci_jenkins
