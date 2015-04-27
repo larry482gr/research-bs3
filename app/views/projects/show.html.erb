@@ -103,3 +103,11 @@
   <%=render 'static_pages/search_gs' %>
 <% end %>
 <input type="hidden" id="project_id" value="<%= @project.id %>">
+
+<script type="text/javascript">
+  $(document).on('page:change', function() {
+      if($('html').height() < $(window).height()) {
+          $('.footer').css('position', 'absolute');
+      }
+  });
+</script>

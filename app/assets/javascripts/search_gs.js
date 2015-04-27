@@ -136,6 +136,13 @@ $(document).ready(function() {
                 $('.search_gs_results').animate({opacity: 1});
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
+
+      		if($('html').height() < $(window).height()) {
+          		$('.footer').css('position', 'absolute');
+      		}
+		else {
+			$('.footer').css('position', 'relative');
+		}
             }
         });
     }
@@ -147,7 +154,7 @@ $(document).ready(function() {
                 doc_link = $(this).parent().parent().find('.gs_rt').find('a').attr('href');
             }
 
-            if(doc_link.substr(doc_link.length-3).toLowerCase() !== 'pdf') {
+            if(typeof doc_link !== "undefined" && doc_link.substr(doc_link.length-3).toLowerCase() !== 'pdf') {
                 $(this).remove();
             }
         });
