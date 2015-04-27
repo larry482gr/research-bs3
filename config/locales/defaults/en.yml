@@ -21,8 +21,15 @@
 
 en:
   homepage: "Home"
+  welcome: "Welcome to ResearchGr"
+  start_immediately: "You can start immediately by creating a new project"
+  activation_email: "An email was just sent to you with instructions to activate your account."
   no_access: "You don 't have access to view this page. You were redirected to the home page."
   search: "Search for a user or project"
+  search_results: "Search results"
+  project_results: "Projects"
+  user_results: "Users"
+  search_user: "Search user"
   no_results: "No results found."
   save: "Save"
   cancel: "Cancel"
@@ -48,6 +55,12 @@ en:
   provide_comment: "In this case you <b>must</b> provide a comment"
   large_comment: "Your comment should not exceed 200 characters"
   search_restriction: "Only registered users can search for other users and/or projects."
+  prevous: "Previous"
+  next: "Next"
+  invite_search_email: "User Email"
+  invited: "You have been invited by"
+  participate: "to participate in project"
+  exact_phrase_match: "Exact phrase match"
 
   time:
       formats:

@@ -1,3 +1,5 @@
+<%- provide(:title, @project.title) %>
+
 <div class="col-md-10 col-sm-12 col-xs-12 left-div">
   <h3 class="project_title">
     <%= @project.title %>
@@ -103,3 +105,11 @@
   <%=render 'static_pages/search_gs' %>
 <% end %>
 <input type="hidden" id="project_id" value="<%= @project.id %>">
+
+<script type="text/javascript">
+  $(document).on('page:change', function() {
+      if($('html').height() < $(window).height()) {
+          $('.footer').css('position', 'absolute');
+      }
+  });
+</script>

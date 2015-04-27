@@ -55,12 +55,11 @@ ActiveRecord::Schema.define(version: 20150413205547) do
     t.integer  "project_profile_id", limit: 4,   default: 2,         null: false
     t.string   "status",             limit: 10,  default: "pending", null: false
     t.string   "reason",             limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
   end
 
   add_index "invitations", ["project_id"], name: "index_invitations_on_project_id", using: :btree
-  add_index "invitations", ["project_profile_id"], name: "index_invitations_on_project_profile_id", using: :btree
   add_index "invitations", ["user_id"], name: "index_invitations_on_user_id", using: :btree
 
   create_table "languages", force: :cascade do |t|
@@ -84,13 +83,13 @@ ActiveRecord::Schema.define(version: 20150413205547) do
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id", limit: 4
     t.integer  "user_id",    limit: 4
-    t.string   "filename",   limit: 255,             null: false
-    t.string   "extension",  limit: 10
-    t.string   "filepath",   limit: 255,             null: false
-    t.boolean  "is_basic",   limit: 1
-    t.integer  "reference",  limit: 4,   default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "filename",   limit: 255,                 null: false
+    t.string   "extension",  limit: 10,                  null: false
+    t.string   "filepath",   limit: 255,                 null: false
+    t.boolean  "is_basic",   limit: 1,   default: false, null: false
+    t.integer  "reference",  limit: 4,   default: 0,     null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   add_index "project_files", ["project_id"], name: "index_project_files_on_project_id", using: :btree
@@ -102,11 +101,11 @@ ActiveRecord::Schema.define(version: 20150413205547) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "title",       limit: 100,   null: false
+    t.string   "title",       limit: 100,                   null: false
     t.text     "description", limit: 65535
-    t.boolean  "is_private",  limit: 1
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.boolean  "is_private",  limit: 1,     default: false, null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   create_table "projects_users", id: false, force: :cascade do |t|
@@ -143,8 +142,8 @@ ActiveRecord::Schema.define(version: 20150413205547) do
     t.string   "password",   limit: 50, null: false
     t.string   "email",      limit: 50, null: false
     t.integer  "profile_id", limit: 4,  null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   add_index "users", ["profile_id"], name: "index_users_on_profile_id", using: :btree

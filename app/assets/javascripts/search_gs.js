@@ -48,8 +48,12 @@ $(document).ready(function() {
 
             bootbox.dialog({
                 title: doc_title,
-                message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
-                save_file,
+                message: '<object id="object-left" class="pull-left" width="100%" height="860" data="'+doc_link+'" alt="pdf" type="'+allowedFileTypes[0]+'">'+
+                            '<a href="'+doc_link+'" target="_blank">'+I18n.t("no_support")+I18n.t("question_mark")+'</a>'+
+                         '</object>'+
+                         save_file,
+                // message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
+                // save_file,
                 className: 'pdf_modal'
             });
         }
@@ -136,6 +140,13 @@ $(document).ready(function() {
                 $('.search_gs_results').animate({opacity: 1});
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
+
+      		if($('html').height() < $(window).height()) {
+          		$('.footer').css('position', 'absolute');
+      		}
+		else {
+			$('.footer').css('position', 'relative');
+		}
             }
         });
     }
@@ -147,7 +158,7 @@ $(document).ready(function() {
                 doc_link = $(this).parent().parent().find('.gs_rt').find('a').attr('href');
             }
 
-            if(doc_link.substr(doc_link.length-3).toLowerCase() !== 'pdf') {
+            if(typeof doc_link !== "undefined" && doc_link.substr(doc_link.length-3).toLowerCase() !== 'pdf') {
                 $(this).remove();
             }
         });

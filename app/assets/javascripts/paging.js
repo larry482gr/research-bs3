@@ -24,14 +24,14 @@
 			else
 				prev_disabled = 'disabled';
 				
-			previous = '<button title="PreviousPage" class="btn btn-sm previousPage" '+prev_disabled+'>&laquo; Previous</button>';
+			previous = '<button title="PreviousPage" class="btn btn-sm previousPage" '+prev_disabled+'>&laquo; '+I18n.t("previous")+'</button>';
 				
 			if(currentPage != totalPages)
 				next_disabled = '';
 			else
 				next_disabled = 'disabled';
 				
-			next = '<button title="NextPage" class="btn btn-sm nextPage"'+next_disabled+'>Next &raquo;</button>';
+			next = '<button title="NextPage" class="btn btn-sm nextPage"'+next_disabled+'>'+I18n.t("next")+' &raquo;</button>';
 		}
 		
 		var paging = previous;

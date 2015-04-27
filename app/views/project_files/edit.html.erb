@@ -1,5 +1,15 @@
-<h1>Editing "<%= @project_file.filename %>"</h1>
+<%- provide(:title, "#{(t :edit)} \"#{@project_file.filename}\"") %>
+
+<h1><%= t :edit %> "<%= @project_file.filename %>"</h1>
 
 <div class="col-md-6">
   <%= render 'form' %>
 </div>
+
+<script type="text/javascript">
+    $(document).on('page:change', function() {
+        if($('html').height() < $(window).height()) {
+            $('.footer').css('position', 'absolute');
+        }
+    });
+</script>
