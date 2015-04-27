@@ -1,6 +1,8 @@
 gr:
-  projects: "Έργα"
+  projects: "Κατάλογος Έργων"
   your_projects: "Τα Έργα σας"
+  project_created: "Το έργο δημιουργήθηκε επιτυχώς."
+  project_updated: "Το έργο τροποποιήθηκε επιτυχώς."
   title: "Τίτλος"
   description: "Περιγραφή"
   created_at: "Δημιουργήθηκε στις"
@@ -11,6 +13,7 @@ gr:
   users_private: "Απόρρητα έργα που κατέχετε:"
   invite_user: "Πρόσκληση Χρήστη"
   create_project: "Δημιουργία Νέου Έργου"
+  new_project: "Νέο Έργο"
   search_gs: "Αναζήτηση βιβλίου, άρθρου ή εργασίας"
   upload: "Μεταφόρτωση"
   upload_file: "Μεταφόρτωση αρχείου..."

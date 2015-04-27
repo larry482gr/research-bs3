@@ -5,9 +5,9 @@
     <%- if @owner %>
         <%= form_tag({controller: 'invitations', action: 'create', project_id: "#{@project.id}"}, id: 'invite-user-form', class: 'form-horizontal') do %>
             <div class="form-group">
-              <label for="user-email" class="col-md-5 control-label">User email</label>
+              <label for="user-email" class="col-md-5 control-label"><%= t :search_user %></label>
               <div class="col-md-7">
-                <%= email_field_tag 'invitation[email]', nil, { :class => 'form-control', :placeholder => 'Search user by email' } %>
+                <%= email_field_tag 'invitation[email]', nil, { :class => 'form-control', :placeholder => (t :invite_search_email) } %>
               </div>
             </div>
             <!--

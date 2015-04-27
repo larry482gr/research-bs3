@@ -1,3 +1,5 @@
+<%- provide(:title, @project_file.filename) %>
+
 <%- if @project_file.reference > 0 %>
   <% refFile = ProjectFile.find(@project_file.reference) %>
   <div class="col-md-6">
@@ -39,17 +41,17 @@
     <div class="col-md-6 project_file">
       <object id="object-left" class="pull-left" width="100%" height="860"
               data="
-            <%- if refFile.filepath[0..3] == 'http' %>
-              <%= refFile.filepath %>
-            <%- else %>
-              <%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>
-            <% end %>
-            "
+                <%- if refFile.filepath[0..3] == 'http' %>
+                  <%= refFile.filepath %>
+                <%- else %>
+                  <%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>
+                <% end %>
+              "
               alt="<%= refFile.extension %>" type="<%= get_extension_info refFile.extension %>">
-	      <%- if refFile.filepath[0..3] == 'http' %>
-                <a href="<%= refFile.filepath %>" target="_blank">No Support?</a>
+              <%- if refFile.filepath[0..3] == 'http' %>
+                <a href="<%= refFile.filepath %>" target="_blank"><%= "#{t :no_support}#{t :question_mark}" %></a>
               <%- else %>
-                <a href="<%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>">No Support?</a>
+                <a href="<%= "/#{params[:locale]}/projects/#{refFile.project.id}/project_files/#{refFile.id}/get_file" %>"><%= "#{t :no_support}#{t :question_mark}" %></a>
               <% end %>
       </object>
 
@@ -67,17 +69,17 @@
 <div class="<%= colClass %> project_file">
   <object id="object-right" class="pull-left" width="100%" height="860"
          data="
-            <%- if @project_file.filepath[0..3] == 'http' %>
-              <%= @project_file.filepath %>
-            <%- else %>
-              <%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>
-            <% end %>
-            "
+           <%- if @project_file.filepath[0..3] == 'http' %>
+             <%= @project_file.filepath %>
+           <%- else %>
+             <%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>
+           <% end %>
+         "
          alt="<%= @project_file.extension %>" type="<%= @filetype %>">
-	<%- if @project_file.filepath[0..3] == 'http' %>
-            <a href="<%= @project_file.filepath %>" target="_blank">No Support?</a>
+        <%- if @project_file.filepath[0..3] == 'http' %>
+            <a href="<%= @project_file.filepath %>" target="_blank"><%= "#{t :no_support}#{t :question_mark}" %></a>
         <%- else %>
-            <a href="<%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>">No Support?</a>
+            <a href="<%= "/#{params[:locale]}/projects/#{@project_file.project.id}/project_files/#{@project_file.id}/get_file" %>"><%= "#{t :no_support}#{t :question_mark}" %></a>
         <% end %>
   </object>
   <%- if @project_file.reference == 0 %>

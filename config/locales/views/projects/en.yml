@@ -1,6 +1,8 @@
 en:
-  projects: "Projects"
+  projects: "Projects List"
   your_projects: "Your Projects"
+  project_created: "Project was successfully created."
+  project_updated: "Project was successfully updated."
   title: "Title"
   description: "Description"
   created_at: "Created at"
@@ -11,6 +13,7 @@ en:
   users_private: "Currently owned private projects:"
   invite_user: "Invite User"
   create_project: "Create New Project"
+  new_project: "New Project"
   search_gs: "Search for a book, article or paper"
   upload: "Upload"
   upload_file: "Upload file..."
