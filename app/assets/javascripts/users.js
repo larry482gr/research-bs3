@@ -68,7 +68,7 @@ function checkInvitations() {
                     user = user.trim().length == 0 ? email : user + ' (' + email + ')';
 
 
-                    text = 'You have been invited by <i>' + user + '</i> to participate in <b>"' + invitations[i].project.project_title + '"</b>';
+                    text = I18n.t("invited") + ' <i>' + user + '</i> '+I18n.t("participate")+' <b>"' + invitations[i].project.project_title + '"</b>';
                     date = invitations[i].date;
 
                     content += getInvitationRow(invitations[i].user.id, invitations[i].id, text, date);
@@ -208,11 +208,11 @@ function signIn() {
             }
             else if (user.id == 0){
                 $(".modal").modal("hide");
-                $("#main").prepend("<div id='alert' class='message'>Please activate your account by following the link you will find at your email.</div>");
+                $("#main").prepend("<div id='alert' class='message'>"+I18n.t("activation_reminder")+"</div>");
             }
             else if (user.id == -1){
                 $(".modal").modal("hide");
-                $("#main").prepend("<div id='alert' class='message'>Your account has been blacklisted. Please contact us at <a href='mailto:info@research.org.gr'>info@research.org.gr</a> if you need more information.</div>");
+                $("#main").prepend("<div id='alert' class='message'>"+I18n.t("account_blacklisted")+"</div>");
             }
             else{
                 $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);

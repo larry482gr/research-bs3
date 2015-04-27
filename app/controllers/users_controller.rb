@@ -59,7 +59,7 @@ class UsersController < ApplicationController
         @user_info.save
         session[:id] = @user.password
         session[:email] = @user.email
-        notices = ["Welcome to ResearchGr #{@user.username}!", 'You can start immediately by creating a new project']
+        notices = ["#{t :welcome} #{@user.username}!", (t :start_immediately)]
         redirect_to(projects_path, :notice => notices.join('<br/>')) and return
       end
     end
@@ -147,7 +147,7 @@ class UsersController < ApplicationController
       @user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
-    notices = ["Welcome to ResearchGr #{params[:user][:username]}!", 'An email was just sent to you with instructions to activate your account.']
+    notices = ["#{t :welcome} #{params[:user][:username]}!", (t :activation_email)]
     redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
   end
 

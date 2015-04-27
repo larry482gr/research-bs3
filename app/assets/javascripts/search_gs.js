@@ -48,8 +48,12 @@ $(document).ready(function() {
 
             bootbox.dialog({
                 title: doc_title,
-                message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
-                save_file,
+                message: '<object id="object-left" class="pull-left" width="100%" height="860" data="'+doc_link+'" alt="pdf" type="'+allowedFileTypes[0]+'">'+
+                            '<a href="'+doc_link+'" target="_blank">'+I18n.t("no_support")+I18n.t("question_mark")+'</a>'+
+                         '</object>'+
+                         save_file,
+                // message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
+                // save_file,
                 className: 'pdf_modal'
             });
         }

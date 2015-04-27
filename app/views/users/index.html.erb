@@ -1,3 +1,5 @@
+<%- provide(:title, (t :list_users)) %>
+
 <h1><%= (t :list_users) %></h1>
 
 <div class="users_table">
@@ -23,9 +25,9 @@
         <td><%= user.email %></td>
         <td><%= user.user_info.first_name %></td>
         <td><%= user.user_info.last_name %></td>
-        <td><%= user.user_info.activated? ? 'Yes' : 'No' %></td>
-        <td><%= user.user_info.blacklisted? ? 'Yes' : 'No' %></td>
-        <td><%= user.user_info.deleted? ? 'Yes' : 'No' %></td>
+        <td><%= user.user_info.activated? ? (t :word_yes) : (t :word_no) %></td>
+        <td><%= user.user_info.blacklisted? ? (t :word_yes) : (t :word_no) %></td>
+        <td><%= user.user_info.deleted? ? (t :word_yes) : (t :word_no) %></td>
         <td><%= "#{l user.created_at, format: :long}" %></td>
         <td><%= "#{l user.updated_at, format: :long}" %></td>
         <td><%= link_to (t :show), user_path(user), class: 'btn btn-xs btn-success' %></td>

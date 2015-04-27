@@ -61,7 +61,7 @@ class ProjectFilesController < ApplicationController
       redirect_to project_path(Project.find(params[:project_id]))
     elsif is_url?(@project_file.filepath)
       respond_to do |format|
-        format.html { redirect_to @project_file.project, alert: 'You cannot edit linked files.' }
+        format.html { redirect_to @project_file.project, alert: (t :linked_edit_error) }
         format.json { render json: @project_file.errors, status: :unprocessable_entity }
       end
     end
@@ -122,13 +122,13 @@ class ProjectFilesController < ApplicationController
     
     respond_to do |format|
       if is_new
-        format.html { redirect_to @project, notice: 'Article was successfully saved.' }
+        format.html { redirect_to @project, notice: (t :file_save_success) }
         format.json { render action: 'show', status: :created, location: @project }
       elsif uploaded_file_params[:file_exists]
-        format.html { redirect_to @project, alert: 'An identical file has been already uploaded.<br/>You can set it as "Main File" if you wish to keep track of its modifications.' }
+        format.html { redirect_to @project, alert: (t :identical_file) }
         format.json { render action: 'show', status: :unprocessable_entity, location: @project }
       else
-        format.html { redirect_to @project, alert: 'Article failed to be saved. It may already exist in this project.' }
+        format.html { redirect_to @project, alert: (t :file_save_error) }
         format.json { render action: 'show', status: :unprocessable_entity, location: @project }
       end
     end
@@ -142,15 +142,15 @@ class ProjectFilesController < ApplicationController
       flash[:alert] = t :file_edit_no_access
       redirect_to project_path(@project_file.project)
     elsif is_url?(@project_file.filepath)
-      flash[:alert] = 'You cannot edit linked files.'
+      flash[:alert] = t :linked_edit_error
       redirect_to @project_file.project
     end
     respond_to do |format|
       if update_file and @project_file.update(project_file_params)
-        format.html { redirect_to project_path(@project_file.project), notice: 'Project file was successfully updated.' }
+        format.html { redirect_to project_path(@project_file.project), notice: (t :file_edit_success) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit', notice: 'Project file was not updated.' }
+        format.html { render action: 'edit', notice: (t :file_edit_error) }
         format.json { render json: @project_file.errors, status: :unprocessable_entity }
       end
     end

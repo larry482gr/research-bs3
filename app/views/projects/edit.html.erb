@@ -1,4 +1,6 @@
-<h1>Editing project</h1>
+<%- provide(:title, "#{(t :edit)} \"#{@project.title}\"") %>
+
+<h1><%= "#{(t :edit)} \"#{@project.title}\"" %></h1>
 
 <div class="col-md-6">
   <%= render 'form' %>

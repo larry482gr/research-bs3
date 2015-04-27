@@ -1,5 +1,7 @@
-<h3>Search Results</h3>
-<h4>Projects</h4>
+<%- provide(:title, (t :search_results)) %>
+
+<h3><%= t :search_results %></h3>
+<h4><%= t :project_results %></h4>
 <%- if @projects.count.zero? %>
     <%= t :no_results %>
 <%- else %>
@@ -9,7 +11,7 @@
     <% end %>
   </ol>
 <% end %>
-<h4>Users</h4>
+<h4><%= t :user_results %></h4>
 <%- if @users.count.zero? %>
     <%= t :no_results %>
 <%- else %>
