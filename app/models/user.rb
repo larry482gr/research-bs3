@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   belongs_to :profile
 
   has_and_belongs_to_many :projects
+  belongs_to :project_profile
   has_many :project_files
 
   has_many :invitations
