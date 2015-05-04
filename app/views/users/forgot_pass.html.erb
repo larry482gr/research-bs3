@@ -1,0 +1,15 @@
+<%- provide(:title, (t :pass_recov)) %>
+
+<div class="container">
+    <h1><%= (t :pass_recov) %></h1>
+    <div class="col-md-4">
+      <%= render 'forgot_pass_form' %>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).on('page:change', function() {
+        if($('html').height() < $(window).height()) {
+            $('.footer').css('position', 'absolute');
+        }
+    });
+</script>

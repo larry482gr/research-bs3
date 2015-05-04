@@ -47,6 +47,7 @@ $(document).ready(function() {
             '</div>'+
             '</div>'+
             '</form>'+
+            '<a href="/forgot_pass">'+I18n.t("forgot_pass")+I18n.t("question_mark")+'</a>'+
             '<script type="text/javascript">'+
             '$(".modal").on("shown.bs.modal", function(){'+
             '$("#inputUsername").focus();'+

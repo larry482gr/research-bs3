@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 </head>
 <body>
-    <h1><%= "Welcome to ResearchGr, #{@user.username}" %></h1>
-    <p><%= "To activate your account follow this link: #{@url}" %></p>
-    <p>Thanks for joining and have a great day!</p>
+    <h1><%= (t 'email.message.welcome.header').gsub('%username%', @user.username).html_safe %></h1>
+    <p><%= (t 'email.message.welcome.par_one').gsub('%url%', @url).html_safe %></p>
+    <p><%= (t 'email.message.welcome.par_two').html_safe %></p>
 </body>

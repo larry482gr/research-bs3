@@ -1,6 +1,6 @@
-<%= "Welcome to ResearchGr, #{@user.username}" %>
+<%= (t 'email.message.welcome.header').gsub('%username%', @user.username) %>
 ===============================================
  
-<%= "To activate your account follow this link:= #{@url}" %>
- 
-Thanks for joining and have a great day!
+<%= (t 'email.message.welcome.par_one').gsub('%url%', @url) %>
+
+<%= (t 'email.message.welcome.par_two') %>

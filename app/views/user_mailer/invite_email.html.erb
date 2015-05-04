@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 </head>
 <body>
-<h1>Project invitation</h1>
-<p><%= "#{@current_user.username} invited you to participate in \"#{@project.title}\"." %></p>
-<p>You may visit <a href="https://research.org.gr">ResearchGr</a> to view your invitation(s).</p>
+<h1><%= (t 'email.message.invitation.header').html_safe %></h1>
+<p><%= (t 'email.message.invitation.par_one').gsub('%username%', @current_user.username).gsub('%project_title%', @project.title).html_safe %></p>
+<p><%= (t 'email.message.invitation.par_two').html_safe %></p>
 </body>

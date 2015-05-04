@@ -19,9 +19,11 @@ Researchgr::Application.routes.draw do
       end
       resources :citations
     end
-    
+
     post 'check_login' => 'users#check_login'
     get 'activate' => 'users#activate'
+    get 'forgot_pass' => 'users#forgot_pass'
+    post 'pass_recover' => 'users#password_recovery'
     get '/logout' => 'users#logout'
     get '/users_autocomplete' => 'users#autocomplete'
     get '/invitations' => 'invitations#index'

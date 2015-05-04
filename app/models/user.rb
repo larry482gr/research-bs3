@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
   end
   
   protected
-  
-  before_create {|user| user.password = Digest::SHA1.hexdigest(user.password)} 
+
+  before_save {|user| user.password = Digest::SHA1.hexdigest(user.password)}
   
   before_validation :set_default_profile
   

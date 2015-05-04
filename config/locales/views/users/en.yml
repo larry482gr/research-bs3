@@ -3,6 +3,12 @@ en:
     one: "error"
     other: "errors"
   user_prohibit: "prohibited your registation:"
+  user_not_exist: "Oops! We couldn't find a user with the info you provided."
+  forgot_pass: "Forgot your password"
+  pass_recov: "Password Recovery"
+  pass_recov_success: "Your password has been reset. You sent you an email with further instructions to sign in to your account."
+  rec_both_empty: "You should provide either your username OR the email you used during your registration."
+  valid_email_error: "You should provide a valid email address."
   username: "Username"
   first_name: "First Name"
   last_name: "Last Name"
@@ -34,3 +40,19 @@ en:
     - "Harmful usage"
     - "Don't like his/her face"
     - "Other"
+
+  email:
+    subject:
+      welcome: "Activate your account to ResearchGr"
+      invitation: "Invitation from %username% at ResearchGr"
+      recover: "Password Recovery"
+    message:
+      welcome:
+        header: "Welcome to ResearchGr, %username%"
+        par_one: "To activate your account follow this link: %url%"
+        par_two: "Thanks for joining and have a great day!"
+      invitation:
+        header: "Project invitation"
+        par_one: "%username%  invited you to participate in \"%project_title%\"."
+        par_two: "You may visit <a href=\"https://research.org.gr\">ResearchGr</a> to view your invitation(s)."
+      recover:

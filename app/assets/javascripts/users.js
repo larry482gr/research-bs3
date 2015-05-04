@@ -46,6 +46,11 @@ $(document).ready(function() {
     });
 });
 
+function validateEmail(elementValue) {
+    var emailPattern = /^[a-zA-Z0-9\._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(elementValue);
+}
+
 function checkInvitations() {
     $.ajax({
         url: "/invitations",
@@ -139,7 +144,7 @@ function invitationModal(user_id, invitation_id, status) {
         buttons: {
             cancel: {
                 label: I18n.t("cancel"),
-                className: "btn btn-default",
+                className: "btn btn-default"
             },
             del: {
                 label: I18n.t("ok"),
