@@ -38,7 +38,8 @@ class StaticPagesController < ApplicationController
     start		= params[:start]
     num			= params[:num]
 
-    uri = URI.parse("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    url = URI.escape("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    uri = URI.parse(url)
     req = Net::HTTP::Get.new(uri)
 
     res = Net::HTTP.start(uri.hostname, uri.port) {|http|
@@ -117,8 +118,8 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_chicago
       
     else
-
-      uri = URI.parse("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
+      url = URI.escape("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
+      uri = URI.parse(url)
       req = Net::HTTP::Get.new(uri)
 
       res = Net::HTTP.start(uri.hostname, uri.port) {|http|
