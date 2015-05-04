@@ -280,7 +280,11 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to forgot_pass_path }
+      if error
+        format.html { redirect_to forgot_pass_path }
+      else
+        format.html { redirect_to root_path }
+      end
     end
   end
 
