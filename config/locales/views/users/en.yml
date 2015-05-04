@@ -18,6 +18,15 @@ en:
   deleted: "Deleted"
   preferred_language: "Preferred language"
   password: "Password"
+  change_pass: "Change Password"
+  current_password: "Current Password"
+  new_password: "New Password"
+  confirm_password: "Confirm Password"
+  error_pass_current: "'Current Password' does not match your actual password."
+  error_pass_not_match: "'New Password' and 'Confirm Password' fields are not identical."
+  error_pass_new_empty: "Your new password cannot be empty."
+  pass_change_success: "Your password has been successfully changed.<br/>Please login with your new password."
+  pass_change_error: "There has been a problem updating your password."
   sign_in: "Sign In"
   invalid_credentials: "The username or password you entered is invalid."
   activation_error_html: "Oops, we had some problems activating your account! Either it is already activated or an error occured.<br/>Try following the activation link again or directly Sign In. If you see this message again contact our <a href='mailto:support@research.org.gr'>Support Department</a>."
@@ -41,11 +50,11 @@ en:
     - "Don't like his/her face"
     - "Other"
 
-  email:
+  email_deliver:
     subject:
       welcome: "Activate your account to ResearchGr"
       invitation: "Invitation from %username% at ResearchGr"
-      recover: "Password Recovery"
+      recover: "Notification from ResearchGr"
     message:
       welcome:
         header: "Welcome to ResearchGr, %username%"
@@ -56,3 +65,8 @@ en:
         par_one: "%username%  invited you to participate in \"%project_title%\"."
         par_two: "You may visit <a href=\"https://research.org.gr\">ResearchGr</a> to view your invitation(s)."
       recover:
+        header: "Password Recovery"
+        par_one: "Dear %username%"
+        par_two: "Your password to ResearchGr has been reset.<br/>Your new password is: %password%"
+        par_three: "For security reasons, you are kindly requested to visit your 'Profile' page as soon as possible and modify this password with one of your choice."
+        par_four: "If you encounter any problems during this process feel free to contact ResearchGr 's <a href='mailto:info@research.org.gr'>Support Department</a>."

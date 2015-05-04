@@ -5,19 +5,19 @@ class UserMailer < ActionMailer::Base
   def welcome_email(user, token, baseUrl)
     @user = user
     @url  = "#{baseUrl}/activate?user=#{@user.username}&token=#{token}"
-    mail(to: @user.email, subject: (t 'email.subject.welcome'))
+    mail(to: @user.email, subject: (t 'email_deliver.subject.welcome'))
   end
 
   def invite_email(project, user, current_user)
     @project = project
     @user = user
     @current_user = current_user
-    mail(to: @user.email, subject: (t 'email.subject.invitation').gsub('%username%', @current_user.username))
+    mail(to: @user.email, subject: (t 'email_deliver.subject.invitation').gsub('%username%', @current_user.username))
   end
 
   def recovery_email(user, token)
     @user = user
     @token = token
-    mail(to: @user.email, subject: (t 'email.subject.recover'))
+    mail(to: @user.email, subject: (t 'email_deliver.subject.recover'))
   end
 end

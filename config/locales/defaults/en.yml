@@ -52,7 +52,7 @@ en:
   collaborator: "Collaborator"
   send: "Send"
   try_again: "Please try again."
-  error_persists: "If this error persists contact our support department at... (support_mail)"
+  error_persists: "If this error persists contact our <a href='mailto:info@research.org.gr'>Support Department</a>."
   write_comment: "Write a comment"
   provide_comment: "In this case you <b>must</b> provide a comment"
   large_comment: "Your comment should not exceed 200 characters"
