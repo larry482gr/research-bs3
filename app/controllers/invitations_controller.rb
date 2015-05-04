@@ -9,7 +9,7 @@ class InvitationsController < ApplicationController
 
     invitations.each do |inv|
       user = User.find(inv.from_user)
-      user_hash = { :id => @current_user.id, :email => user.email, :first_name => user.user_info.first_name, :last_name => user.user_info.first_name }
+      user_hash = { :id => @current_user.id, :email => user.email, :first_name => user.user_info.first_name, :last_name => user.user_info.last_name }
 
       project = Project.find(inv.project_id)
       project_hash = { :id => project.id , :project_title => project.title, :project_profile => inv.project_profile_id }
