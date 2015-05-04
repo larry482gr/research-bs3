@@ -1,0 +1,13 @@
+<%= (t 'email_deliver.message.recover.header') %>
+===============================================
+
+<%= (t 'email_deliver.message.recover.par_one').gsub('%username%', @user.username).html_safe %>
+
+
+<%= (t 'email_deliver.message.recover.par_two').gsub('%password%', @token).gsub('<br/>', "\r\n").html_safe %>
+
+
+<%= (t 'email_deliver.message.recover.par_three').html_safe %>
+
+
+<%= (t 'email_deliver.message.recover.par_four').html_safe %>

@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   belongs_to :profile
 
   has_and_belongs_to_many :projects
+  belongs_to :project_profile
   has_many :project_files
 
   has_many :invitations
@@ -39,8 +40,8 @@ class User < ActiveRecord::Base
   end
   
   protected
-  
-  before_create {|user| user.password = Digest::SHA1.hexdigest(user.password)} 
+
+  before_create {|user| user.password = Digest::SHA1.hexdigest(user.password)}
   
   before_validation :set_default_profile
   

@@ -44,7 +44,16 @@ $(document).ready(function() {
             invitationModal(user_id, invitation_id, 'report');
         }
     });
+
+    $('#change-pass-div h5').on('click', function(){
+       $('#change-pass-form').slideToggle();
+    });
 });
+
+function validateEmail(elementValue) {
+    var emailPattern = /^[a-zA-Z0-9\._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(elementValue);
+}
 
 function checkInvitations() {
     $.ajax({
@@ -139,7 +148,7 @@ function invitationModal(user_id, invitation_id, status) {
         buttons: {
             cancel: {
                 label: I18n.t("cancel"),
-                className: "btn btn-default",
+                className: "btn btn-default"
             },
             del: {
                 label: I18n.t("ok"),

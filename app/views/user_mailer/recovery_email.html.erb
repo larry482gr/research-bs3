@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h1><%= (t 'email_deliver.message.recover.header').html_safe %></h1>
+<p><%= (t 'email_deliver.message.recover.par_one').gsub('%username%', @user.username).html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_two').gsub('%password%', @token).html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_three').html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_four').html_safe %></p>
+</body>

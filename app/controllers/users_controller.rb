@@ -148,7 +148,7 @@ class UsersController < ApplicationController
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
     notices = ["#{t :welcome} #{params[:user][:username]}!", (t :activation_email)]
-    redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
+    redirect_to(root_url, :notice => notices.join('<br/>'))
   end
 
   # PATCH/PUT /users/1
@@ -167,7 +167,9 @@ class UsersController < ApplicationController
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
         if @current_user != @user and @current_user.can_access?('user_edit')
           if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
-            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: @user.profile_id, to_value: admin_params[:profile_id], change_type: 'profile'})
+            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id,
+                                             from_value: @user.profile_id, to_value: admin_params[:profile_id],
+                                             change_type: 'profile'})
           end
           @user.update(admin_params)
         end
@@ -196,7 +198,8 @@ class UsersController < ApplicationController
     @user.user_info.deleted = 1
     if @user.user_info.save!
       if @current_user.can_access?('user_delete')
-        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1, change_type: 'deletion', comment: params[:comment]})
+        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1,
+                                         change_type: 'deletion', comment: params[:comment]})
 
         respond_to do |format|
           format.js {}
@@ -249,6 +252,70 @@ class UsersController < ApplicationController
     end
   end
 
+  def forgot_pass
+    @user = User.new
+  end
+
+  def password_recovery
+    error = false
+    if (params[:user][:username].empty? and params[:user][:email].empty?) or
+        (not params[:user][:username].empty? and not params[:user][:email].empty?)
+      flash[:alert] = t :rec_both_empty
+      error = true
+    elsif not params[:user][:email].empty? and not params[:user][:email].match(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
+      flash[:alert] = t :valid_email_error
+      error = true
+    end
+
+    unless error
+      @user = User.where('username = ? OR email = ?', params[:user][:username], params[:user][:email]).first
+      if @user
+        random_token = SecureRandom.urlsafe_base64(nil, false)
+        @user.update(:password => Digest::SHA1.hexdigest(random_token[0..7]))
+        UserMailer.recovery_email(@user, random_token[0..7]).deliver_now
+        flash[:notice] = t :pass_recov_success
+      else
+        flash[:alert] = t :user_not_exist
+      end
+    end
+
+    respond_to do |format|
+      format.html { redirect_to forgot_pass_path }
+    end
+  end
+
+  def change_pass
+    error = false
+    alert = []
+    if Digest::SHA1.hexdigest(params[:user][:current_password]) != @current_user.password
+      alert << (t :error_pass_current)
+      error = true
+    elsif params[:user][:new_password] != params[:user][:confirm_password]
+      alert << (t :error_pass_not_match)
+      error = true
+    elsif params[:user][:new_password].empty? and params[:user][:confirm_password].empty?
+      alert << (t :error_pass_new_empty)
+      error = true
+    end
+
+    unless error
+      new_pass = Digest::SHA1.hexdigest(params[:user][:new_password])
+      if @current_user.update(:password => new_pass)
+        flash[:notice] = (t :pass_change_success)
+        return logout
+      else
+        flash[:alert] = "#{(t :pass_change_error)} #{(t :try_again)} #{(t :error_persists)}"
+      end
+    else
+      flash[:alert] = alert.join('<br/>')
+    end
+
+
+    respond_to do |format|
+      format.html { redirect_to edit_user_path }
+    end
+  end
+
   private
     def set_referer
       session[:return_to] = '/'
@@ -257,7 +324,8 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :email, user_info_attributes: [:id, :first_name, :last_name, :language_id, :deleted])
+      params.require(:user).permit(:username, :password, :email, :current_password, :new_password, :confirm_password,
+                                   user_info_attributes: [:id, :first_name, :last_name, :language_id, :deleted])
     end
 
     def admin_params
