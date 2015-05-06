@@ -44,6 +44,10 @@ $(document).ready(function() {
             invitationModal(user_id, invitation_id, 'report');
         }
     });
+
+    $('#change-pass-div h5').on('click', function(){
+       $('#change-pass-form').slideToggle();
+    });
 });
 
 function validateEmail(elementValue) {

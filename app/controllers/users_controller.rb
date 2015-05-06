@@ -148,7 +148,7 @@ class UsersController < ApplicationController
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
     end
     notices = ["#{t :welcome} #{params[:user][:username]}!", (t :activation_email)]
-    redirect_to(root_url, :notice => notices.join("<br/>").html_safe)
+    redirect_to(root_url, :notice => notices.join('<br/>'))
   end
 
   # PATCH/PUT /users/1
@@ -258,7 +258,7 @@ class UsersController < ApplicationController
 
   def password_recovery
     error = false
-    if (params[:user][:username].empty? and params[:user][:email].empty?)or
+    if (params[:user][:username].empty? and params[:user][:email].empty?) or
         (not params[:user][:username].empty? and not params[:user][:email].empty?)
       flash[:alert] = t :rec_both_empty
       error = true
@@ -271,9 +271,8 @@ class UsersController < ApplicationController
       @user = User.where('username = ? OR email = ?', params[:user][:username], params[:user][:email]).first
       if @user
         random_token = SecureRandom.urlsafe_base64(nil, false)
-        puts random_token[0..7]
-        @user.update(:password => random_token[0..7])
-        UserMailer.recovery_email(@user, random_token).deliver_now
+        @user.update(:password => Digest::SHA1.hexdigest(random_token[0..7]))
+        UserMailer.recovery_email(@user, random_token[0..7]).deliver_now
         flash[:notice] = t :pass_recov_success
       else
         flash[:alert] = t :user_not_exist
@@ -281,7 +280,43 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to forgot_pass_path }
+      if error
+        format.html { redirect_to forgot_pass_path }
+      else
+        format.html { redirect_to root_path }
+      end
+    end
+  end
+
+  def change_pass
+    error = false
+    alert = []
+    if Digest::SHA1.hexdigest(params[:user][:current_password]) != @current_user.password
+      alert << (t :error_pass_current)
+      error = true
+    elsif params[:user][:new_password] != params[:user][:confirm_password]
+      alert << (t :error_pass_not_match)
+      error = true
+    elsif params[:user][:new_password].empty? and params[:user][:confirm_password].empty?
+      alert << (t :error_pass_new_empty)
+      error = true
+    end
+
+    unless error
+      new_pass = Digest::SHA1.hexdigest(params[:user][:new_password])
+      if @current_user.update(:password => new_pass)
+        flash[:notice] = (t :pass_change_success)
+        return logout
+      else
+        flash[:alert] = "#{(t :pass_change_error)} #{(t :try_again)} #{(t :error_persists)}"
+      end
+    else
+      flash[:alert] = alert.join('<br/>')
+    end
+
+
+    respond_to do |format|
+      format.html { redirect_to edit_user_path }
     end
   end
 
@@ -293,7 +328,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :email,
+      params.require(:user).permit(:username, :password, :email, :current_password, :new_password, :confirm_password,
                                    user_info_attributes: [:id, :first_name, :last_name, :language_id, :deleted])
     end
 

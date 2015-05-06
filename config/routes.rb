@@ -6,6 +6,9 @@ Researchgr::Application.routes.draw do
       resources :projects
       resources :project_files
       resources :invitations
+      member do
+        post :change_pass
+      end
     end
     
     resources :projects do

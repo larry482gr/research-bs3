@@ -1,6 +1,6 @@
-<%= (t 'email.message.invitation.header').html_safe %>
+<%= (t 'email_deliver.message.invitation.header') %>
 ===============================================
 
-<%= (t 'email.message.invitation.par_one').gsub('%username%', @current_user.username).gsub('%project_title%', @project.title).html_safe %>
+<%= (t 'email_deliver.message.invitation.par_one').gsub('%username%', @current_user.username).gsub('%project_title%', @project.title) %>
 
-<%= (t 'email.message.invitation.par_two').html_safe %>
+<%= (t 'email_deliver.message.invitation.par_two') %>

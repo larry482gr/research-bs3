@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
 </head>
 <body>
-<h1><%= (t 'email.message.invitation.header').html_safe %></h1>
-<p><%= (t 'email.message.invitation.par_one').gsub('%username%', @current_user.username).gsub('%project_title%', @project.title).html_safe %></p>
-<p><%= (t 'email.message.invitation.par_two').html_safe %></p>
+<h1><%= (t 'email_deliver.message.recover.header').html_safe %></h1>
+<p><%= (t 'email_deliver.message.recover.par_one').gsub('%username%', @user.username).html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_two').gsub('%password%', @token).html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_three').html_safe %></p>
+<p><%= (t 'email_deliver.message.recover.par_four').html_safe %></p>
 </body>
