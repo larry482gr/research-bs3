@@ -1,6 +1,6 @@
-<%= (t 'email.message.welcome.header').gsub('%username%', @user.username) %>
+<%= (t 'email.message.welcome.header').gsub('%username%', @user.username).html_safe %>
 ===============================================
  
-<%= (t 'email.message.welcome.par_one').gsub('%url%', @url) %>
+<%= (t 'email.message.welcome.par_one').gsub('%url%', @url).html_safe %>
 
-<%= (t 'email.message.welcome.par_two') %>
+<%= (t 'email.message.welcome.par_two').html_safe %>
