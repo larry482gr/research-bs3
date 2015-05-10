@@ -42,6 +42,7 @@ $(document).ready(function() {
             '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />'+
             '<input type="hidden" name="project_file[extension]" value="'+doc_extension+'">' +
             '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />'+
+            '<input type="hidden" name="search_q" value="'+$('#search_gs_input').val()+'" />' +
             '<input type="submit" class="save-article-btn btn btn-primary" value="Save" />'+
             '</div>'+
             '</form>';
