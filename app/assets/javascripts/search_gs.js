@@ -231,6 +231,7 @@ function gs_sva(doc_id, doc_num) {
         '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />' +
         '<input id="project_file_extension" type="hidden" name="project_file[extension]" value="'+doc_extension+'">' +
         '<input type="hidden" name="authenticity_token" value="'+AUTH_TOKEN+'" />' +
+        '<input type="hidden" name="search_q" value="'+$('#search_gs_input').val()+'" />' +
         '</form>';
         element_link.after(save_file);
         $('.container #save_gs_link').submit();
