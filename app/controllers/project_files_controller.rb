@@ -18,7 +18,7 @@ class ProjectFilesController < ApplicationController
   def show
     if not (@project_file.project.owner?(@current_user.id) or @project_file.project.contributor?(@current_user.id))
       if is_url?(@project_file.filepath)
-        session[:search_gs] = @project_file.filename
+        # session[:search_gs] = @project_file.filename
         redirect_to projects_path and return
       else
         flash[:alert] = t :no_access
@@ -41,6 +41,7 @@ class ProjectFilesController < ApplicationController
       redirect_to :root and return
     else
       @old_files = @project_file.project.project_files.where('reference = ?', @project_file.id).order('id DESC')
+      # session[:search_gs] = @project_file.filename
     end
   end
 
@@ -60,6 +61,7 @@ class ProjectFilesController < ApplicationController
       flash[:alert] = t :file_edit_no_access
       redirect_to project_path(Project.find(params[:project_id]))
     elsif is_url?(@project_file.filepath)
+      # session[:search_gs] = @project_file.filename
       respond_to do |format|
         format.html { redirect_to @project_file.project, alert: (t :linked_edit_error) }
         format.json { render json: @project_file.errors, status: :unprocessable_entity }
@@ -92,7 +94,12 @@ class ProjectFilesController < ApplicationController
     is_new = false
     # uploaded_io = params[:project_file][:filename]
 
-    (uploaded_file_params = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
+    # (uploaded_file_params = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
+    if is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String
+      session[:search_gs] = params[:search_q]
+    else
+      uploaded_file_params = upload_file
+    end
 
     @project_file = @project.project_files.where(project_file_params)
     
