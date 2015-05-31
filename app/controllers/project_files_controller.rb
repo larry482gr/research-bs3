@@ -1,10 +1,12 @@
 class ProjectFilesController < ApplicationController
+  include Concerns::ForceNonSSL
   before_action :valid_user
   before_action :set_project_file, only: [:show, :show_history, :edit, :update, :destroy, :set_main, :get_file]
   before_action :allowed_file_types, only: :show
   before_action :can_edit, only:  [:show, :edit, :update]
   before_action :set_extension_info, only: [:show, :get_file]
   before_action :set_referer, only: [:show, :edit, :show_history]
+  force_non_ssl
 
   # GET /project_files
   # GET /project_files.json
