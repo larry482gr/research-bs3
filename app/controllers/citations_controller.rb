@@ -1,7 +1,6 @@
 class CitationsController < ApplicationController
   before_action :valid_user
   before_action :set_project, only: [:destroy]
-  force_non_ssl
 
   # DELETE /projects/1/citations/1
   # DELETE /projects/1/citations/1.json
