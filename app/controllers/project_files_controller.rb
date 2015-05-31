@@ -5,7 +5,6 @@ class ProjectFilesController < ApplicationController
   before_action :can_edit, only:  [:show, :edit, :update]
   before_action :set_extension_info, only: [:show, :get_file]
   before_action :set_referer, only: [:show, :edit, :show_history]
-  force_non_ssl
 
   # GET /project_files
   # GET /project_files.json
