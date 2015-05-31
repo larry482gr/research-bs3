@@ -3,7 +3,6 @@ class StaticPagesController < ApplicationController
   require 'uri'
 
   before_action :valid_user, only: [:search, :search_scholar, :search_citation]
-  !force_ssl
   
   def index
     redirect_to projects_path unless @current_user.nil?
