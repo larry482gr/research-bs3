@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :set_current_user
   before_action :set_locale
+  # before_action force_ssl if: -> { @current_user.present? }
 
   def default_url_options(options={})
     logger.debug "default_url_options is passed options: #{options.inspect}\n"
@@ -11,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_user
-    return unless session[:id]
+    force_ssl_redirect and return unless session[:id]
     @current_user ||= User.find_by('password = ? AND email = ?', session[:id], session[:email])
   end
 
