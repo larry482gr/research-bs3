@@ -1,6 +1,5 @@
 class InvitationsController < ApplicationController
   before_action :valid_user
-  force_ssl
 
   # GET /invitations
   # GET /invitations.json
