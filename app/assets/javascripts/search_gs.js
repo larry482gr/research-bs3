@@ -89,12 +89,20 @@ $(document).ready(function() {
     });
 
     $('#search_gs_adv_btn').on('click', function() {
-        getSearchResults(1, $( "#search_more_form").serialize());
+        if(isDigit($('#gs_asd_ylo').val()) && isDigit($('#gs_asd_yhi').val())) {
+            $('#searchMoreModal').modal('hide');
+            getSearchResults(1, $( "#search_more_form").serialize());
+        }
+        else {
+            $('#search_more_form').submit();
+        }
     });
 
+    /*
     $('#exact_match').on('click', function() {
         $('#search_gs_input').focus();
     });
+    */
 
     $(document).keypress(function(e) {
         if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13))

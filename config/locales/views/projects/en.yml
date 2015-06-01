@@ -22,7 +22,24 @@ en:
   project_citations: "Project Citations"
   citation_deleted: "Citation successfully deleted."
   cite_delete_error: "There was an error deleting the citation."
+
   time:
     formats:
       short: "%m-%d-%Y"
       long: "%m-%d-%Y (%H:%m:%S)"
+
+  adv_search:
+    header: "Advanced Search"
+    f_arts: "<b>Find articles</b>"
+    all_words: "with <b>all</b> of the words"
+    exact_phrase: "with the <b>exact phrase</b>"
+    at_least_one: "with <b>at least one</b> of the words"
+    without: "<b>wthout</b> the words"
+    words_occur: "where my words occur"
+    occur_opt1: "anywhere in the article"
+    occur_opt2: "in the title of the article"
+    authored_by: "Return articles <b>authored</b> by"
+    auth_example: "<i>\"M Armbrust\"</i> ή <i>Fox</i>"
+    published_in: "Return articles <b>published</b> in"
+    publ_example: "<i>Cloud Computing</i> ή <i>Internet of Things</i>"
+    art_dates: "Return articles <b>dated</b> between"
