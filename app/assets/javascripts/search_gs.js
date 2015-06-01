@@ -135,6 +135,7 @@ $(document).ready(function() {
                     for(i = 0; i < response.results.length; i++) {
                         $('.search_gs_results').append(response.results[i]);
                     }
+                    $('#search_gs_input').val(decodeHtml(response.search));
                 }
 
                 checkValidSave();
@@ -196,7 +197,8 @@ function showCitationsModal(doc_id, doc_num, citations) {
 
 function saveCitation(citation_type, doc_id) {
     $.ajax({
-        url: "/static_pages/citation_save?project_id=" + $("#project_id").val() + "&doc_id=" + doc_id + "&citation_type=" + citation_type,
+        url: "/static_pages/citation_save?project_id=" + $("#project_id").val() + "&doc_id=" + doc_id +
+             "&citation_type=" + citation_type + "&search_q=" + $('#search_gs_input').val(),
         cache: false,
         type: "get",
         dataType: "json",

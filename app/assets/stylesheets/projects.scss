@@ -96,10 +96,6 @@ div.citations-body {
 }
 
 .search_gs {
-	width: 100%;
-	@media screen and (min-width: 767px) {
-
-	}
 	@media screen and (max-width: 767px) {
 		margin-top: 10px;
 	}
@@ -110,6 +106,10 @@ div.citations-body {
   padding-left: 0px;
   padding-right: 0px;
   border-top: 1px solid #999999;
+}
+
+#search_gs_form > .form-group {
+  padding: 0px !important;
 }
 
 #rows_div {
@@ -125,8 +125,22 @@ div.citations-body {
 	-o-transition: width 0.4s;
 }
 
+#search_gs_more {
+  color: #3c763d;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+#search_more_form label {
+  text-align: left;
+  font-weight: normal;
+}
+
 #search_gs_btn {
   cursor: pointer;
+  min-width: 60px;
 }
 
 .gs_ggs {

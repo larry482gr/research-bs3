@@ -85,7 +85,7 @@ class StaticPagesController < ApplicationController
 
 			response.to_enum(:scan,/<div id="gs_ab_rt">/i).map do |m,|
 				total_results_index << $`.size
-			end
+      end
 
 			total_results_array = response[total_results_index[0]..total_results_index[1]].split
 
@@ -99,8 +99,19 @@ class StaticPagesController < ApplicationController
 			end
     end
 
+    search_field_index = []
+    response.to_enum(:scan,/id="gs_hdr_frm_in_txt"/i).map do |m,|
+      search_field_index << $`.size
+    end
+
+    response.to_enum(:scan,/id="gs_hdr_arw"/i).map do |m,|
+      search_field_index << $`.size
+    end
+
+    search_field = response[search_field_index[0]..search_field_index[1]].split(/(.*?)value="(.*?)"(.*?)/)[2]
+
 		respond_to do |format|
-			format.js { render json: { results: @results, total: total_results.gsub(',', '.') } }
+			format.js { render json: { results: @results, total: total_results.gsub(',', '.'), search: search_field } }
 		end
   end
   
