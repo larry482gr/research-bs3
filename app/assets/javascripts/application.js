@@ -94,3 +94,7 @@ function decodeHtml(html) {
     txt.innerHTML = html;
     return txt.value;
 }
+
+function isDigit(num) {
+    return /^[0-9]+$/.test(num);
+}

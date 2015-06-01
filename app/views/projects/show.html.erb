@@ -10,6 +10,18 @@
   </h3>
   <div class="project_files_table">
     <div class="project_description"><%= @project.description %></div>
+    <%- if @owner %>
+        <%= link_to (t :edit), edit_project_path(@project), :class => 'btn btn-sm btn-warning' %>
+    <% end %>
+    <%= link_to (t :back), projects_path, :class => 'btn btn-sm btn-default' %>
+    <%- if @owner or @contributor %>
+        <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
+            <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
+            <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
+            <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
+            <%= hidden_field_tag 'project_file[extension]' %>
+        <% end %>
+    <% end %>
     <%- if @project_files.count.zero? %>
       <h5 class="no-project-files"><%= (t :no_project_files) %></h5>
     <%- else %>
@@ -81,19 +93,6 @@
             <% end %>
           </div>
         </div>
-    <% end %>
-
-    <%- if @owner %>
-        <%= link_to (t :edit), edit_project_path(@project), :class => 'btn btn-sm btn-warning' %>
-    <% end %>
-    <%= link_to (t :back), projects_path, :class => 'btn btn-sm btn-default' %>
-    <%- if @owner or @contributor %>
-        <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
-            <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
-            <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
-            <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
-            <%= hidden_field_tag 'project_file[extension]' %>
-        <% end %>
     <% end %>
   </div>
 </div>

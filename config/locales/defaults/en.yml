@@ -63,6 +63,7 @@ en:
   invited: "You have been invited by"
   participate: "to participate in project"
   exact_phrase_match: "Exact phrase match"
+  for_example: "e.g."
 
   time:
       formats:

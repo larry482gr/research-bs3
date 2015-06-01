@@ -48,69 +48,69 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="searchMoreModalLabel">Σύνθετη αναζήτηση</h4>
+        <h4 class="modal-title" id="searchMoreModalLabel"><%= I18n.t('adv_search.header').html_safe %></h4>
       </div>
       <div class="modal-body">
-        <div><b>Εύρεση άρθρων</b></div>
+        <div style="margin-bottom: 10px"><%= I18n.t('adv_search.f_arts').html_safe %></div>
         <form id="search_more_form" class="form-horizontal" onsubmit="return false;">
-          <div class="form-group">
-            <label for="gs_asd_q" class="col-md-4 control-label">με <b>όλες</b> τις λέξεις</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_q" class="col-md-5 control-label"><%= I18n.t('adv_search.all_words').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_q" value="" name="as_q" class="form-control">
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_epq" class="col-md-4 control-label">με την <b>ακριβή φράση</b></label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_epq" class="col-md-5 control-label"><%= I18n.t('adv_search.exact_phrase').html_safe %></b></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_epq" value="" name="as_epq" class="form-control">
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_oq" class="col-md-4 control-label">με <b>τουλάχιστον μία</b> από τις λέξεις</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_oq" class="col-md-5 control-label"><%= I18n.t('adv_search.at_least_one').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_oq" value="" name="as_oq" class="form-control">
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_eq" class="col-md-4 control-label"><b>χωρίς</b> τις λέξεις</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_eq" class="col-md-5 control-label"><%= I18n.t('adv_search.without').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_eq" value="" name="as_eq" class="form-control">
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_occt" class="col-md-4 control-label">όπου εμφανίζονται οι λέξεις μου</label>
-            <div class="col-md-8">
-              <select id="gs_asd_occt" class="form-control" name="as_occt">
-                <option value="any">οπουδήποτε στο άρθρο</option>
-                <option value="title">στον τίτλο του άρθρου</option>
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_occt" class="col-md-5 control-label"><%= I18n.t('adv_search.words_occur').html_safe %></label>
+            <div class="col-md-7">
+              <select id="gs_asd_occt" class="form-control" name="as_occt" style="font-weight: bold;">
+                <option value="any"><%= I18n.t('adv_search.occur_opt1').html_safe %></option>
+                <option value="title"><%= I18n.t('adv_search.occur_opt2').html_safe %></option>
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_sau" class="col-md-4 control-label">Επιστροφή άρθρων που έχουν <b>συγγραφεί</b> από</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_sau" class="col-md-5 control-label"><%= I18n.t('adv_search.authored_by').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_sau" value="" name="as_sauthors" class="form-control">
-              <span class="help-block">π.χ., <i>"M Armbrust"</i> ή <i>Fox</i></span>
+              <span class="help-block"><%= "#{I18n.t('for_example')} #{I18n.t('adv_search.auth_example')}".html_safe %></span>
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_pub" class="col-md-4 control-label">Επιστροφή άρθρων που έχουν <b>δημοσιευτεί</b> σε</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_pub" class="col-md-5 control-label"><%= I18n.t('adv_search.published_in').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" autocapitalize="off" id="gs_asd_pub" value="" name="as_publication" class="form-control">
-              <span class="help-block">π.χ. <i>Cloud Computing</i> ή <i>Internet of Things</i></span>
+              <span class="help-block"><%= "#{I18n.t('for_example')} #{I18n.t('adv_search.publ_example')}".html_safe %></span>
             </div>
           </div>
-          <div class="form-group">
-            <label for="gs_asd_ylo" class="col-md-4 control-label">Επιστροφή άρθρων <b>με ημερομηνίες</b> μεταξύ</label>
-            <div class="col-md-8">
+          <div class="form-group form-group-sm">
+            <label for="gs_asd_ylo" class="col-md-5 control-label"><%= I18n.t('adv_search.art_dates').html_safe %></label>
+            <div class="col-md-7">
               <input type="text" pattern="[0-9]*" autocapitalize="off" maxlength="4" size="4" id="gs_asd_ylo" value="" name="as_ylo" class="form-control pull-left" style="width: auto">
               <span class="pull-left" style="height: 34px; padding: 6px 0px;">&nbsp;&mdash;&nbsp;</span>
               <input type="text" pattern="[0-9]*" autocapitalize="off" maxlength="4" size="4" id="gs_asd_yhi" value="" name="as_yhi" class="form-control" style="width: auto">
-              <span class="help-block">π.χ. <i>2008</i></span>
+              <span class="help-block"><%= I18n.t('for_example').html_safe %> <i>2008</i></span>
             </div>
           </div>
           <!-- <input type="hidden" value="el" name="hl"><input type="hidden" value="0,5" name="as_sdt"> -->
-          <button id="search_gs_adv_btn" class="btn btn-success" style="width: 80px;" data-dismiss="modal"><span class="glyphicon glyphicon-search"></span></button>
+          <button id="search_gs_adv_btn" class="btn btn-success" style="width: 80px;"><span class="glyphicon glyphicon-search"></span></button>
         </form>
       </div>
     </div>

@@ -63,6 +63,7 @@ gr:
   invited: "Έχετε λάβει πρόσκληση από τον/την"
   participate: "για να συμμετέχετε στο έργο"
   exact_phrase_match: "Να περιλαμβάνει ολόκληρη τη φράση"
+  for_example: "π.χ."
 
   time:
       formats:
