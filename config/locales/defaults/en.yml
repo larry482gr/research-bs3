@@ -57,7 +57,7 @@ en:
   provide_comment: "In this case you <b>must</b> provide a comment"
   large_comment: "Your comment should not exceed 200 characters"
   search_restriction: "Only registered users can search for other users and/or projects."
-  prevous: "Previous"
+  previous: "Previous"
   next: "Next"
   invite_search_email: "User Email"
   invited: "You have been invited by"
