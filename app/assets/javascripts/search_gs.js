@@ -5,7 +5,7 @@
 $(document).ready(function() {
 
     if(typeof $('#search_gs_input').val() !== 'undefined' &&  $('#search_gs_input').val().length > 0) {
-        getSearchResults(1, $('#search_gs_input').val());
+        getSearchResults(1, $( "#search_gs_form").serialize());
     }
 
     if (!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
@@ -53,8 +53,6 @@ $(document).ready(function() {
                             '<a href="'+doc_link+'" target="_blank">'+I18n.t("no_support")+I18n.t("question_mark")+'</a>'+
                          '</object>'+
                          save_file,
-                // message: '<embed width="900" height="860" style="border:1px solid #ccc" src="'+doc_link+'" alt="pdf" pluginspage="http://get.adobe.com/reader/">'+
-                // save_file,
                 className: 'pdf_modal'
             });
         }
@@ -63,30 +61,35 @@ $(document).ready(function() {
     // Current page
     $('.paging').on('click', '.number', function() {
         var pageNumber = $(this).attr('title');
-        getSearchResults(pageNumber, $('#search_gs_input').val());
+        getSearchResults(pageNumber, $( "#search_gs_form").serialize());
     });
 
     // paging previous
     $('.paging').on('click', '.previousPage', function() {
         var pageNumber = $(this).parent().find('.btn-primary').attr('title');
         pageNumber--;
-        getSearchResults(pageNumber, $('#search_gs_input').val());
+        getSearchResults(pageNumber, $( "#search_gs_form").serialize());
     });
 
     // paging next
     $('.paging').on('click', '.nextPage' ,function() {
         var pageNumber = $(this).parent().find('.btn-primary').attr('title');
         pageNumber++;
-        getSearchResults(pageNumber, $('#search_gs_input').val());
+        getSearchResults(pageNumber, $( "#search_gs_form").serialize());
     });
 
     $('.rowsPerPage').on('change', function() {
-        getSearchResults(1, $('#search_gs_input').val());
+        var current_page = $('#paging_gs_results').find('button.btn-primary').attr('title');
+        getSearchResults(current_page, $( "#search_gs_form").serialize());
     });
 
     // Search Google Scholar
     $('#search_gs_btn').on('click', function() {
-        getSearchResults(1, $('#search_gs_input').val());
+        getSearchResults(1, $( "#search_gs_form").serialize());
+    });
+
+    $('#search_gs_adv_btn').on('click', function() {
+        getSearchResults(1, $( "#search_more_form").serialize());
     });
 
     $('#exact_match').on('click', function() {
@@ -95,7 +98,7 @@ $(document).ready(function() {
 
     $(document).keypress(function(e) {
         if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13))
-            getSearchResults(1, $('#search_gs_input').val());
+            getSearchResults(1, $( "#search_gs_form").serialize());
     });
 
     $('.container').on('click', '.gs_nph', function(e) {
@@ -111,15 +114,15 @@ $(document).ready(function() {
         }
     }
 
-    function getSearchResults(page, question) {
-        num = $('.rowsPerPage').val();
-        start = (page-1)*num;
+    function getSearchResults(page, form_params) {
+        var num = $('.rowsPerPage').val();
+        var start = (page-1)*num;
 
-        if ($('#exact_match').is(':checked'))
-            question = '"' + question + '"';
+        // if ($('#exact_match').is(':checked'))
+        //    question = '"' + question + '"';
 
         $.ajax({
-            url: '/static_pages/search_scholar?question='+question+'&start='+start+'&num='+num,
+            url: '/static_pages/search_scholar?'+form_params+'&start='+start+'&num='+num,
             cache: false,
             type: "get",
             dataType: "json",
@@ -138,7 +141,7 @@ $(document).ready(function() {
                     $('#search_gs_input').val(decodeHtml(response.search));
                 }
 
-                checkValidSave();
+                // checkValidSave();
                 $('.search_gs_results').animate({opacity: 1});
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');

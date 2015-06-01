@@ -27,8 +27,9 @@ $(document).ready(function() {
   $('.container').on('click', '.pr_file', function() {
       row_element = $(this).parent();
       project_id = row_element.attr('rel');
-      file_id = row_element.find('td:first-child').attr('rel');
+      file_id   = row_element.find('td:first-child').attr('rel');
       doc_title = row_element.find('td:nth-child(2)').text();
+      doc_ext   = row_element.find('td:nth-child(2)').attr('rel');
       main_btn_txt = row_element.find('td:first-child').text().trim().length == 0 ? I18n.t("set_main_file") : I18n.t("unset_main_file");
       bootbox.dialog({
           title: I18n.t("file_actions_title"),
@@ -68,7 +69,7 @@ $(document).ready(function() {
                   className: "btn-success",
                   callback: function() {
                       $(".bootbox").on('hidden.bs.modal', function () {
-                          openFile(project_id, file_id);
+                          openFile(project_id, file_id, doc_ext);
                       });
                   }
               }
@@ -88,14 +89,14 @@ $(document).ready(function() {
             buttons: {
                 cancel: {
                     label: I18n.t("cancel"),
-                    className: "btn-default",
+                    className: "btn-default"
                 },
                 view_file: {
                     label: I18n.t("ok"),
                     className: "btn-primary",
                     callback: function() {
                         $(".bootbox").on('hidden.bs.modal', function () {
-                            openFile(project_id, file_id);
+                            openFile(project_id, file_id, '');
                         });
                     }
                 }
@@ -104,8 +105,16 @@ $(document).ready(function() {
     }
   });
 
-  function openFile(project_id, file_id) {
-      window.open('/projects/'+project_id+'/project_files/'+file_id, '_self');
+  function openFile(project_id, file_id, ext) {
+      var target;
+      if(ext == 'lnk') {
+          target = '_blank';
+      }
+      else {
+          target = '_self';
+      }
+
+      window.open('/projects/'+project_id+'/project_files/'+file_id, target);
   }
   
   $('#file_btn').on('click', function() {

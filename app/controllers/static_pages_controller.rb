@@ -3,6 +3,7 @@ class StaticPagesController < ApplicationController
   require 'uri'
 
   before_action :valid_user, only: [:search, :search_scholar, :search_citation]
+  before_action :set_hash, only: [:search_scholar]
   
   def index
     redirect_to projects_path unless @current_user.nil?
@@ -25,20 +26,26 @@ class StaticPagesController < ApplicationController
   end
   
   def search_scholar
-    url_extension = 'com'
-    if I18n.locale != :en
-      url_extension = I18n.locale
-    end
+    url_ext = @url_ext_hash[I18n.locale]
 
-    if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
-      session[:search_gs] = params[:question]
-    end
-
-    question	= params[:question].gsub(' ', '+')
     start		= params[:start]
     num			= params[:num]
 
-    url = URI.escape("http://scholar.google.#{url_extension}/scholar?q=#{question}&start=#{start}&num=#{num}")
+    if params[:q].present?
+      gs_params	= "q=#{params[:q].gsub(' ', '+')}"
+    else
+      gs_params = "as_q=#{params[:as_q]}&"
+      gs_params << "as_epq=#{params[:as_epq]}&"
+      gs_params << "as_oq=#{params[:as_oq]}&"
+      gs_params << "as_eq=#{params[:as_eq]}&"
+      gs_params << "as_occt=#{params[:as_occt]}&"
+      gs_params << "as_sauthors=#{params[:as_sauthors]}&"
+      gs_params << "as_publication=#{params[:as_publication]}&"
+      gs_params << "as_ylo=#{params[:as_ylo]}&"
+      gs_params << "as_yhi=#{params[:as_yhi]}"
+    end
+
+    url = URI.escape("http://scholar.google.#{url_ext}/scholar?#{gs_params}&start=#{start}&num=#{num}&hl=#{@hl}")
     uri = URI.parse(url)
     req = Net::HTTP::Get.new(uri)
 
@@ -57,7 +64,7 @@ class StaticPagesController < ApplicationController
       response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
     end
 
-		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_extension}/")
+		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_ext}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
 
@@ -109,6 +116,10 @@ class StaticPagesController < ApplicationController
     end
 
     search_field = response[search_field_index[0]..search_field_index[1]].split(/(.*?)value="(.*?)"(.*?)/)[2]
+
+    if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
+      session[:search_gs] = search_field
+    end
 
 		respond_to do |format|
 			format.js { render json: { results: @results, total: total_results.gsub(',', '.'), search: search_field } }
@@ -211,5 +222,9 @@ class StaticPagesController < ApplicationController
       flash[:alert] = (t :search_restriction)
       redirect_to :root and return
     end
+  end
+
+  def set_hash
+    @url_ext_hash = { :en => 'com', :gr => 'gr' }
   end
 end

@@ -1,7 +1,7 @@
 <div class="search_div col-md-10 col-sm-12 col-xs-12 left-div">
     <form id="search_gs_form" class="col-md-12" onsubmit="return false;">
       <div class="form-group has-success col-md-11">
-        <input type="text" class="form-control" id="search_gs_input" placeholder="<%= t :search_gs %>"
+        <input type="text" class="form-control" id="search_gs_input" name="q" placeholder="<%= t :search_gs %>"
           value="<%= @search_gs unless @search_gs.nil? %>"
         />
         <span id="search_gs_more" class="glyphicon glyphicon-triangle-bottom" title="Σύνθετη Αναζήτηση" data-toggle="modal" data-target="#searchMoreModal"></span>
@@ -15,7 +15,6 @@
       <div class="form-group" id="search_more_form">
         <div aria-label="Σύνθετη αναζήτηση Μελετητή" aria-hidden="false" role="dialog" style="display: block;" class="gs_md_wn gs_ttzi gs_vis" id="gs_hdr_adv"><a href="#" role="button" class="gs_ico gs_ico_X gs_ico_Xt" id="gs_hdr_advx"></a><form action="/scholar" id="gs_hdr_frm_adv"><div class="gs_hatr"><div class="gs_hadt"><b>Εύρεση άρθρων</b></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_q">με <b>όλες</b> τις λέξεις</label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_q" value="Cloud Computing" name="as_q" class="gs_in_txt gs_mini"></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_epq">με την <b>ακριβή φράση</b></label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_epq" value="" name="as_epq" class="gs_in_txt gs_mini"></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_oq">με <b>τουλάχιστον μία</b> από τις λέξεις</label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_oq" value="" name="as_oq" class="gs_in_txt gs_mini"></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_eq"><b>χωρίς</b> τις λέξεις</label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_eq" value="" name="as_eq" class="gs_in_txt gs_mini"></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_occt">όπου εμφανίζονται οι λέξεις μου</label></div><div class="gs_hadd"><div style="position:relative"><input type="hidden" value="any" id="gs_asd_occt" name="as_occt"><button class=" gs_in_se" aria-haspopup="true" aria-controls="gs_asd_occt-md" id="gs_asd_occt-bd" type="button"><span class="gs_wr"><span id="gs_asd_occt-ds" class="gs_lbl">οπουδήποτε στο άρθρο</span><span class="gs_icm"></span></span></button><div aria-hidden="true" role="listbox" class="gs_md_se" id="gs_asd_occt-md"><ul><li aria-selected="true" class="gs_sel" id="gs_asd_occt-0" data-v="any" onclick="" tabindex="-1" role="option">οπουδήποτε στο άρθρο</li><li data-v="title" onclick="" tabindex="-1" role="option">στον τίτλο του άρθρου</li></ul></div></div></div></div><div class="gs_hatr"><div style="height:16px"> </div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_sau">Επιστροφή άρθρων που έχουν <b>συγγραφεί</b> από</label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_sau" value="" name="as_sauthors" class="gs_in_txt gs_mini"></div><div>π.χ., <i>"PJ Hayes"</i> ή <i>McCarthy</i></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_pub">Επιστροφή άρθρων που έχουν <b>δημοσιευτεί</b> σε</label></div><div class="gs_hadd"><div class="gs_in_txtm"><input type="text" autocapitalize="off" id="gs_asd_pub" value="" name="as_publication" class="gs_in_txt gs_mini"></div><div>π.χ. <i>Επιθεώρηση Οικονομικών Επιστημών</i> ή <i>Πολιτική Επιστήμη</i></div></div></div><div class="gs_hatr"><div class="gs_hadt"><label for="gs_asd_ylo">Επιστροφή άρθρων <b>με ημερομηνίες</b> μεταξύ</label></div><div class="gs_hadd"><div class="gs_yri"><input type="text" pattern="[0-9]*" autocapitalize="off" maxlength="4" size="4" id="gs_asd_ylo" value="" name="as_ylo" class="gs_in_txt gs_mini">&nbsp;&mdash;&nbsp;<input type="text" pattern="[0-9]*" autocapitalize="off" maxlength="4" size="4" id="gs_asd_yhi" value="" name="as_yhi" class="gs_in_txt gs_mini"></div><div>π.χ. <i>1996</i></div></div></div><div class="gs_hatr"><div class="gs_hadt"><button class="gs_btnG gs_in_ib gs_btn_act gs_btn_eml" aria-label="Αναζήτηση" name="btnG" type="submit"><span class="gs_wr"><span class="gs_lbl"></span><span class="gs_ico"></span></span></button></div></div><input type="hidden" value="el" name="hl"><input type="hidden" value="0,5" name="as_sdt"></form></div>
       </div>
-      -->
       <div class="form-group">
         <div class="col-md-12" id="exact_match_div">
           <div class="checkbox">
@@ -25,6 +24,7 @@
           </div>
         </div>
       </div>
+      -->
     </form>
 
     <div class="search_gs_results col-md-12"></div>
@@ -52,7 +52,7 @@
       </div>
       <div class="modal-body">
         <div><b>Εύρεση άρθρων</b></div>
-        <form id="search_more_form" class="form-horizontal">
+        <form id="search_more_form" class="form-horizontal" onsubmit="return false;">
           <div class="form-group">
             <label for="gs_asd_q" class="col-md-4 control-label">με <b>όλες</b> τις λέξεις</label>
             <div class="col-md-8">
@@ -68,13 +68,13 @@
           <div class="form-group">
             <label for="gs_asd_oq" class="col-md-4 control-label">με <b>τουλάχιστον μία</b> από τις λέξεις</label>
             <div class="col-md-8">
-              <input type="text" autocapitalize="off" id="gs_asd_oq" value="" name="asd_oq" class="form-control">
+              <input type="text" autocapitalize="off" id="gs_asd_oq" value="" name="as_oq" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label for="gs_asd_eq" class="col-md-4 control-label"><b>χωρίς</b> τις λέξεις</label>
             <div class="col-md-8">
-              <input type="text" autocapitalize="off" id="gs_asd_eq" value="" name="asd_eq" class="form-control">
+              <input type="text" autocapitalize="off" id="gs_asd_eq" value="" name="as_eq" class="form-control">
             </div>
           </div>
           <div class="form-group">
@@ -82,7 +82,7 @@
             <div class="col-md-8">
               <select id="gs_asd_occt" class="form-control" name="as_occt">
                 <option value="any">οπουδήποτε στο άρθρο</option>
-                <option value="any">στον τίτλο του άρθρου</option>
+                <option value="title">στον τίτλο του άρθρου</option>
               </select>
             </div>
           </div>
@@ -110,7 +110,7 @@
             </div>
           </div>
           <!-- <input type="hidden" value="el" name="hl"><input type="hidden" value="0,5" name="as_sdt"> -->
-          <button type="submit" class="btn btn-success" style="width: 80px;"><span class="glyphicon glyphicon-search"></span></button>
+          <button id="search_gs_adv_btn" class="btn btn-success" style="width: 80px;"><span class="glyphicon glyphicon-search"></span></button>
         </form>
       </div>
     </div>
