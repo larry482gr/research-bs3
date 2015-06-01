@@ -20,7 +20,7 @@ class ProjectFilesController < ApplicationController
   def show
     if not (@project_file.project.owner?(@current_user.id) or @project_file.project.contributor?(@current_user.id))
       if is_url?(@project_file.filepath)
-        # session[:search_gs] = @project_file.filename
+        session[:search_gs] = @project_file.filename
         redirect_to projects_path and return
       else
         flash[:alert] = t :no_access
@@ -30,6 +30,8 @@ class ProjectFilesController < ApplicationController
       if @project_file.extension.in?(@allowed_file_types)
 
         # @file_size = File.size("#{Rails.root}/private#{@project_file.filepath}").to_f
+      elsif @project_file.extension == 'lnk'
+        redirect_to @project_file.filepath
       else
         send_file "#{Rails.root}/private#{@project_file.filepath}" and return
         # "private#{@project_file.filepath}" and return
