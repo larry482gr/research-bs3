@@ -47,17 +47,22 @@ class StaticPagesController < ApplicationController
 
     url = URI.escape("http://scholar.google.#{url_ext}/scholar?#{gs_params}&start=#{start}&num=#{num}&hl=#{@hl}")
     uri = URI.parse(url)
-    req = Net::HTTP::Get.new(uri)
 
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-      http.request(req)
-    }
+    #req = Net::HTTP::Get.new(uri)
+
+    #res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+    #  http.request(req)
+    #}
+
+    res = Net::HTTP.get_response(uri)
 
     response = res.body
+
     begin
-      cleaned = res.body.dup.force_encoding('UTF-8')
+      cleaned = response.dup.force_encoding('ISO-8859-7').encode('UTF-8')
+
       unless cleaned.valid_encoding?
-        cleaned = res.body.encode( 'UTF-8', 'Windows-1251' )
+        cleaned = response.encode( 'UTF-8', 'ISO-8859-7' )
       end
       response = cleaned
     rescue EncodingError
