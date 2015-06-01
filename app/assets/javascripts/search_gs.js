@@ -89,7 +89,7 @@ $(document).ready(function() {
     });
 
     $('#search_gs_adv_btn').on('click', function() {
-        if($('#gs_asd_ylo').val().length > 0 && $('#gs_asd_yhi').val().length > 0 && isDigit($('#gs_asd_ylo').val()) && isDigit($('#gs_asd_yhi').val())) {
+        if(($('#gs_asd_ylo').val().length == 0 && $('#gs_asd_yhi').val().length == 0) || (isDigit($('#gs_asd_ylo').val()) && isDigit($('#gs_asd_yhi').val()))) {
             $('#searchMoreModal').modal('hide');
             getSearchResults(1, $( "#search_more_form").serialize());
         }
