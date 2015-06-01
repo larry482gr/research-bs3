@@ -69,7 +69,10 @@ class StaticPagesController < ApplicationController
       response.encode!( 'UTF-8', invalid: :replace, undef: :replace )
     end
 
+    # For external links
 		response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_ext}/")
+    # For images
+    response = response.gsub("src=\"/", "src=\"http://scholar.google.#{url_ext}/")
 		# Remove code that causes ajax request error. (13/01/2015)
 		response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
 
