@@ -14,7 +14,7 @@ module TimeElapsed
       when (365*86400)..Time.now.to_i
         return "#{(I18n.t :more_than)} #{I18n.t :year, count: timestamp_difference/365*86400} #{(I18n.t :ago)}"
       when 30*86400..(365*86400-1)
-        return "#{I18n.t :month, count: timestamp_difference/30*86400} #{(I18n.t :ago)}"
+        return "#{I18n.t :month, count: timestamp_difference/(30*86400)} #{(I18n.t :ago)}"
         # return "#{timestamp_difference/30*86400} month(s) ago"
       when 86400..(30*86400-1)
         return "#{I18n.t :day, count: timestamp_difference/86400} #{(I18n.t :ago)}"
