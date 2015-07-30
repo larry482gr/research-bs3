@@ -37,6 +37,13 @@ class UsersController < ApplicationController
       else
         session[:id] = @user.password
         session[:email] = @user.email
+        #cookies.signed_or_encrypted[:authTokenEnc] = {
+        #    value: "auth_token - #{@user.id}",
+        #    expires: Time.now + 1.day
+        #}
+        # puts "\n\n\nCookie:"
+        # puts cookies.signed_or_encrypted[:authTokenEnc]
+        # puts "\n\n\n"
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
@@ -56,7 +63,8 @@ class UsersController < ApplicationController
       @user_info = @user.user_info
       if @user_info.token == params[:token]
         @user_info.activated = true
-        @user_info.token = nil
+        random_token = SecureRandom.urlsafe_base64(nil, false)
+        @user_info.token = random_token
         @user_info.save
         session[:id] = @user.password
         session[:email] = @user.email
@@ -64,13 +72,14 @@ class UsersController < ApplicationController
         redirect_to(projects_path, :notice => notices.join('<br/>')) and return
       end
     end
-    flash[:alert] = :activation_error_html
+    flash[:alert] = t :activation_error_html
   end
 
   def logout
     session.delete(:id)
     session.delete(:email)
     session.delete(:search_gs)
+    # cookies.delete(:authTokenEnc)
     redirect_to :root
   end
 
@@ -144,6 +153,7 @@ class UsersController < ApplicationController
       @user = User.new
       redirect_to :root and return
     end
+
     if @current_user == nil or @current_user.can_access?('user_create')
       @user_info = UserInfo.create(:user_id => @user.id)
       UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
