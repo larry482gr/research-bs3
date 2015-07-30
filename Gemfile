@@ -7,7 +7,8 @@ ruby '2.1.1'
 gem 'rails', '4.2.0'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass'
+gem 'sass-rails'
 gem 'bootstrap-sass', '~> 3.3.5'
 
 # Use Uglifier as compressor for JavaScript assets
@@ -51,7 +52,6 @@ end
 group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
-  gem 'rspec-rails', '~> 3.0'
   gem 'simplecov'
   gem 'launchy'
 end
@@ -61,6 +61,8 @@ group :test do
   gem 'cucumber-rails-training-wheels'
   gem 'factory_girl'
   gem 'factory_girl_rails', :require => false
+  gem 'rspec'
+  gem 'rspec-rails', '~> 3.0'
   gem 'rspec-activemodel-mocks', '~> 1.0.1'
   gem 'sqlite3'
 end
