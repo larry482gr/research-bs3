@@ -22,7 +22,6 @@ class UsersController < ApplicationController
   def check_login
     pass = Digest::SHA1.hexdigest(params[:user][:password])
     @user = User.find_by_username(params[:user][:username])
-    # @user_info = @user.user_info
     if @user and pass == @user.password and not @user.user_info.deleted?
       if not @user.user_info.activated?
         respond_to do |format|
@@ -37,13 +36,6 @@ class UsersController < ApplicationController
       else
         session[:id] = @user.password
         session[:email] = @user.email
-        #cookies.signed_or_encrypted[:authTokenEnc] = {
-        #    value: "auth_token - #{@user.id}",
-        #    expires: Time.now + 1.day
-        #}
-        # puts "\n\n\nCookie:"
-        # puts cookies.signed_or_encrypted[:authTokenEnc]
-        # puts "\n\n\n"
         respond_to do |format|
           format.js {}
           format.json { render json: "{ \"id\": \"#{@user.id}\" }" }
@@ -66,10 +58,8 @@ class UsersController < ApplicationController
         random_token = SecureRandom.urlsafe_base64(nil, false)
         @user_info.token = random_token
         @user_info.save
-        session[:id] = @user.password
-        session[:email] = @user.email
-        notices = ["#{t :welcome} #{@user.username}!", (t :start_immediately)]
-        redirect_to(projects_path, :notice => notices.join('<br/>')) and return
+        notices = ["#{t :welcome} #{@user.username}!", (t :account_activated)]
+        redirect_to(:root, :notice => notices.join('<br/>')) and return
       end
     end
     flash[:alert] = t :activation_error_html
@@ -79,15 +69,12 @@ class UsersController < ApplicationController
     session.delete(:id)
     session.delete(:email)
     session.delete(:search_gs)
-    # cookies.delete(:authTokenEnc)
     redirect_to :root
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    # session[:return_to] = '/'
-    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
       flash[:alert] = t :no_access
       redirect_to :root and return
@@ -106,8 +93,6 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    # session[:return_to] = '/'
-    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     @user = User.new
     respond_to do |format|
       format.html { render action: 'new' }
@@ -117,8 +102,6 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    # session[:return_to] = '/'
-    # session[:return_to] = request.referer unless request.original_fullpath.to_s.in?(request.referer.to_s)
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_edit'))
       flash[:alert] = t :no_access
       redirect_to :root and return

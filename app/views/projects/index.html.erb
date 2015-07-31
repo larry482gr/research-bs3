@@ -14,15 +14,17 @@
         </thead>
         <tbody>
           <%- @projects.each do |project| %>
-            <tr id=<%= "projects/#{project.id}" %>>
-              <td class="proj center no-wrap"><%= project.title %></td>
-              <td class="proj"><%= project.description %></td>
+            <tr>
+              <td class="proj left no-wrap"><div><a href="<%= "projects/#{project.id}" %>"><%= project.title %></a></div></td>
+              <td class="proj left"><div><a href="<%= "projects/#{project.id}" %>"><%= project.description %></a></div></td>
               <td class="proj center">
-                <%- if project.is_private %>
+                <div><a href="<%= "projects/#{project.id}" %>">
+                  <%- if project.is_private %>
                     <%= (t :word_yes) %>
-                <%- else %>
+                  <%- else %>
                     <%= (t :word_no) %>
-                <% end %>
+                  <% end %>
+                </a></div>
               </td>
               <td class="center">
                 <%- if project.owner? @current_user.id %>

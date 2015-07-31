@@ -15,7 +15,6 @@
 //= require jquery-ui
 //= require jquery.turbolinks
 //= require bootstrap-sprockets
-//= require bootstrap
 //= require bootbox.min
 //= require turbolinks
 //= require pnotify.custom.min

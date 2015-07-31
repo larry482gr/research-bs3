@@ -167,3 +167,13 @@
 .no-wrap {
   white-space: nowrap;
 }
+
+table tr td {
+  div a {
+    display: block;
+    width: 100%;
+    color: #333 !important;
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}

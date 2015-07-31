@@ -22,7 +22,7 @@
 en:
   homepage: "Home"
   welcome: "Welcome to ResearchGr"
-  start_immediately: "You can start immediately by creating a new project"
+  account_activated: "Your account has been successfully activated. You can now login to your account and create your first project."
   activation_email: "An email was just sent to you with instructions to activate your account."
   no_access: "You don 't have access to view this page. You were redirected to the home page."
   search: "Search for a user or project"

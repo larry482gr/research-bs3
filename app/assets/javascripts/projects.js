@@ -18,11 +18,6 @@ $(document).ready(function() {
           });
       }
   });
-  
-  $('.projects_table .table tr td.proj').on('click', function() {
-	 link = $(this).parent().attr('id');
-	 location.href = link;
-  });
 
   $('.container').on('click', '.pr_file', function() {
       row_element = $(this).parent();
