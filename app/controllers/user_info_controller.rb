@@ -1,3 +1,3 @@
 class UserInfoController < ApplicationController
-  #force_ssl
+  force_ssl
 end

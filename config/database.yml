@@ -16,7 +16,12 @@ production:
   database: researchgr
   username: myresearchgroup
   password: r3s3@Rch_Gr0uP
-  host: localhost
+  # host: localhost
+  host: 173.194.85.246
+  # host: 2001:4860:4864:1:8bb4:b6e4:b064:c798
+  # sslca: client-cert.pem
+  # sslcert: server-ca.pem 
+  # sslkey: client-key.pem
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

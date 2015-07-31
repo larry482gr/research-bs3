@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_user
-    #force_ssl_redirect and return unless session[:id]
+    force_ssl_redirect and return unless session[:id]
     @current_user ||= User.find_by('password = ? AND email = ?', session[:id], session[:email])
   end
 
