@@ -76,18 +76,31 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
-      flash[:alert] = t :no_access
-      redirect_to :root and return
+      error = t :no_access
     end
+
     @user = User.find(params[:id])
+
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = t :no_access
-      redirect_to :root and return
+      error = t :no_access
     end
+
     begin
       @language = t(Language.find(@user.user_info.language_id).language)
     rescue ActiveRecord::RecordNotFound
       @language = Language.find(1).language
+    end
+
+    json_response = { username: @user.username, email: @user.email, fname: @user.user_info.first_name, lname: @user.user_info.last_name, lang: @language }
+
+    respond_to do |format|
+      if error.nil?
+        format.html { render action: 'show' }
+        format.json { render json: json_response }
+      else
+        format.html { redirect_to :root, alert: error }
+        format.json { render json: { error: error } }
+      end
     end
   end
 
@@ -95,7 +108,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     respond_to do |format|
-      format.html { render action: 'new' }
+      format.html { redirect_to :root }
       format.json { render json: @user }
     end
   end
