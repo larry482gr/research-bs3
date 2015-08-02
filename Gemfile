@@ -71,10 +71,13 @@ group :development, :production do
   gem 'mysql2'
 end
 
+group :development do
+  gem 'puma'
+end
+
 # For Heroku deployment
 group :production do
   gem 'rails_12factor'
-  gem 'puma'
 end
 
 gem 'dynamic_form'
