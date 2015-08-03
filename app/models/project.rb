@@ -44,15 +44,11 @@ class Project < ActiveRecord::Base
 
     citations = []
 
-    puts "\nEach do:\n\n"
     project_citations.each do |cite|
       query = "SELECT citation_id as id, #{cite['citation_type']} as cit FROM citations WHERE citation_id = '#{cite['citation_id']}'"
       citation = ActiveRecord::Base.connection.exec_query(query)
-      puts "\n\n"
-      puts citation
       citations << citation[0]
     end
-    puts "\n\n\n"
 
     return citations
   end
