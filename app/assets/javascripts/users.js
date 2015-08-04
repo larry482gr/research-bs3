@@ -262,7 +262,7 @@ function populateAutocompleteUsers(element) {
                 minLength: 1,
                 source: function(request, response) {
                     var matches = $.map(users, function(userItem) {
-                        if (userItem.email.toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
+                        if (userItem.username.toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
                             return userItem;
                         }
                     });
@@ -273,16 +273,16 @@ function populateAutocompleteUsers(element) {
                     // return false;
                 //},
                 select: function(event, ui) {
-                    element.val(ui.item.email); // + ' (' + ui.item.username + ')');
-                    element.attr('rel', ui.item.email);
+                    element.val(ui.item.username); // + ' (' + ui.item.username + ')');
+                    element.attr('rel', ui.item.username);
                     return false;
                 }
             })
                 .data("ui-autocomplete")._renderItem = function(ul, item) {
                 return $("<li></li>")
                     .append("<a style='font-size: 12px !important; font-weight: normal; cursor: pointer;'>" +
-                    "<span style='color: #01ade4'>" + item.email.substring(0, element.val().length) + "</span>" +
-                    item.email.substring(element.val().length) /* + " (" + item.username + ')' */ + "</a>")
+                    "<span style='color: #01ade4'>" + item.username.substring(0, element.val().length) + "</span>" +
+                    item.username.substring(element.val().length) /* + " (" + item.username + ')' */ + "</a>")
                     .appendTo(ul);
             };
         }

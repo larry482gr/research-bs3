@@ -243,13 +243,13 @@ class UsersController < ApplicationController
     @users = nil
     unless @current_user.nil?
       if @current_user.owner?
-        @users = User.select('email').where('id != ?', @current_user.id).order('email')
+        @users = User.select('username').where('id != ?', @current_user.id).order('email')
       elsif @current_user.admin?
-        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
+        @users = User.select('username').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
         # @users = User.order('profile_id, username').where('profile_id >= ?', 2)
         # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
       else
-        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
+        @users = User.select('username').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
       end
     end
 

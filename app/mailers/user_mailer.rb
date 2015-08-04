@@ -8,11 +8,10 @@ class UserMailer < ActionMailer::Base
     mail(to: @user.email, subject: (t 'email_deliver.subject.welcome'))
   end
 
-  def invite_email(project, user, current_user)
+  def invite_email(project, email, current_user)
     @project = project
-    @user = user
     @current_user = current_user
-    mail(to: @user.email, subject: (t 'email_deliver.subject.invitation').gsub('%username%', @current_user.username))
+    mail(to: email, subject: (t 'email_deliver.subject.invitation').gsub('%username%', @current_user.username))
   end
 
   def recovery_email(user, token)

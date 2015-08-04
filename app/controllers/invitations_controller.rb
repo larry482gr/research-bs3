@@ -4,7 +4,7 @@ class InvitationsController < ApplicationController
   # GET /invitations
   # GET /invitations.json
   def index
-    invitations = @current_user.invitations.where('status = ?', 'pending')
+    invitations = Invitation.where('email = ? AND status = ?', @current_user.email, 'pending')
     invitations_array = []
 
     invitations.each do |inv|
@@ -34,19 +34,24 @@ class InvitationsController < ApplicationController
     @project = Project.find(params[:project_id])
 
     if not @project.owner?(@current_user.id)
-      flash[:alert] = :no_invitation_access
+      flash[:alert] = t :no_invitation_access
       redirect_to project_path(@project) and return
     end
 
-    @user = User.find_by_email(params[:invitation][:email])
+    @user = User.find_by_username(params[:invitation][:username])
 
-    if @user
+    email = @user ? @user.email : params[:invitation][:email]
+
+    if email.nil? or not email.match(User::VALID_EMAIL_REGEX)
+      error_msg = t :invitation_user_restriction
+      alert = error_msg
+    else
       begin
-        @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
+        @invitation = @project.invitations.create(email: email, from_user: @current_user.id, project_id: @project.id)
         if @invitation.save
-          notice = "#{(t :invitation_sent)} #{@user.username}"
+          notice = "#{(t :invitation_sent)} #{email}"
           # UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
-          UserMailer.invite_email(@project, @user, @current_user).deliver_now
+          UserMailer.invite_email(@project, email, @current_user).deliver_now
         else
           alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
         end
@@ -54,9 +59,6 @@ class InvitationsController < ApplicationController
         error_msg = (t :invitation_duplicate).to_s.gsub('_@user@_', @user.username).gsub('_@project@_', @project.title)
         alert = error_msg
       end
-    else
-      error_msg = (t :invitation_user_restriction)
-      alert = error_msg
     end
 
     respond_to do |format|
@@ -110,7 +112,7 @@ class InvitationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def invitation_params
     # params.require(:invitation).permit(:email, :profile, :status, :reason)
-    params.require(:invitation).permit(:email, :status, :reason)
+    params.require(:invitation).permit(:username, :email, :status, :reason)
   end
 
   def valid_user

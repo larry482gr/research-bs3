@@ -9,8 +9,9 @@ class User < ActiveRecord::Base
   belongs_to :project_profile
   has_many :project_files
 
-  has_many :invitations
-  
+  # has_many :invitations
+  has_many :invitations, :source => :email, :foreign_key => :email
+
   has_many :history_user_infos
   has_many :history_projects
 
