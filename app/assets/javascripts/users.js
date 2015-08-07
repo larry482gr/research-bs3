@@ -190,8 +190,7 @@ function updateInvitation(user_id, invitation_id, status, reason) {
             if(result.error_code == 0) {
                 if(result.status == 'accepted') {
                     location.href = '/projects';
-                }
-                else {
+                } else {
                     location.reload();
                 }
             }
@@ -214,16 +213,13 @@ function signIn() {
         success: function(user) {
             if (user.id > 0) {
                 location.href = "projects"; // "http://localhost:3000";
-            }
-            else if (user.id == 0){
+            } else if (user.id == 0) {
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>"+I18n.t("activation_reminder")+"</div>");
-            }
-            else if (user.id == -1){
+            } else if (user.id == -1) {
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>"+I18n.t("account_blacklisted")+"</div>");
-            }
-            else{
+            } else{
                 $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);
             }
         }
