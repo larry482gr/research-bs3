@@ -146,7 +146,6 @@ class StaticPagesController < ApplicationController
       citations << citation.citation_mla
       citations << citation.citation_apa
       citations << citation.citation_chicago
-      
     else
       url = URI.escape("http://scholar.google.com/scholar?q=info:#{doc_id}:scholar.google.com/&output=cite&scirp=#{doc_num}")
       uri = URI.parse(url)
@@ -170,36 +169,37 @@ class StaticPagesController < ApplicationController
       result_indexes = []
 
       response.to_enum(:scan,/class="gs_citr">/i).map do |m,|
-	    result_indexes << $`.size+16
-	  end
-	
-	  close_div_indexes = []
-	
-	  response.to_enum(:scan,/<\/div><\/td>/i).map do |m,|
-	    close_div_indexes << $`.size-1
-	  end
-	
-	  for n in 0..2
-	    citations[n] = response[result_indexes[n]..close_div_indexes[n]]
-	  end
-	  
-	  begin
-	    project = Project.find(params[:project_id])
-	    citation = project.citations.create(:citation_id => doc_id, :citation_mla => citations[0], :citation_apa => citations[1], :citation_chicago => citations[2])
-	    if !citation.save
-	      error = true
+	      result_indexes << $`.size+16
 	    end
-	  rescue
-	  end
-	end
 	
-	respond_to do |format|
-	  if !error
-	    format.js { render json: citations }
-	  else
-	    format.js { render json: error }
+	    close_div_indexes = []
+	
+      response.to_enum(:scan,/<\/div><\/td>/i).map do |m,|
+        close_div_indexes << $`.size-1
+      end
+	
+      for n in 0..2
+        citations[n] = response[result_indexes[n]..close_div_indexes[n]]
+      end
+	  
+      begin
+        project = Project.find(params[:project_id])
+        citation = project.citations.create(:citation_id => doc_id, :citation_mla => citations[0], :citation_apa => citations[1], :citation_chicago => citations[2])
+        if !citation.save
+          error = true
+        end
+      rescue
+        # ignored
+      end
 	  end
-	end
+	
+    respond_to do |format|
+      if !error
+        format.js { render json: citations }
+      else
+        format.js { render json: error }
+      end
+    end
   end
   
   def citation_save

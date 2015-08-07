@@ -70,7 +70,7 @@ class InvitationsController < ApplicationController
   def update
     user = User.find(params[:user_id])
 
-    if @current_user.id != user.id
+    if @current_user.id.to_i != user.id.to_i
       error_code = -1
       respond_to do |format|
         format.html { redirect_to root_path, alert: error_code }
@@ -87,7 +87,7 @@ class InvitationsController < ApplicationController
     if invitation.update(invitation_params)
       error_code = 0
       if invitation.status.to_s == 'accepted'
-        error_code = 1 unless invitation.project.add_user(invitation.user.id, invitation.project_profile.id)
+        error_code = 1 unless invitation.project.add_user(@current_user, invitation.project_profile.id)
       elsif invitation.status.to_s == 'reported'
         inv_sender = User.find(invitation.from_user)
         user_reports = inv_sender.user_info.reports + 1
@@ -100,7 +100,7 @@ class InvitationsController < ApplicationController
       error_code = 1
     end
 
-    total = @current_user.invitations.where('status = ?', 'pending').count
+    total = Invitation.where('email = ? AND status = ?', @current_user.email, 'pending').count
     respond_to do |format|
       format.html { redirect_to root_path, notice: error_code }
       format.json { render json: "{ \"error_code\": #{error_code}, \"status\": \"#{params[:invitation][:status]}\", \"total\": #{total} }" }
