@@ -8,8 +8,6 @@
 
 Language.create([{id: 1, locale: 'en', language: 'english'}, {id: 2, locale: 'gr', language: 'greek'}])
 
-
-
 owner = Profile.create(label: 'owner', description: 'Owner')
 admin = Profile.create(label: 'admin', description: 'Administrator')
 user  = Profile.create(label: 'user', description: 'Single User')

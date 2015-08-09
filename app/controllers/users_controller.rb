@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   require 'digest/sha1'
   before_action :set_referer, only: [:show, :edit, :new]
-  #force_ssl except: :autocomplete
+  # force_ssl except: :autocomplete
 
   # GET /users
   # GET /users.json
@@ -13,8 +13,7 @@ class UsersController < ApplicationController
       if @current_user.owner?
         @users = User.all.order('profile_id, username')
       else
-        @users = User.order('profile_id, username').where('profile_id >= ?', 2)
-        # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
+        @users = User.where('profile_id >= ?', 2).order('profile_id, username')
       end
     end
   end
@@ -235,7 +234,9 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
+  # Maybe to be removed (see StaticPagesController#search)
+  # Check it...
   def search
     @user = User.find_by(username: params[:search_terms[:username]], email: params[:search_terms[:email]])
     redirect_to user_path(@user)
