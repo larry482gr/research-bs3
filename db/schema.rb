@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804132907) do
+ActiveRecord::Schema.define(version: 20150808083740) do
 
   create_table "citations", primary_key: "citation_id", force: :cascade do |t|
     t.text "citation_mla",     limit: 65535
@@ -39,8 +39,7 @@ ActiveRecord::Schema.define(version: 20150804132907) do
 
   create_table "history_user_infos", id: false, force: :cascade do |t|
     t.integer  "user_id",     limit: 4,   default: 0,  null: false
-    t.string   "user_email",  limit: 50,               null: false
-    t.string   "admin",       limit: 20,               null: false
+    t.integer  "admin",       limit: 4,                null: false
     t.string   "from_value",  limit: 20,               null: false
     t.string   "to_value",    limit: 20,               null: false
     t.string   "change_type", limit: 50,  default: "", null: false
@@ -49,6 +48,7 @@ ActiveRecord::Schema.define(version: 20150804132907) do
   end
 
   create_table "invitations", force: :cascade do |t|
+    t.string   "email",              limit: 50,                      null: false
     t.integer  "from_user",          limit: 4,                       null: false
     t.integer  "project_id",         limit: 4,                       null: false
     t.integer  "project_profile_id", limit: 4,   default: 2,         null: false
@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(version: 20150804132907) do
     t.string   "reason",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",              limit: 50,                      null: false
   end
 
   add_index "invitations", ["project_id"], name: "index_invitations_on_project_id", using: :btree

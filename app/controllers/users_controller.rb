@@ -91,12 +91,14 @@ class UsersController < ApplicationController
       @language = Language.find(1).language
     end
 
-    json_response = { username: @user.username, email: @user.email, fname: @user.user_info.first_name, lname: @user.user_info.last_name, lang: @language }
+    puts "\n\n\nRails mime types:"
+    Mime::EXTENSION_LOOKUP.each { |m| puts m}
+    puts "\n\n\n"
 
     respond_to do |format|
       if error.nil?
-        format.html { render action: 'show' }
-        format.json { render json: json_response }
+        format.html
+        format.json { render action: 'show' }
       else
         format.html { redirect_to :root, alert: error }
         format.json { render json: { error: error } }
