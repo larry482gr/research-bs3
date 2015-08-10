@@ -1,6 +1,5 @@
 class ChangeHistoryUserInfosPkey < ActiveRecord::Migration
   def change
-    remove_column :history_user_infos, :user_email
     change_column :history_user_infos, :admin, :integer
 
     execute 'ALTER TABLE history_user_infos DROP PRIMARY KEY;'

@@ -3,12 +3,10 @@ class GoogleScholarController < ApplicationController
   require 'uri'
 
   before_action :valid_user, only: [:search_scholar, :search_citation]
-  before_action :set_hash, only: :search_scholar
-  before_action :set_hl, only: :search_scholar
+  before_action :set_extension, only: :search_scholar
+  before_action :set_hl_param, only: :search_scholar
 
   def search_scholar
-    url_ext = @url_ext_hash[I18n.locale]
-
     start		= params[:start]
     num			= params[:num]
 
@@ -26,7 +24,7 @@ class GoogleScholarController < ApplicationController
       gs_params << "as_yhi=#{params[:as_yhi]}"
     end
 
-    url = URI.escape("http://scholar.google.#{url_ext}/scholar?#{gs_params}&start=#{start}&num=#{num}&hl=#{@hl}")
+    url = URI.escape("http://scholar.google.#{@url_ext}/scholar?#{gs_params}&start=#{start}&num=#{num}&hl=#{@hl}")
     uri = URI.parse(url)
 
     res = Net::HTTP.get_response(uri)
@@ -177,6 +175,8 @@ class GoogleScholarController < ApplicationController
     end
   end
 
+  # TODO Refactoring needed. Send it to #CitationsController and
+  # don't forget to check if the user has the proper rights to save it!
   def citation_save
     project_id = params[:project_id]
     doc_id = params[:doc_id]
@@ -207,11 +207,12 @@ class GoogleScholarController < ApplicationController
     end
   end
 
-  def set_hash
-    @url_ext_hash = { :en => 'com', :gr => 'gr' }
+  def set_extension
+    url_ext_hash = { :en => 'com', :gr => 'gr' }
+    @url_ext = url_ext_hash[I18n.locale]
   end
 
-  def set_hl
+  def set_hl_param
     hl_hash = { :en => 'en', :gr => 'el' }
     @hl = hl_hash[I18n.locale]
   end

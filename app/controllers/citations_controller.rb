@@ -1,7 +1,7 @@
 class CitationsController < ApplicationController
   include Concerns::ForceNonSSL
   before_action :valid_user
-  before_action :set_project, only: [:destroy]
+  before_action :set_project, only: :destroy
   force_non_ssl
 
   # DELETE /projects/1/citations/1
@@ -27,10 +27,6 @@ class CitationsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_project
-    @project = Project.find(params[:project_id])
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
