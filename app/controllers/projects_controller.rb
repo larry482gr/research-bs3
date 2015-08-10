@@ -80,21 +80,11 @@ class ProjectsController < ApplicationController
     else
       respond_to do |format|
         old_project = @project.attributes
-        puts "\n\n\n"
-        puts "Old project: #{old_project}"
-        puts "Project params: #{project_params}"
-        puts "\n\n\n"
         if @project.update(project_params)
-          # param is an Array object with the form ['title', 'Test Project']
           project_params.each do |param|
             key = param[0]
             val = param[1]
-            puts "\n\n\n"
-            puts old_project[key]
-            puts old_project[key].class
-            puts val
-            puts val.class
-            puts "\n\n\n"
+
             unless old_project[key] == (val)
               @project.history_projects.create({user_id: @current_user.id, from_value: old_project[key],
                                                 to_value: val, change_type: key})
@@ -122,7 +112,7 @@ class ProjectsController < ApplicationController
     else
       project_directory = "#{Rails.root}/private/project_files/#{@project.id/100}/#{@project.id}"
       if Dir.exists? project_directory
-        rm_dir = FileUtils.rm_rf project_directory
+        FileUtils.rm_rf project_directory
       end
 
       @project.project_files.each do |file|

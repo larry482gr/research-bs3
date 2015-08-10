@@ -251,7 +251,7 @@ class ProjectFilesController < ApplicationController
       id = 0
       uploaded_io = params[:project_file][:filename]
       params[:project_file][:filename] = params[:project_file][:filename].original_filename
-      FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0755
+      FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0700
       output_path = Rails.root.join('private', 'project_files', params[:project_file][:filepath], params[:project_file][:filename])
 
       # tmp_filename = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]

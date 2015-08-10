@@ -16,7 +16,7 @@ class ProjectFile < ActiveRecord::Base
   private
 
   def set_extension
-    if self.extension.nil? and self.extension.length < 6
+    if not self.extension.nil? and self.extension.length < 6
       self.extension = self.filepath.to_s[self.filepath.to_s.rindex('.')+1..self.filepath.to_s.length-1]
     else
       self.extension = 'lnk'
