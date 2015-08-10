@@ -43,9 +43,9 @@ class GoogleScholarController < ApplicationController
     end
 
     # For external links
-    response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{url_ext}/")
+    response = response.gsub("href=\"/", "target=\"blank\" href=\"http://scholar.google.#{@url_ext}/")
     # For images
-    response = response.gsub("src=\"/", "src=\"http://scholar.google.#{url_ext}/")
+    response = response.gsub("src=\"/", "src=\"http://scholar.google.#{@url_ext}/")
     # Remove code that causes ajax request error. (13/01/2015)
     response = response.gsub("gs_ie_ver<=7&&(new Image().src='/scholar_url?ie='+gs_ie_ver);", '')
 
@@ -107,6 +107,7 @@ class GoogleScholarController < ApplicationController
     end
   end
 
+  # TODO Don't forget to check if the user has the proper rights to save it! See project param at the end!!!
   def search_citation
     doc_id = params[:doc_id]
     doc_num = params[:doc_num]
