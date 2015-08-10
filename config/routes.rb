@@ -1,5 +1,7 @@
 Researchgr::Application.routes.draw do
   scope '(:locale)', locale: /en|gr/ do
+    root 'static_pages#index'
+    get '/:locale' => 'static_pages#index'
 
     resources :users do
       resources :projects
@@ -29,12 +31,10 @@ Researchgr::Application.routes.draw do
     get '/logout' => 'users#logout'
     get '/users_autocomplete' => 'users#autocomplete'
     get '/invitations' => 'invitations#index'
-    get '/:locale' => 'static_pages#index'
     get 'search' => 'static_pages#search'
-    get 'static_pages/search_scholar' => 'static_pages#search_scholar'
-    get 'static_pages/search_citation' => 'static_pages#search_citation'
-    get '/static_pages/citation_save' => 'static_pages#citation_save'
-    root 'static_pages#index'
+    get 'google_scholar/search_scholar' => 'google_scholar#search_scholar'
+    get 'google_scholar/search_citation' => 'google_scholar#search_citation'
+    get '/google_scholar/citation_save' => 'google_scholar#citation_save'
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

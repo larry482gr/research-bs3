@@ -130,7 +130,7 @@ $(document).ready(function() {
         //    question = '"' + question + '"';
 
         $.ajax({
-            url: '/static_pages/search_scholar?'+form_params+'&start='+start+'&num='+num,
+            url: '/google_scholar/search_scholar?'+form_params+'&start='+start+'&num='+num,
             cache: false,
             type: "get",
             dataType: "json",
@@ -208,7 +208,7 @@ function showCitationsModal(doc_id, doc_num, citations) {
 
 function saveCitation(citation_type, doc_id) {
     $.ajax({
-        url: "/static_pages/citation_save?project_id=" + $("#project_id").val() + "&doc_id=" + doc_id +
+        url: "/google_scholar/citation_save?project_id=" + $("#project_id").val() + "&doc_id=" + doc_id +
              "&citation_type=" + citation_type + "&search_q=" + $('#search_gs_input').val(),
         cache: false,
         type: "get",
@@ -257,7 +257,7 @@ function gs_sva(doc_id, doc_num) {
 function gs_ocit(event ,doc_id, doc_num) {
     cite_link = $('#gs_svl' + doc_num).parent().prev();
     $.ajax({
-        url: "/static_pages/search_citation?doc_id="+doc_id+"&doc_num="+doc_num+"&project_id="+$('#project_id').val(),
+        url: "/google_scholar/search_citation?doc_id="+doc_id+"&doc_num="+doc_num+"&project_id="+$('#project_id').val(),
         cache: false,
         type: "get",
         dataType: "json",

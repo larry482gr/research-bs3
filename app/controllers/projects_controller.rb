@@ -1,8 +1,10 @@
 class ProjectsController < ApplicationController
   include Concerns::ForceNonSSL
+
   before_action :valid_user
   before_action :set_referer, only: [:show, :edit, :new]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+
   force_non_ssl
 
   # GET /projects
