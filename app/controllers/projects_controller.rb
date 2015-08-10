@@ -8,13 +8,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    # if @current_user.nil?
-    #  flash[:alert] = :no_access
-    #  redirect_to :root and return
-    # end
-
     @projects = @current_user.projects.order('updated_at DESC')
-
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
   end
 

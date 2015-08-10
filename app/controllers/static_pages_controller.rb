@@ -201,15 +201,15 @@ class StaticPagesController < ApplicationController
       end
     end
   end
-  
+
   def citation_save
     project_id = params[:project_id]
     doc_id = params[:doc_id]
     citation_type = params[:citation_type]
-    
+
     project = Project.find(project_id)
     result = project.update_citation(doc_id, citation_type)
-    
+
     if result < 1
       result = project.insert_citation(doc_id, citation_type)
     end
