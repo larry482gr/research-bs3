@@ -174,7 +174,7 @@ class UsersController < ApplicationController
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
         if @current_user != @user and @current_user.can_access?('user_edit')
           if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
-            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id,
+            @user.history_user_infos.create({admin: @current_user.id,
                                              from_value: @user.profile_id, to_value: admin_params[:profile_id],
                                              change_type: 'profile'})
           end
