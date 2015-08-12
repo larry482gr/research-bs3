@@ -90,14 +90,10 @@ class UsersController < ApplicationController
       @language = Language.find(1).language
     end
 
-    puts "\n\n\nRails mime types:"
-    Mime::EXTENSION_LOOKUP.each { |m| puts m}
-    puts "\n\n\n"
-
     respond_to do |format|
       if error.nil?
         format.html
-        format.json { render action: 'show' }
+        format.json { render :show }
       else
         format.html { redirect_to :root, alert: error }
         format.json { render json: { error: error } }
@@ -184,7 +180,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: (t :user_updated) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

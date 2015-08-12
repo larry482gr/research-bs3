@@ -23,11 +23,6 @@ class InvitationsController < ApplicationController
     end
   end
 
-  # GET /invitations/new
-  def new
-    redirect_to project_path(Project.find(params[:project_id]))
-  end
-
   # POST /invitations
   # POST /invitations.json
   def create

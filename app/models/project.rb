@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   has_many :invitations
 
   has_many :history_projects
-  
+
   validates :title, presence: true
   validates :description, presence: true
 
@@ -62,7 +62,7 @@ class Project < ActiveRecord::Base
 
     return ActiveRecord::Base.connection.insert_sql(query)
   end
-  
+
   def update_citation(doc_id, citation_type)
     cite_id		= ActiveRecord::Base.connection.quote(doc_id)
     cite_type	= ActiveRecord::Base.connection.quote(citation_type)
@@ -71,7 +71,7 @@ class Project < ActiveRecord::Base
   			 SET citation_type = #{cite_type}
   			 WHERE project_id = #{self.id}
   			 AND citation_id = #{cite_id}"
-    
+
     return ActiveRecord::Base.connection.update_sql(query)
   end
 
@@ -95,7 +95,7 @@ class Project < ActiveRecord::Base
 
     ActiveRecord::Base.connection.update_sql(query)
   end
-  
+
   protected
 
   after_save :set_default_profile
@@ -109,5 +109,5 @@ class Project < ActiveRecord::Base
 
     ActiveRecord::Base.connection.update_sql(query)
   end
-  
+
 end

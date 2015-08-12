@@ -108,7 +108,7 @@ class ProjectFilesController < ApplicationController
     end
 
     @project_file = @project.project_files.where(project_file_params)
-    
+
     if @project_file.empty?
       @project_file = @project.project_files.create(project_file_params)
       @project_file.user_id = @current_user.id
@@ -132,7 +132,7 @@ class ProjectFilesController < ApplicationController
         end
       end
     end
-    
+
     respond_to do |format|
       if is_new
         format.html { redirect_to @project, notice: (t :file_save_success) }
@@ -243,11 +243,11 @@ class ProjectFilesController < ApplicationController
         redirect_to :root and return
       end
     end
-    
+
     def is_url?(filepath)
       filepath[0..3] == 'http'
     end
-    
+
     def upload_file
       file_exists = true
       id = 0

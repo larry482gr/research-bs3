@@ -1,7 +1,7 @@
 class UserMailer < ActionMailer::Base
   require 'uri'
-  default from: "no-reply@research.org.gr"
-  
+  default from: 'no-reply@research.org.gr'
+
   def welcome_email(user, token, baseUrl)
     @user = user
     @url  = "#{baseUrl}/activate?user=#{@user.username}&token=#{token}"

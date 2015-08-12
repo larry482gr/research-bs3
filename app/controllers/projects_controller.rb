@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to @project, notice: (t :project_created) }
         format.json { render action: 'show', status: :created, location: @project }
       else
-        format.html { render action: 'new' }
+        format.html { render :new }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -98,7 +98,7 @@ class ProjectsController < ApplicationController
         else
           @private_count = private_count
 
-          format.html { render action: 'edit' }
+          format.html { render :edit }
           format.json { render json: @project.errors, status: :unprocessable_entity }
         end
       end

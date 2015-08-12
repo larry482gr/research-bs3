@@ -6,14 +6,14 @@ Researchgr::Application.routes.draw do
     resources :users do
       resources :projects
       resources :project_files
-      resources :invitations
+      resources :invitations, except: [:new, :show, :edit, :destroy]
       member do
         post :change_pass
       end
     end
-    
+
     resources :projects do
-      resources :invitations
+      resources :invitations, except: [:new, :show, :edit, :destroy]
       resources :project_files do
         member do
           post :set_main
@@ -21,7 +21,7 @@ Researchgr::Application.routes.draw do
           get :show_history
         end
       end
-      resources :citations
+      resources :citations, only: :destroy
     end
 
     post 'check_login' => 'users#check_login'
@@ -36,7 +36,7 @@ Researchgr::Application.routes.draw do
     get 'google_scholar/search_citation' => 'google_scholar#search_citation'
     get '/google_scholar/citation_save' => 'google_scholar#citation_save'
   end
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -77,7 +77,7 @@ Researchgr::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'
