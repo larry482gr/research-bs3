@@ -22,7 +22,7 @@ gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'jquery-ui-rails', '~> 5.0.3'
+gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
 gem 'i18n-js'
 

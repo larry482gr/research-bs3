@@ -202,7 +202,7 @@ class UsersController < ApplicationController
     @user.user_info.deleted = 1
     if @user.user_info.save!
       if @current_user.can_access?('user_delete')
-        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1,
+        @user.history_user_infos.create({admin: @current_user.id, from_value: 0, to_value: 1,
                                          change_type: 'deletion', comment: params[:comment]})
 
         respond_to do |format|
