@@ -1,5 +1,10 @@
+// $navbar-default-bg: #312312;
+// $light-orange: #ff8c00;
+// $navbar-default-color: $light-orange;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap/theme";
 @import "jquery-ui";
 
 @import "project_files";
@@ -161,4 +166,14 @@
 
 .no-wrap {
   white-space: nowrap;
+}
+
+table tr td {
+  div a {
+    display: block;
+    width: 100%;
+    color: #333 !important;
+    text-decoration: none !important;
+    outline: none !important;
+  }
 }
