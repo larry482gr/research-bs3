@@ -144,6 +144,7 @@ $(document).ready(function() {
   	if($(this).val() != '') {
         uploadFile = this.files[0];
         uploadFileType = uploadFile.type;
+        alert(uploadFileType);
         validFile = false;
         for(i = 0; i < allowedFileTypes.length; i++) {
             if(uploadFileType === allowedFileTypes[i]) {

@@ -1,5 +1,5 @@
 var allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/msword', 'application/vnd.oasis.opendocument.text', 'text/plain', 'text/rtf'];
+    'application/msword', 'application/vnd.oasis.opendocument.text', 'text/plain', 'application/rtf'];
 
 var fileExtensions = {
     'application/pdf' : 'pdf',
@@ -7,7 +7,7 @@ var fileExtensions = {
     'application/msword' : 'doc',
     'application/vnd.oasis.opendocument.text' : 'odt',
     'text/plain' : 'txt',
-    'text/rtf' : 'rtf'
+    'application/rtf' : 'rtf'
 };
 
 $(document).ready(function() {
