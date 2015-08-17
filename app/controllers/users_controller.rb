@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   require 'digest/sha1'
   before_action :set_referer, only: [:show, :edit, :new]
-  force_ssl except: [:autocomplete]
+  force_ssl except: :autocomplete
 
   # GET /users
   # GET /users.json
@@ -13,8 +13,7 @@ class UsersController < ApplicationController
       if @current_user.owner?
         @users = User.all.order('profile_id, username')
       else
-        @users = User.order('profile_id, username').where('profile_id >= ?', 2)
-        # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
+        @users = User.where('profile_id >= ?', 2).order('profile_id, username')
       end
     end
   end
@@ -76,18 +75,29 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     if @current_user.nil? or (@current_user.id.to_i != params[:id].to_i and not @current_user.can_access?('user_show'))
-      flash[:alert] = t :no_access
-      redirect_to :root and return
+      error = t :no_access
     end
+
     @user = User.find(params[:id])
+
     if @current_user.profile.id.to_i > @user.profile.id.to_i and @current_user.id.to_i != @user.id.to_i
-      flash[:alert] = t :no_access
-      redirect_to :root and return
+      error = t :no_access
     end
+
     begin
       @language = t(Language.find(@user.user_info.language_id).language)
     rescue ActiveRecord::RecordNotFound
       @language = Language.find(1).language
+    end
+
+    respond_to do |format|
+      if error.nil?
+        format.html
+        format.json { render :show }
+      else
+        format.html { redirect_to :root, alert: error }
+        format.json { render json: { error: error } }
+      end
     end
   end
 
@@ -95,7 +105,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     respond_to do |format|
-      format.html { render action: 'new' }
+      format.html { redirect_to :root }
       format.json { render json: @user }
     end
   end
@@ -161,7 +171,7 @@ class UsersController < ApplicationController
       if @user.update(user_params) and @user.user_info.update(user_params[:user_info_attributes])
         if @current_user != @user and @current_user.can_access?('user_edit')
           if (admin_params[:profile_id].to_i != @user.profile_id.to_i)
-            @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id,
+            @user.history_user_infos.create({admin: @current_user.id,
                                              from_value: @user.profile_id, to_value: admin_params[:profile_id],
                                              change_type: 'profile'})
           end
@@ -170,7 +180,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: (t :user_updated) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -192,7 +202,7 @@ class UsersController < ApplicationController
     @user.user_info.deleted = 1
     if @user.user_info.save!
       if @current_user.can_access?('user_delete')
-        @user.history_user_infos.create({user_email: @user.email, admin: @current_user.id, from_value: 0, to_value: 1,
+        @user.history_user_infos.create({admin: @current_user.id, from_value: 0, to_value: 1,
                                          change_type: 'deletion', comment: params[:comment]})
 
         respond_to do |format|
@@ -220,7 +230,9 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
+  # Maybe to be removed (see StaticPagesController#search)
+  # Check it...
   def search
     @user = User.find_by(username: params[:search_terms[:username]], email: params[:search_terms[:email]])
     redirect_to user_path(@user)
@@ -230,13 +242,13 @@ class UsersController < ApplicationController
     @users = nil
     unless @current_user.nil?
       if @current_user.owner?
-        @users = User.select('email').where('id != ?', @current_user.id).order('email')
+        @users = User.select('username').where('id != ?', @current_user.id).order('email')
       elsif @current_user.admin?
-        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
+        @users = User.select('username').where('id != ? AND profile_id >= ?', @current_user.id, 2).order('email')
         # @users = User.order('profile_id, username').where('profile_id >= ?', 2)
         # @users = User.find(:all, :conditions => ['profile_id >= ?', 2], :order => 'profile_id, username')
       else
-        @users = User.select('email').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
+        @users = User.select('username').where('id != ? AND profile_id >= ?', @current_user.id, 3).order('email')
       end
     end
 

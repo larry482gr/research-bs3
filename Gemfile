@@ -22,7 +22,7 @@ gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'jquery-ui-rails', '~> 5.0.3'
+gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
 gem 'i18n-js'
 
@@ -71,10 +71,13 @@ group :development, :production do
   gem 'mysql2'
 end
 
+group :development do
+  gem 'puma'
+end
+
 # For Heroku deployment
 group :production do
   gem 'rails_12factor'
-  gem 'puma'
 end
 
 gem 'dynamic_form'

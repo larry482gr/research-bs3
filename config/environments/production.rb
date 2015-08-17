@@ -83,8 +83,7 @@ Researchgr::Application.configure do
     :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE,
     :address => "127.0.0.1",
     :port => 25,
-    :enable_starttls_auto => true,
-    # :domain => "research.org.gr",
+    :enable_starttls_auto => true
   }
   config.action_mailer.perform_deliveries = :true #try to force sending in development
   config.action_mailer.raise_delivery_errors = :true

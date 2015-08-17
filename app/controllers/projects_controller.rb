@@ -1,20 +1,16 @@
 class ProjectsController < ApplicationController
   include Concerns::ForceNonSSL
+
   before_action :valid_user
   before_action :set_referer, only: [:show, :edit, :new]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+
   force_non_ssl
 
   # GET /projects
   # GET /projects.json
   def index
-    # if @current_user.nil?
-    #  flash[:alert] = :no_access
-    #  redirect_to :root and return
-    # end
-
     @projects = @current_user.projects.order('updated_at DESC')
-
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
   end
 
@@ -71,7 +67,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to @project, notice: (t :project_created) }
         format.json { render action: 'show', status: :created, location: @project }
       else
-        format.html { render action: 'new' }
+        format.html { render :new }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -85,11 +81,24 @@ class ProjectsController < ApplicationController
       redirect_to :root and return
     else
       respond_to do |format|
+        old_project = @project.attributes
         if @project.update(project_params)
+          project_params.each do |param|
+            key = param[0]
+            val = param[1]
+
+            unless old_project[key] == (val)
+              @project.history_projects.create({user_id: @current_user.id, from_value: old_project[key],
+                                                to_value: val, change_type: key})
+            end
+          end
+
           format.html { redirect_to @project, notice: (t :project_updated) }
           format.json { head :no_content }
         else
-          format.html { render action: 'edit' }
+          @private_count = private_count
+
+          format.html { render :edit }
           format.json { render json: @project.errors, status: :unprocessable_entity }
         end
       end
@@ -105,7 +114,7 @@ class ProjectsController < ApplicationController
     else
       project_directory = "#{Rails.root}/private/project_files/#{@project.id/100}/#{@project.id}"
       if Dir.exists? project_directory
-        rm_dir = FileUtils.rm_rf project_directory
+        FileUtils.rm_rf project_directory
       end
 
       @project.project_files.each do |file|

@@ -190,8 +190,7 @@ function updateInvitation(user_id, invitation_id, status, reason) {
             if(result.error_code == 0) {
                 if(result.status == 'accepted') {
                     location.href = '/projects';
-                }
-                else {
+                } else {
                     location.reload();
                 }
             }
@@ -214,16 +213,13 @@ function signIn() {
         success: function(user) {
             if (user.id > 0) {
                 location.href = "projects"; // "http://localhost:3000";
-            }
-            else if (user.id == 0){
+            } else if (user.id == 0) {
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>"+I18n.t("activation_reminder")+"</div>");
-            }
-            else if (user.id == -1){
+            } else if (user.id == -1) {
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>"+I18n.t("account_blacklisted")+"</div>");
-            }
-            else{
+            } else{
                 $('#sign-in-error').text(I18n.t("invalid_credentials")).animate({ opacity: 1}, 400);
             }
         }
@@ -262,7 +258,7 @@ function populateAutocompleteUsers(element) {
                 minLength: 1,
                 source: function(request, response) {
                     var matches = $.map(users, function(userItem) {
-                        if (userItem.email.toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
+                        if (userItem.username.toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
                             return userItem;
                         }
                     });
@@ -273,16 +269,16 @@ function populateAutocompleteUsers(element) {
                     // return false;
                 //},
                 select: function(event, ui) {
-                    element.val(ui.item.email); // + ' (' + ui.item.username + ')');
-                    element.attr('rel', ui.item.email);
+                    element.val(ui.item.username); // + ' (' + ui.item.username + ')');
+                    element.attr('rel', ui.item.username);
                     return false;
                 }
             })
                 .data("ui-autocomplete")._renderItem = function(ul, item) {
                 return $("<li></li>")
                     .append("<a style='font-size: 12px !important; font-weight: normal; cursor: pointer;'>" +
-                    "<span style='color: #01ade4'>" + item.email.substring(0, element.val().length) + "</span>" +
-                    item.email.substring(element.val().length) /* + " (" + item.username + ')' */ + "</a>")
+                    "<span style='color: #01ade4'>" + item.username.substring(0, element.val().length) + "</span>" +
+                    item.username.substring(element.val().length) /* + " (" + item.username + ')' */ + "</a>")
                     .appendTo(ul);
             };
         }

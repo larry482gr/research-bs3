@@ -3,38 +3,42 @@
 <div class="col-md-12 left-div">
     <h3><%= t :your_projects %></h3>
     <div class="projects_table">
-      <table class="table table-condensed table-hover">
-        <thead>
-          <tr>
-            <th><%= (t :title) %></th>
-            <th><%= (t :description) %></th>
-            <th><%= (t :private) %></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <%- @projects.each do |project| %>
-            <tr>
-              <td class="proj left no-wrap"><div><a href="<%= "projects/#{project.id}" %>"><%= project.title %></a></div></td>
-              <td class="proj left"><div><a href="<%= "projects/#{project.id}" %>"><%= project.description %></a></div></td>
-              <td class="proj center">
-                <div><a href="<%= "projects/#{project.id}" %>">
-                  <%- if project.is_private %>
-                    <%= (t :word_yes) %>
-                  <%- else %>
-                    <%= (t :word_no) %>
-                  <% end %>
-                </a></div>
-              </td>
-              <td class="center">
-                <%- if project.owner? @current_user.id %>
-                    <%= link_to (t :delete), project_path(project), :class => 'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%- if @projects.count.zero? %>
+          <h4>Oops! You have no projects yet. Go on and create your first one...</h4>
+      <%- else %>
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th><%= (t :title) %></th>
+                <th><%= (t :description) %></th>
+                <th><%= (t :private) %></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%- @projects.each do |project| %>
+                <tr>
+                  <td class="proj left no-wrap"><div><a href="<%= "projects/#{project.id}" %>"><%= project.title %></a></div></td>
+                  <td class="proj left"><div><a href="<%= "projects/#{project.id}" %>"><%= project.description %></a></div></td>
+                  <td class="proj center">
+                    <div><a href="<%= "projects/#{project.id}" %>">
+                      <%- if project.is_private %>
+                        <%= (t :word_yes) %>
+                      <%- else %>
+                        <%= (t :word_no) %>
+                      <% end %>
+                    </a></div>
+                  </td>
+                  <td class="center">
+                    <%- if project.owner? @current_user.id %>
+                        <%= link_to (t :delete), project_path(project), :class => 'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => "#{t :are_you_sure}#{t :question_mark}" } %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+      <% end %>
       <%= link_to (t :create_project), new_project_path, :class => "btn btn-success create_project" %>
     </div>
 </div>

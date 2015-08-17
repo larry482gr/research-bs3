@@ -5,4 +5,5 @@ class Profile < ActiveRecord::Base
 
   OWNER = 'owner'
   ADMIN = 'admin'
+  USER = 'user'
 end

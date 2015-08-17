@@ -4,7 +4,7 @@ class InvitationsController < ApplicationController
   # GET /invitations
   # GET /invitations.json
   def index
-    invitations = @current_user.invitations.where('status = ?', 'pending')
+    invitations = Invitation.where('email = ? AND status = ?', @current_user.email, 'pending')
     invitations_array = []
 
     invitations.each do |inv|
@@ -23,30 +23,30 @@ class InvitationsController < ApplicationController
     end
   end
 
-  # GET /invitations/new
-  def new
-    redirect_to project_path(Project.find(params[:project_id]))
-  end
-
   # POST /invitations
   # POST /invitations.json
   def create
     @project = Project.find(params[:project_id])
 
     if not @project.owner?(@current_user.id)
-      flash[:alert] = :no_invitation_access
+      flash[:alert] = t :no_invitation_access
       redirect_to project_path(@project) and return
     end
 
-    @user = User.find_by_email(params[:invitation][:email])
+    @user = User.find_by_username(params[:invitation][:username])
 
-    if @user
+    email = @user ? @user.email : params[:invitation][:email]
+
+    if email.nil? or not email.match(User::VALID_EMAIL_REGEX)
+      error_msg = t :invitation_user_restriction
+      alert = error_msg
+    else
       begin
-        @invitation = @project.invitations.create(user_id: @user.id, from_user: @current_user.id, project_id: @project.id)
+        @invitation = @project.invitations.create(email: email, from_user: @current_user.id, project_id: @project.id)
         if @invitation.save
-          notice = "#{(t :invitation_sent)} #{@user.username}"
+          notice = "#{(t :invitation_sent)} #{email}"
           # UserMailer.welcome_email(@user, @user_info.token, request.base_url).deliver_now
-          UserMailer.invite_email(@project, @user, @current_user).deliver_now
+          UserMailer.invite_email(@project, email, @current_user).deliver_now
         else
           alert = "#{(t :invitation_fail)} #{(t :try_again)} #{(t :error_persists)}"
         end
@@ -54,9 +54,6 @@ class InvitationsController < ApplicationController
         error_msg = (t :invitation_duplicate).to_s.gsub('_@user@_', @user.username).gsub('_@project@_', @project.title)
         alert = error_msg
       end
-    else
-      error_msg = (t :invitation_user_restriction)
-      alert = error_msg
     end
 
     respond_to do |format|
@@ -68,7 +65,7 @@ class InvitationsController < ApplicationController
   def update
     user = User.find(params[:user_id])
 
-    if @current_user.id != user.id
+    if @current_user.id.to_i != user.id.to_i
       error_code = -1
       respond_to do |format|
         format.html { redirect_to root_path, alert: error_code }
@@ -85,7 +82,7 @@ class InvitationsController < ApplicationController
     if invitation.update(invitation_params)
       error_code = 0
       if invitation.status.to_s == 'accepted'
-        error_code = 1 unless invitation.project.add_user(invitation.user.id, invitation.project_profile.id)
+        error_code = 1 unless invitation.project.add_user(@current_user, invitation.project_profile.id)
       elsif invitation.status.to_s == 'reported'
         inv_sender = User.find(invitation.from_user)
         user_reports = inv_sender.user_info.reports + 1
@@ -98,7 +95,7 @@ class InvitationsController < ApplicationController
       error_code = 1
     end
 
-    total = @current_user.invitations.where('status = ?', 'pending').count
+    total = Invitation.where('email = ? AND status = ?', @current_user.email, 'pending').count
     respond_to do |format|
       format.html { redirect_to root_path, notice: error_code }
       format.json { render json: "{ \"error_code\": #{error_code}, \"status\": \"#{params[:invitation][:status]}\", \"total\": #{total} }" }
@@ -110,7 +107,7 @@ class InvitationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def invitation_params
     # params.require(:invitation).permit(:email, :profile, :status, :reason)
-    params.require(:invitation).permit(:email, :status, :reason)
+    params.require(:invitation).permit(:username, :email, :status, :reason)
   end
 
   def valid_user

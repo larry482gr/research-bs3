@@ -1,11 +1,13 @@
 class ProjectFilesController < ApplicationController
   include Concerns::ForceNonSSL
+
   before_action :valid_user
   before_action :set_project_file, only: [:show, :show_history, :edit, :update, :destroy, :set_main, :get_file]
   before_action :allowed_file_types, only: :show
   before_action :can_edit, only:  [:show, :edit, :update]
   before_action :set_extension_info, only: [:show, :get_file]
   before_action :set_referer, only: [:show, :edit, :show_history]
+
   force_non_ssl
 
   # GET /project_files
@@ -101,12 +103,14 @@ class ProjectFilesController < ApplicationController
     # (uploaded_file_params = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
     if is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String
       session[:search_gs] = params[:search_q]
+      @project_file = @project.project_files.where(project_file_params)
+      uploaded_file_params = { file_exists: @project_file.empty? }
     else
       uploaded_file_params = upload_file
     end
 
     @project_file = @project.project_files.where(project_file_params)
-    
+
     if @project_file.empty?
       @project_file = @project.project_files.create(project_file_params)
       @project_file.user_id = @current_user.id
@@ -130,7 +134,7 @@ class ProjectFilesController < ApplicationController
         end
       end
     end
-    
+
     respond_to do |format|
       if is_new
         format.html { redirect_to @project, notice: (t :file_save_success) }
@@ -241,17 +245,17 @@ class ProjectFilesController < ApplicationController
         redirect_to :root and return
       end
     end
-    
+
     def is_url?(filepath)
       filepath[0..3] == 'http'
     end
-    
+
     def upload_file
       file_exists = true
       id = 0
       uploaded_io = params[:project_file][:filename]
       params[:project_file][:filename] = params[:project_file][:filename].original_filename
-      FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0755
+      FileUtils.mkdir_p Rails.root.join('private', 'project_files', params[:project_file][:filepath]), :mode => 0700
       output_path = Rails.root.join('private', 'project_files', params[:project_file][:filepath], params[:project_file][:filename])
 
       # tmp_filename = params[:project_file][:filename].to_s[0..params[:project_file][:filename].to_s.rindex('.')-1]

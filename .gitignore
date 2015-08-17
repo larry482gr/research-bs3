@@ -28,7 +28,8 @@ test/version_tmp
 public/assets
 private/
 cron/
-# Gemfile.lock
+config/database.yml
+Gemfile.lock
 
 # YARD artifacts
 .yardoc
