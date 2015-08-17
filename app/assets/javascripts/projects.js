@@ -137,6 +137,7 @@ $(document).ready(function() {
         else {
             $('#upload_form').submit();
             $('#clear-file').html(I18n.t('uploading_file') + ' ' + $('#upload_form #project_file_filename').val() + "<img class='loader_icon' id='file_loader' src='/assets/loader.gif' width='14px' height='14px' />");
+            $('#clear-file').attr('id', 'uploading-file');
         }
     }
   });
