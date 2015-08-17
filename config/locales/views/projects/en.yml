@@ -17,6 +17,7 @@ en:
   search_gs: "Search for a book, article or paper"
   upload: "Upload"
   upload_file: "Upload file..."
+  uploading_file: "Uploading"
   no_project_files: "Oops! This project has no files yet."
   project_files: "Project Files"
   project_citations: "Project Citations"
