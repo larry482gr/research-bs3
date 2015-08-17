@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
   def set_current_user
     #force_ssl_redirect and return unless session[:id]
     @current_user ||= User.find_by('password = ? AND email = ?', session[:id], session[:email])
+    unless @current_user.nil?
+      @current_user = nil unless (@current_user.user_info.activated? and
+          not (@current_user.user_info.blacklisted? or @current_user.user_info.deleted?))
+    end
   end
 
   def set_locale

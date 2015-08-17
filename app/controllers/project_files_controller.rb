@@ -103,6 +103,8 @@ class ProjectFilesController < ApplicationController
     # (uploaded_file_params = upload_file) unless (is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String)
     if is_url?(params[:project_file][:filepath]) or params[:project_file][:filename].is_a? String
       session[:search_gs] = params[:search_q]
+      @project_file = @project.project_files.where(project_file_params)
+      uploaded_file_params = { file_exists: @project_file.empty? }
     else
       uploaded_file_params = upload_file
     end

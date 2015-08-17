@@ -18,6 +18,8 @@
         <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
             <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
             <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
+            <br/>
+            <span id="clear-file" class="pull-right">Clear file</span>
             <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
             <%= hidden_field_tag 'project_file[extension]' %>
         <% end %>
