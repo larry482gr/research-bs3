@@ -178,3 +178,8 @@ table tr td {
     outline: none !important;
   }
 }
+
+.form-control:focus {
+  border-color: #67b168;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(103, 177, 104, 0.6);
+}

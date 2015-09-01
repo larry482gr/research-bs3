@@ -334,21 +334,29 @@ div.citations-body {
 
 #upload_form {
   div.pull-left {
-    margin-right: 16px;
+    margin-right: 20px;
   }
 
   div#add-link-fields {
     display: none;
     padding: 0px;
-  }
-}
 
-#clear-file {
-  display: none;
-  color: #337ab7;
-  text-align: right;
-  cursor: pointer;
-  margin-top: 4px;
+    div:first-child {
+      padding-right: 0px;
+    }
+  }
+
+  #link_btn:hover {
+    text-decoration: none;
+  }
+
+  #clear-file {
+    display: none;
+    color: #337ab7;
+    text-align: right;
+    cursor: pointer;
+    margin-top: 4px;
+  }
 }
 
 #uploading-file {

@@ -144,11 +144,12 @@ $(document).ready(function() {
 
   $('#link_btn').on('click', function() {
       if($('#add-link-fields').is(':visible')) {
-        alert('Should submit form...');
+          alert('Should submit form...');
       }
       else {
-        $(this).text($(this).text().substring(0, $(this).text().length-3));
-        $('#add-link-fields').animate({width: 'toggle'}, 200);
+          $(this).removeClass('btn-link').addClass('btn-success');
+          $(this).text($(this).text().substring(0, $(this).text().length-3));
+          $('#add-link-fields').animate({width: 'toggle'}, 200);
       }
   });
 
@@ -171,13 +172,13 @@ $(document).ready(function() {
         }
         else {
             $('#file_btn').text(I18n.t('upload') + ' ' + $(this).val());
-            $('#file_btn').removeClass('btn-success').addClass('btn-danger');
+            $('#file_btn').removeClass('btn-primary').addClass('btn-danger');
             $('#clear-file').show();
         }
     }
 	else {
         $('#file_btn').text(I18n.t('upload_file'));
-        $('#file_btn').removeClass('btn-danger').addClass('btn-success');
+        $('#file_btn').removeClass('btn-danger').addClass('btn-primary');
     }
   });
 
@@ -187,7 +188,7 @@ $(document).ready(function() {
       $('#project_file_extension').val('');
       document.getElementById('upload_form').reset;
       $('#file_btn').text(I18n.t('upload_file'));
-      $('#file_btn').removeClass('btn-danger').addClass('btn-success');
+      $('#file_btn').removeClass('btn-danger').addClass('btn-primary');
       $('#clear-file').hide();
   });
 
