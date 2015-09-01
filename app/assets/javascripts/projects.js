@@ -141,7 +141,17 @@ $(document).ready(function() {
         }
     }
   });
-  
+
+  $('#link_btn').on('click', function() {
+      if($('#add-link-fields').is(':visible')) {
+        alert('Should submit form...');
+      }
+      else {
+        $(this).text($(this).text().substring(0, $(this).text().length-3));
+        $('#add-link-fields').animate({width: 'toggle'}, 200);
+      }
+  });
+
   $('#upload_form #project_file_filename').on('change', function(){
   	if($(this).val() != '') {
         uploadFile = this.files[0];

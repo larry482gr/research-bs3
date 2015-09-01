@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   require 'digest/sha1'
   before_action :set_referer, only: [:show, :edit, :new]
-  force_ssl except: :autocomplete
+  # force_ssl except: :autocomplete
 
   # GET /users
   # GET /users.json

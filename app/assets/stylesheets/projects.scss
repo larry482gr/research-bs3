@@ -332,6 +332,17 @@ div.citations-body {
   margin: 4px 0px;
 }
 
+#upload_form {
+  div.pull-left {
+    margin-right: 16px;
+  }
+
+  div#add-link-fields {
+    display: none;
+    padding: 0px;
+  }
+}
+
 #clear-file {
   display: none;
   color: #337ab7;
