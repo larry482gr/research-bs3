@@ -205,14 +205,14 @@ function updateInvitation(user_id, invitation_id, status, reason) {
 function signIn() {
     $("#warning").remove();
     $.ajax({
-        url: "check_login",
+        url: "/check_login",
         cache: false,
         type: "post",
         data: "user[username]=" + $('#inputUsername').val() + "&user[password]=" + $('#inputPassword').val(),
         dataType: "json",
         success: function(user) {
             if (user.id > 0) {
-                location.href = "projects"; // "http://localhost:3000";
+                location.href = "/projects"; // "http://localhost:3000";
             } else if (user.id == 0) {
                 $(".modal").modal("hide");
                 $("#main").prepend("<div id='alert' class='message'>"+I18n.t("activation_reminder")+"</div>");

@@ -1,0 +1,9 @@
+<%- provide(:title, (t :search_results)) %>
+
+<h3><%= t :search_results %></h3>
+
+<div class="col-md-12">
+  <% @res.each do |r| %>
+    <p><%= r %></p>
+  <% end %>
+</div>
