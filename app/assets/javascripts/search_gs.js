@@ -113,6 +113,10 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
+    $('search_gs_more').on('click', function(){
+
+    });
+
     function selectProject() {
         if (typeof $("#project_id").val() != "undefined")
             $(".save-article-form").submit();

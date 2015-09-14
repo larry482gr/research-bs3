@@ -7,6 +7,7 @@
 @import "bootstrap/theme";
 @import "jquery-ui";
 
+@import "mixins";
 @import "project_files";
 @import "projects";
 @import "scaffolds";
@@ -176,4 +177,9 @@ table tr td {
     text-decoration: none !important;
     outline: none !important;
   }
+}
+
+.form-control:focus {
+  border-color: #67b168;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(103, 177, 104, 0.6);
 }

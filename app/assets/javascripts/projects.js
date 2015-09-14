@@ -1,8 +1,8 @@
 $(document).ready(function() {
   $('#invite-user-btn').on('click', function() {
       if($('#invite-user-div').is(':hidden')) {
-          $('.left-div').removeClass('col-md-10').addClass('col-md-7');
-          $('.right-div').removeClass('col-md-2').addClass('col-md-5');
+          $('.left-div').removeClass('col-md-10').addClass('col-md-9');
+          $('.right-div').removeClass('col-md-2').addClass('col-md-3');
           $('#invite-user-div').delay(400).slideDown('fast');
 
           $('#invitation_email').val('');
@@ -13,8 +13,8 @@ $(document).ready(function() {
       }
       else {
           $('#invite-user-div').slideUp('fast', function() {
-              $('.left-div').removeClass('col-md-7').addClass('col-md-10');
-              $('.right-div').removeClass('col-md-5').addClass('col-md-2');
+              $('.left-div').removeClass('col-md-9').addClass('col-md-10');
+              $('.right-div').removeClass('col-md-3').addClass('col-md-2');
           });
       }
   });
@@ -136,10 +136,23 @@ $(document).ready(function() {
         }
         else {
             $('#upload_form').submit();
+            $('#clear-file').html(I18n.t('uploading_file') + ' ' + $('#upload_form #project_file_filename').val() + "<img class='loader_icon' id='file_loader' src='/assets/loader.gif' width='14px' height='14px' />");
+            $('#clear-file').attr('id', 'uploading-file');
         }
     }
   });
-  
+
+  $('#link_btn').on('click', function() {
+      if($('#add-link-fields').is(':visible')) {
+          alert('Should submit form...');
+      }
+      else {
+          $(this).removeClass('btn-link').addClass('btn-success');
+          $(this).text($(this).text().substring(0, $(this).text().length-3));
+          $('#add-link-fields').animate({width: 'toggle'}, 200);
+      }
+  });
+
   $('#upload_form #project_file_filename').on('change', function(){
   	if($(this).val() != '') {
         uploadFile = this.files[0];
@@ -154,18 +167,29 @@ $(document).ready(function() {
 
         if(!validFile) {
             this.value = '';
-            // $('#upload_form').reset();
+            document.getElementById('upload_form').reset;
             bootbox.alert(I18n.t('not_allowed_file'));
         }
         else {
             $('#file_btn').text(I18n.t('upload') + ' ' + $(this).val());
-            $('#file_btn').removeClass('btn-success').addClass('btn-danger');
+            $('#file_btn').removeClass('btn-primary').addClass('btn-danger');
+            $('#clear-file').show();
         }
     }
 	else {
         $('#file_btn').text(I18n.t('upload_file'));
-        $('#file_btn').removeClass('btn-danger').addClass('btn-success');
+        $('#file_btn').removeClass('btn-danger').addClass('btn-primary');
     }
+  });
+
+  $('#clear-file').on('click', function(e){
+      e.preventDefault();
+      $('#upload_form #project_file_filename').value = '';
+      $('#project_file_extension').val('');
+      document.getElementById('upload_form').reset;
+      $('#file_btn').text(I18n.t('upload_file'));
+      $('#file_btn').removeClass('btn-danger').addClass('btn-primary');
+      $('#clear-file').hide();
   });
 
   function setMainFile(project_id, file_id, is_basic) {

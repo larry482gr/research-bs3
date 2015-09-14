@@ -331,3 +331,36 @@ div.citations-body {
 #searchMoreModal .help-block {
   margin: 4px 0px;
 }
+
+#upload_form {
+  div.pull-left {
+    margin-right: 20px;
+  }
+
+  div#add-link-fields {
+    display: none;
+    padding: 0px;
+
+    div:first-child {
+      padding-right: 0px;
+    }
+  }
+
+  #link_btn:hover {
+    text-decoration: none;
+  }
+
+  #clear-file {
+    display: none;
+    color: #337ab7;
+    text-align: right;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+}
+
+#uploading-file {
+  color: #5cb85c;
+  text-align: right;
+  margin-top: 4px;
+}

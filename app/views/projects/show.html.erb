@@ -16,8 +16,23 @@
     <%= link_to (t :back), projects_path, :class => 'btn btn-sm btn-default' %>
     <%- if @owner or @contributor %>
         <%= form_tag({controller: 'project_files', action: 'create', project_id: "#{@project.id}"}, multipart: true, id: 'upload_form') do %>
-            <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
-            <button class="btn btn-sm btn-success" id="file_btn" type="button"><%= t :upload_file %></button>
+            <div class="pull-left">
+              <div id="add-link-fields" class="col-md-10">
+                <div class="col-md-6">
+                  <%= text_field_tag 'project_file[filename]', nil, class: 'form-control input-sm', placeholder: (t :link_label) %>
+                </div>
+                <div class="col-md-6">
+                  <%= text_field_tag 'project_file[filepath]', nil, class: 'form-control input-sm', placeholder: (t :link_url) %>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-link pull-right" id="link_btn" type="button"><%= "#{t :add_link}..." %></button>
+            </div>
+            <div class="pull-right">
+              <%= file_field_tag 'project_file[filename]', :style => 'display: none;' %>
+              <button class="btn btn-sm btn-primary pull-right" id="file_btn" type="button"><%= t :upload_file %></button>
+              <br/>
+              <span id="clear-file" class="pull-right">Clear file</span>
+            </div>
             <%= hidden_field_tag 'project_file[filepath]', "#{@project.id/100}/#{@project.id}" %>
             <%= hidden_field_tag 'project_file[extension]' %>
         <% end %>
