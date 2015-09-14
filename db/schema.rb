@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 20150808083740) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.string   "email",              limit: 50,                      null: false
     t.integer  "from_user",          limit: 4,                       null: false
     t.integer  "project_id",         limit: 4,                       null: false
     t.integer  "project_profile_id", limit: 4,   default: 2,         null: false
@@ -56,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150808083740) do
     t.string   "reason",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email",              limit: 50,                      null: false
   end
 
   add_index "invitations", ["project_id"], name: "index_invitations_on_project_id", using: :btree
