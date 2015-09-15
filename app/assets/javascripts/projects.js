@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 $(document).ready(function() {
   $('#invite-user-btn').on('click', function() {
       if($('#invite-user-div').is(':hidden')) {

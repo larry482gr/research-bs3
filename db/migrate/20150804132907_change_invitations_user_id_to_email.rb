@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class ChangeInvitationsUserIdToEmail < ActiveRecord::Migration
   def change
     change_table :invitations do |t|

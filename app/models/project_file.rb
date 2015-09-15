@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class ProjectFile < ActiveRecord::Base
   belongs_to :project, touch: true
   belongs_to :user

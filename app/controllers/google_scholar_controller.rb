@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class GoogleScholarController < ApplicationController
   require 'net/http'
   require 'uri'

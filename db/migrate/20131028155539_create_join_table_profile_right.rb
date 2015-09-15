@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateJoinTableProfileRight < ActiveRecord::Migration
   def change
     create_join_table :profiles, :rights do |t|

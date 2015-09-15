@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class UsersController < ApplicationController
   require 'digest/sha1'
   before_action :set_referer, only: [:show, :edit, :new]
@@ -61,7 +65,7 @@ class UsersController < ApplicationController
         redirect_to(:root, :notice => notices.join('<br/>')) and return
       end
     end
-    flash[:alert] = t :activation_error_html
+    redirect_to(:root, :alert => (t :activation_error_html)) and return
   end
 
   def logout

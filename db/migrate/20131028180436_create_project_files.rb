@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateProjectFiles < ActiveRecord::Migration
   def change
     create_table :project_files do |t|

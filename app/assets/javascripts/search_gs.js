@@ -1,5 +1,5 @@
 /**
- * Created by Larry on 3/25/15.
+ * Copyright 2015 Kazantzis Lazaros
  */
 
 $(document).ready(function() {
@@ -244,7 +244,7 @@ function gs_sva(doc_id, doc_num) {
         doc_extension = doc_link.substr(doc_link.lastIndexOf('.')+1).toLowerCase();
 
         // alert(doc_link);
-        save_file = '<form id="save_gs_link" action="/projects/'+$('#project_id').val()+'/project_files" method="post">' +
+        save_file = '<form id="save_gs_link" action="/projects/2/project_files" method="post">' +
         '<input type="hidden" name="project_file[filename]" value="'+doc_title+'" />' +
         '<input type="hidden" name="project_file[filepath]" value="'+doc_link+'" />' +
         '<input id="project_file_extension" type="hidden" name="project_file[extension]" value="'+doc_extension+'">' +
@@ -268,11 +268,11 @@ function gs_ocit(event ,doc_id, doc_num) {
         beforeSend: function() {
             cite_link.append("<img class='loader_icon' id='cite_loader"+doc_num+"' src='/assets/loader.gif' width='14px' height='14px' />");
         },
-        success: function(citations){
+        success: function(citations) {
             showCitationsModal(doc_id, doc_num, citations);
             $('#cite_loader'+doc_num).remove();
         },
-        error: function(result){
+        error: function(result) {
             alert("Error!!!");
         }
     });

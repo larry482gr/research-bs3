@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class Language < ActiveRecord::Base
   has_many :users, through: :user_infos
 

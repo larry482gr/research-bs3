@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class ProjectsController < ApplicationController
   include Concerns::ForceNonSSL
 

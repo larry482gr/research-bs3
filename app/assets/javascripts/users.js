@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 $(document).ready(function() {
     $('.users_table').on('click', '.delete-user', function() {
         var formAction = $(this).attr('rel');

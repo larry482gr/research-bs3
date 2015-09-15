@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
