@@ -24,17 +24,19 @@ Researchgr::Application.routes.draw do
       resources :citations, only: :destroy
     end
 
-    post 'check_login' => 'users#check_login'
-    get 'activate' => 'users#activate'
-    get 'forgot_pass' => 'users#forgot_pass'
-    post 'pass_recover' => 'users#password_recovery'
+    post '/check_login' => 'users#check_login'
+    get '/activate' => 'users#activate'
+    get '/forgot_pass' => 'users#forgot_pass'
+    post '/pass_recover' => 'users#password_recovery'
     get '/logout' => 'users#logout'
     get '/users_autocomplete' => 'users#autocomplete'
     get '/invitations' => 'invitations#index'
-    get 'search' => 'static_pages#search'
-    get 'google_scholar/search_scholar' => 'google_scholar#search_scholar'
-    get 'google_scholar/search_citation' => 'google_scholar#search_citation'
+    get '/search' => 'static_pages#search'
+    get '/google_scholar/search_scholar' => 'google_scholar#search_scholar'
+    get '/google_scholar/search_citation' => 'google_scholar#search_citation'
     get '/google_scholar/citation_save' => 'google_scholar#citation_save'
+    get '/open_search/helios_list' => 'open_search#helios_list'
+    get '/open_search/helios_show' => 'open_search#helios_show'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
