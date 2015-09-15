@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-ruby '2.1.1'
-# ruby '2.2.0'
+# ruby '2.1.1'
+ruby '2.2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.4'
 
 # Use SCSS for stylesheets
 gem 'sass'
@@ -68,11 +68,12 @@ group :test do
 end
 
 group :development, :production do
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.3.20'
 end
 
 group :development do
   gem 'puma'
+  gem 'rails-erd'
 end
 
 # For Heroku deployment
