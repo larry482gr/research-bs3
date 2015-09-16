@@ -90,7 +90,7 @@ $(document).ready(function() {
                 getSearchResults(1, $( "#search_gs_form").serialize());
                 break;
             case 'helios':
-                alert('get helios results');
+                getSearchResults(1, $( "#search_gs_form").serialize());
                 break;
             default:
                 alert('Select a source first!');
@@ -108,9 +108,16 @@ $(document).ready(function() {
         }
     });
 
-    $(document).keypress(function(e) {
-        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13))
+    $(document).keyup(function(e) {
+        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13)) {
             getSearchResults(1, $( "#search_gs_form").serialize());
+        }
+    });
+
+    $(document).keydown(function(e) {
+        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13)) {
+            e.preventDefault();
+        }
     });
 
     $('.container').on('click', '.gs_nph', function(e) {
@@ -130,6 +137,14 @@ $(document).ready(function() {
         var num = $('.rowsPerPage').val();
         var start = (page-1)*num;
 
+        if($('#select-source').val() == 'gs') {
+            getScholarResults(page, start, num, form_params);
+        } else {
+            getOpenSearchResults(page, start, num, form_params);
+        }
+    }
+
+    function getScholarResults(page, start, num, form_params) {
         $.ajax({
             url: '/google_scholar/search_scholar?'+form_params+'&start='+start+'&num='+num,
             cache: false,

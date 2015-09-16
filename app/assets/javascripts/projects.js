@@ -230,7 +230,14 @@ $(document).ready(function() {
                                                 '<h4>Pick a List Set (leave blank to search all repos) --> translate it!!!</h4>' + listContent +
                                             '</div>');
 
-              $('#opensearch-listset').slideDown('fast');
+              $('#opensearch-listset').slideDown('fast', function(){
+                  if($('html').height() < $(window).height()) {
+                      $('.footer').css('position', 'absolute');
+                  }
+                  else {
+                      $('.footer').css('position', 'relative');
+                  }
+              });
           }
       });
   }

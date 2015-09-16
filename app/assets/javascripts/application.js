@@ -59,7 +59,7 @@ $(document).ready(function() {
             '$("#sign-in-btn").on("click", function(){'+
             'signIn();'+
             '});'+
-            '$(".modal").keypress(function(e) {'+
+            '$(".modal").keyup(function(e) {'+
             'if(e.which == 13 || e.keycode == 13)'+
             '$("#sign-in-btn").click();'+
             '});'+

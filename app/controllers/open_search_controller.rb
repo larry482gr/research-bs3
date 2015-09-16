@@ -19,9 +19,6 @@ class OpenSearchController < ApplicationController
 
     listSet = []
     set.xpath('//xmlns:set').each do |item|
-      puts "====================\n\n===================="
-      puts item
-      puts "====================\n\n===================="
 
       unless item.children.first.text.blank? or item.children.last.text.blank?
         listSet << { set_key: item.children.first.text, set_val: item.children.last.text }
@@ -38,6 +35,7 @@ class OpenSearchController < ApplicationController
   def helios_search
     #verb		= params[:verb]
     verb    = 'ListRecords'
+    q_words	= params[:q].split
 
     res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc"))
 
@@ -45,8 +43,9 @@ class OpenSearchController < ApplicationController
 
     @results = []
 
-    metadata[0...10].each do |nodes|
+    metadata.each do |nodes|
       res = {}
+      match_against = []
       nodes.children.children.each do |node|
         if node.name == 'description' and node.text.length > 300
           last_boundary = node.text[0..300].rindex(/\s/)
@@ -57,10 +56,22 @@ class OpenSearchController < ApplicationController
           res[node.name][first_break] = '<br/>'
 
           res[node.name] = "#{res[node.name]} ..."
+          match_against << node.text unless node.text.nil?
         else
           res[node.name] = node.text
+          if node.name == 'title'
+            match_against << node.text unless node.text.nil?
+          end
         end
       end
+
+      search_match = false
+      match_against.select do |param|
+        search_match = q_words.any?{ |word| param.downcase.include? word.downcase }
+        break if search_match
+      end
+
+      next unless search_match
 
       uri = URI.parse(res['identifier'])
       host = uri.host.downcase
@@ -69,7 +80,7 @@ class OpenSearchController < ApplicationController
       table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
 
       table.each do |node|
-        if node.children.first.text.downcase.include?('publisher link:') # and node.children.last.text.downcase.include?('.pdf')
+        if node.children.first.text.downcase.include?('publisher link:')
           node.children.last.children.each do |link_node|
             if link_node.text.downcase.include?('.pdf')
               res['pdf_link'] = link_node.text
@@ -81,6 +92,11 @@ class OpenSearchController < ApplicationController
       end
 
       @results << res
+      break if @results.length >= params[:num].to_i
+    end
+
+    respond_to do |format|
+      format.js { render json: { results: @results, total: @results.length.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse, search: params[:q] } }
     end
   end
 
@@ -88,7 +104,7 @@ class OpenSearchController < ApplicationController
     #verb		= params[:verb]
     verb    = 'GetRecord'
 
-    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc&identifier=oai:http://helios-eie.ekt.gr:10442/7288"))
+    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc&identifier=oai:http://helios-eie.ekt.gr:10442/8715"))
 
     nodes = res.xpath('//xmlns:metadata')
 
@@ -162,10 +178,6 @@ class OpenSearchController < ApplicationController
       response << tmp_resp
     end
 
-    puts "====================\n\ncite form\n\n===================="
-    puts response.inspect
-    puts "====================\n\ncite form\n\n===================="
-
     response.each do |resp|
       start_index = 0
       end_index = 0
@@ -173,17 +185,9 @@ class OpenSearchController < ApplicationController
         start_index = $`.size+18
       end
 
-      puts "====================\n\nstart index\n\n===================="
-      puts start_index
-      puts "====================\n\nstart index\n\n===================="
-
       resp.to_enum(:scan,"</div>\n</div>\n</body></html>").map do |m,|
         end_index = $`.size-1
       end
-
-      puts "====================\n\nend index\n\n===================="
-      puts end_index
-      puts "====================\n\nend index\n\n===================="
 
       citations << resp[start_index..end_index]
     end
