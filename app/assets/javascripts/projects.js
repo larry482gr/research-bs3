@@ -196,6 +196,27 @@ $(document).ready(function() {
       $('#clear-file').hide();
   });
 
+  $('#select-source').on('change', function() {
+      $('#search_gs_more').hide();
+     if($(this).val() == 'gs') {
+         $('#search_gs_more').show();
+     } else if ($(this).val() == 'helios') {
+         getListSet('helios');
+     }
+  });
+
+  function getListSet(repo) {
+      $.ajax({
+          url: "/open_search/"+repo+"_list",
+          cache: true,
+          type: 'get',
+          dataType: "json",
+          success: function(listSet) {
+              alert(JSON.stringify(listSet));
+          }
+      });
+  }
+
   function setMainFile(project_id, file_id, is_basic) {
       $.ajax({
           url: "/projects/"+project_id+"/project_files/"+file_id+"/set_main",

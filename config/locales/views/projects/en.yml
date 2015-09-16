@@ -14,7 +14,9 @@ en:
   invite_user: "Invite User"
   create_project: "Create New Project"
   new_project: "New Project"
+  select_source: "Select Source"
   search_gs: "Search for a book, article or paper"
+  results_per_page: "Results per page"
   upload: "Upload"
   upload_file: "Upload file..."
   uploading_file: "Uploading"
@@ -26,6 +28,16 @@ en:
   project_citations: "Project Citations"
   citation_deleted: "Citation successfully deleted."
   cite_delete_error: "There was an error deleting the citation."
+
+  search_sources:
+    acad_search_engine:
+      group_title: "Academic Search Engines"
+      options:
+        gs: "Google Scholar"
+    gr_repo:
+      group_title: "Greek Repositories"
+      options:
+        helios: "Helios"
 
   time:
     formats:

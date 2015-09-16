@@ -83,9 +83,19 @@ $(document).ready(function() {
         getSearchResults(current_page, $( "#search_gs_form").serialize());
     });
 
-    // Search Google Scholar
+    // Search
     $('#search_gs_btn').on('click', function() {
-        getSearchResults(1, $( "#search_gs_form").serialize());
+        switch ($('#select-source').val()) {
+            case 'gs':
+                getSearchResults(1, $( "#search_gs_form").serialize());
+                break;
+            case 'helios':
+                alert('get helios results');
+                break;
+            default:
+                alert('Select a source first!');
+                break;
+        }
     });
 
     $('#search_gs_adv_btn').on('click', function() {
@@ -98,12 +108,6 @@ $(document).ready(function() {
         }
     });
 
-    /*
-    $('#exact_match').on('click', function() {
-        $('#search_gs_input').focus();
-    });
-    */
-
     $(document).keypress(function(e) {
         if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13))
             getSearchResults(1, $( "#search_gs_form").serialize());
@@ -111,10 +115,6 @@ $(document).ready(function() {
 
     $('.container').on('click', '.gs_nph', function(e) {
         e.preventDefault();
-    });
-
-    $('search_gs_more').on('click', function(){
-
     });
 
     function selectProject() {

@@ -71,6 +71,7 @@ div.citations-body {
 .search_div {
   padding: 0px;
   margin-top: 20px;
+  border-top: 1px solid #999999;
   transition: width 0.6s;
   -webkit-transition: width 0.6s;
   -moz-transition: width 0.6s;
@@ -109,7 +110,6 @@ div.citations-body {
   padding-top: 20px;
   padding-left: 0px;
   padding-right: 0px;
-  border-top: 1px solid #999999;
 }
 
 #search_gs_form > .form-group {

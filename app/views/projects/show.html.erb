@@ -120,6 +120,7 @@
 </div>
 <%- if @owner or @contributor %>
   <%=render 'static_pages/search_gs' %>
+    <%#=render 'static_pages/search_open' %>
 <% end %>
 <input type="hidden" id="project_id" value="<%= @project.id %>">
 

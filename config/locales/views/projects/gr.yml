@@ -14,7 +14,9 @@ gr:
   invite_user: "Πρόσκληση Χρήστη"
   create_project: "Δημιουργία Νέου Έργου"
   new_project: "Νέο Έργο"
+  select_source: "Επιλογή πηγής"
   search_gs: "Αναζήτηση βιβλίου, άρθρου ή εργασίας"
+  results_per_page: "Αποτελέσματα ανά σελίδα"
   upload: "Μεταφόρτωση"
   upload_file: "Μεταφόρτωση αρχείου..."
   uploading_file: "Μεταφόρτωση του"
@@ -26,6 +28,16 @@ gr:
   project_citations: "Βιβλιογραφικές Αναφορές Έργου"
   citation_deleted: "Η βιβλιογραφική αναφορά διαγράφηκε επιτυχώς."
   cite_delete_error: "Παρουσιάστηκε πρόβλημα κατά τη διαγραφή της βιβλιογραφική αναφοράς."
+
+  search_sources:
+    acad_search_engine:
+      group_title: "Ακαδημαϊκές Μηχανές Αναζήτησης"
+      options:
+        gs: "Google Scholar"
+    gr_repo:
+      group_title: "Ελληνικά Αποθετήρια"
+      options:
+        helios: "Helios"
 
   time:
     formats:

@@ -13,11 +13,20 @@ class OpenSearchController < ApplicationController
     #verb		= params[:verb]
     verb    = 'ListSets'
 
-    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}"))
+    set = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}"))
 
-    @res = []
-    res.xpath('//xmlns:setName').each do |set_name|
-      @res << set_name.text
+    puts set
+
+    listSet = {}
+    set.xpath('//xmlns:set').each do |item|
+      puts "====================\n\n===================="
+      puts item
+      puts "====================\n\n===================="
+      listSet[item.children.first.text] = item.children.last.text unless item.children.first.text.blank? or item.children.last.text.blank?
+    end
+
+    respond_to do |format|
+      format.js { render json: listSet }
     end
   end
 
@@ -25,9 +34,9 @@ class OpenSearchController < ApplicationController
     #verb		= params[:verb]
     verb    = 'GetRecord'
 
-    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc&identifier=oai:http://helios-eie.ekt.gr:10442/8425"))
+    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc&identifier=oai:http://helios-eie.ekt.gr:10442/7288"))
 
-    nodes = res.xpath("//xmlns:metadata")
+    nodes = res.xpath('//xmlns:metadata')
 
     @res = {}
     nodes.children.children.each do |node|
