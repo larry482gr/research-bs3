@@ -17,16 +17,70 @@ class OpenSearchController < ApplicationController
 
     puts set
 
-    listSet = {}
+    listSet = []
     set.xpath('//xmlns:set').each do |item|
       puts "====================\n\n===================="
       puts item
       puts "====================\n\n===================="
-      listSet[item.children.first.text] = item.children.last.text unless item.children.first.text.blank? or item.children.last.text.blank?
+
+      unless item.children.first.text.blank? or item.children.last.text.blank?
+        listSet << { set_key: item.children.first.text, set_val: item.children.last.text }
+      end
     end
+
+    #listSet = listSet.sort {|left, right| left[:set_key] <=> right[:set_key]}
 
     respond_to do |format|
       format.js { render json: listSet }
+    end
+  end
+
+  def helios_search
+    #verb		= params[:verb]
+    verb    = 'ListRecords'
+
+    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc"))
+
+    metadata = res.xpath('//xmlns:metadata')
+
+    @results = []
+
+    metadata[0...10].each do |nodes|
+      res = {}
+      nodes.children.children.each do |node|
+        if node.name == 'description' and node.text.length > 300
+          last_boundary = node.text[0..300].rindex(/\s/)
+          res[node.name] = node.text[0..last_boundary]
+          first_break = res[node.name][0..100].rindex(/\s/)
+          second_break = res[node.name][0..200].rindex(/\s/)
+          res[node.name][second_break] = '<br/>'
+          res[node.name][first_break] = '<br/>'
+
+          res[node.name] = "#{res[node.name]} ..."
+        else
+          res[node.name] = node.text
+        end
+      end
+
+      uri = URI.parse(res['identifier'])
+      host = uri.host.downcase
+      res['domain'] = host
+
+      table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
+
+      table.each do |node|
+        if node.children.first.text.downcase.include?('publisher link:') # and node.children.last.text.downcase.include?('.pdf')
+          node.children.last.children.each do |link_node|
+            if link_node.text.downcase.include?('.pdf')
+              res['pdf_link'] = link_node.text
+            end
+          end
+        elsif node.children.first.text.downcase.include?('publisher:')
+          res['publisher'] = node.children.last.text
+        end
+      end
+
+      @results << res
     end
   end
 

@@ -1,16 +1,15 @@
 <!-- Copyright 2015 Kazantzis Lazaros -->
 
 <div class="search_div col-md-10 col-sm-12 col-xs-12 left-div">
-  <div class="col-md-3 col-sm-6 col-xs-12">
-    <h5><%= (t :select_source) %></h5>
-    <select id="select-source" class="form-control">
-      <optgroup label="<%= (t 'search_sources.acad_search_engine.group_title') %>"></optgroup>
-      <option value="gs"><%= (t 'search_sources.acad_search_engine.options.gs') %></option>
-      <optgroup label="<%= (t 'search_sources.gr_repo.group_title') %>"></optgroup>
-      <option value="helios"><%= (t 'search_sources.gr_repo.options.helios') %></option>
-    </select>
-  </div>
-  <div id="helios-listset" class="col-md-12"></div>
+    <div id="select-source-div" class="col-md-3">
+      <h5><%= (t :select_source) %></h5>
+      <select id="select-source" class="form-control">
+        <optgroup label="<%= (t 'search_sources.acad_search_engine.group_title') %>"></optgroup>
+        <option value="gs"><%= (t 'search_sources.acad_search_engine.options.gs') %></option>
+        <optgroup label="<%= (t 'search_sources.gr_repo.group_title') %>"></optgroup>
+        <option value="helios"><%= (t 'search_sources.gr_repo.options.helios') %></option>
+      </select>
+    </div>
     <form id="search_gs_form" class="col-md-12" onsubmit="return false;">
       <div class="form-group has-success col-md-11">
         <input type="text" class="form-control" id="search_gs_input" name="q" placeholder="<%= t :search_gs %>"

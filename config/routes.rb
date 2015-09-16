@@ -37,6 +37,7 @@ Researchgr::Application.routes.draw do
     get '/google_scholar/citation_save' => 'google_scholar#citation_save'
     get '/open_search/helios_list' => 'open_search#helios_list'
     get '/open_search/helios_show' => 'open_search#helios_show'
+    get '/open_search/helios_search' => 'open_search#helios_search'
     get '/open_search/helios_cite' => 'open_search#helios_cite'
   end
 

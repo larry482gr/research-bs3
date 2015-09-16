@@ -200,6 +200,9 @@ $(document).ready(function() {
       $('#search_gs_more').hide();
      if($(this).val() == 'gs') {
          $('#search_gs_more').show();
+         $('.search_div').find('#opensearch-listset').slideUp('fast', function(){
+            $(this).remove();
+         });
      } else if ($(this).val() == 'helios') {
          getListSet('helios');
      }
@@ -211,10 +214,35 @@ $(document).ready(function() {
           cache: true,
           type: 'get',
           dataType: "json",
+          beforeSend: function() {
+              $('.search_div').find('#opensearch-listset').remove();
+          },
           success: function(listSet) {
-              alert(JSON.stringify(listSet));
+              listContent = '<form class="form-inline">';
+
+              for(i = 0; i < listSet.length; i++) {
+                  listContent += getListCheckbox(listSet[i].set_key, listSet[i].set_val);
+              }
+
+              listContent += '</form>';
+
+              $('#select-source-div').after('<div id="opensearch-listset" class="col-md-12 jumbotron">' +
+                                                '<h4>Pick a List Set (leave blank to search all repos) --> translate it!!!</h4>' + listContent +
+                                            '</div>');
+
+              $('#opensearch-listset').slideDown('fast');
           }
       });
+  }
+
+  function getListCheckbox(set_key, set_val) {
+        return  '<div class="form-group col-md-12">' +
+                    '<div class="checkbox">' +
+                        '<label>' +
+                            '<input type="checkbox" rel="' + set_key + '">&nbsp;&nbsp;'+ set_val +
+                        '</label>' +
+                    '</div>' +
+                '</div>';
   }
 
   function setMainFile(project_id, file_id, is_basic) {

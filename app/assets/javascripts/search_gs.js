@@ -130,9 +130,6 @@ $(document).ready(function() {
         var num = $('.rowsPerPage').val();
         var start = (page-1)*num;
 
-        // if ($('#exact_match').is(':checked'))
-        //    question = '"' + question + '"';
-
         $.ajax({
             url: '/google_scholar/search_scholar?'+form_params+'&start='+start+'&num='+num,
             cache: false,
@@ -158,12 +155,12 @@ $(document).ready(function() {
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
 
-      		if($('html').height() < $(window).height()) {
-          		$('.footer').css('position', 'absolute');
-      		}
-		else {
-			$('.footer').css('position', 'relative');
-		}
+                if($('html').height() < $(window).height()) {
+                    $('.footer').css('position', 'absolute');
+                }
+                else {
+                    $('.footer').css('position', 'relative');
+                }
             }
         });
     }

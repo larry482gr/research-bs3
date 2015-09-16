@@ -76,6 +76,14 @@ div.citations-body {
   -webkit-transition: width 0.6s;
   -moz-transition: width 0.6s;
   -o-transition: width 0.6s;
+
+  #select-source-div {
+    padding-left: 0px;
+  }
+
+  #opensearch-listset {
+    display: none;
+  }
 }
 
 #exact_match_div {
