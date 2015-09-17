@@ -1,6 +1,13 @@
 function getOpenSearchResults(page, start, num, form_params) {
+    listSet = [];
+
+    var selected = [];
+    $('#opensearch-listset form input:checked').each(function() {
+        listSet.push($(this).attr('rel'));
+    });
+
     $.ajax({
-        url: '/open_search/helios_search?'+form_params+'&start='+start+'&num='+num,
+        url: '/open_search/helios_search?'+form_params+'&start='+start+'&num='+num+'&listSet='+listSet,
         cache: false,
         type: "get",
         dataType: "json",
@@ -15,16 +22,16 @@ function getOpenSearchResults(page, start, num, form_params) {
                 $('.search_gs_results').html("<div><strong>Total Results:</strong> " + response.total + "</div>");
 
                 for(i = 0; i < response.results.length; i++) {
-                    $('.search_gs_results').append(drawResult(response.results[i]));
+                    $('.search_gs_results').append(drawResult(i, response.results[i]));
                 }
 
-                $('#search_gs_input').val(decodeHtml(response.search));
+                // checkValidSave();
+                $('.search_gs_results').animate({opacity: 1});
+                $('#rows_div').show();
+                paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
             }
 
-            // checkValidSave();
-            $('.search_gs_results').animate({opacity: 1});
-            $('#rows_div').show();
-            paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
+            $('#search_gs_input').val(decodeHtml(response.search));
 
             if($('html').height() < $(window).height()) {
                 $('.footer').css('position', 'absolute');
@@ -36,19 +43,19 @@ function getOpenSearchResults(page, start, num, form_params) {
     });
 }
 
-function drawResult(result) {
+function drawResult(doc_num, result) {
     description = (typeof result.description != 'undefined') ? result.description : '';
     pdf_link = (typeof result.pdf_link != 'undefined') ? getPdfLink(result.pdf_link, result.domain) : '&nbsp;';
 
     return '<div class="gs_r">' +
                 '<div class="gs_ggs gs_fl">' +
-                    '<button class="gs_btnFI gs_in_ib gs_btn_half" id="gs_ggsB0" type="button">' +
+                    '<button class="gs_btnFI gs_in_ib gs_btn_half" id="gs_ggsB'+doc_num+'" type="button">' +
                         '<span class="gs_wr">'+
                         '<span class="gs_lbl"></span>'+
                         '<span class="gs_ico"></span>'+
                         '</span>'+
                     '</button>'+
-                    '<div id="gs_ggsW0" class="gs_md_wp gs_ttss">'+
+                    '<div id="gs_ggsW'+doc_num+'" class="gs_md_wp gs_ttss">'+
                         pdf_link+
                     '</div>'+
                 '</div>'+
@@ -63,17 +70,17 @@ function drawResult(result) {
                     '<div class="gs_fl">'+
                         '<a aria-haspopup="true" aria-controls="gs_cit" role="button" class="gs_nph" href="#" '+
                             'title="Check what to return [parse identifier citation div]" '+
-                            'onclick="return helios_cite() // gs_ocit(event,\'5F6EenTzb4cJ\',\'0\')">Cite'+
+                            'onclick="return helios_cite() // gs_ocit(event,\'5F6EenTzb4cJ\','+doc_num+')">Cite'+
                         '</a>'+
                         '<span class="gs_nph">'+
                             '<a title="Save this article to my library so that I can read or cite it later...<br/>' +
                                 'parse identifier citation div" href="#"' +
-                                ' onclick="return gs_sva(\'5F6EenTzb4cJ\',\'0\')" id="gs_svl0">Save' +
+                                ' onclick="return gs_sva(\'5F6EenTzb4cJ\','+doc_num+')" id="gs_svl'+doc_num+'">Save' +
                             '</a>'+
-                            '<span class="gs_svm" id="gs_svo0">Saving<span id="gs_svd0">...</span></span>'+
-                            '<a style="display:none" id="gs_svs0">Saved</a>'+
-                            '<span class="gs_svm" id="gs_sve0">Error saving. ' +
-                                '<a href="#" onclick="return gs_sva(\'5F6EenTzb4cJ\',\'0\')">Try again?</a>' +
+                            '<span class="gs_svm" id="gs_svo'+doc_num+'">Saving<span id="gs_svd'+doc_num+'">...</span></span>'+
+                            '<a style="display:none" id="gs_svs'+doc_num+'">Saved</a>'+
+                            '<span class="gs_svm" id="gs_sve'+doc_num+'">Error saving. ' +
+                                '<a href="#" onclick="return gs_sva(\'5F6EenTzb4cJ\','+doc_num+')">Try again?</a>' +
                             '</span>'+
                         '</span>'+
                         '<a onclick="return gs_more(this,1)" role="button" class="gs_mor gs_oph" href="#">More</a>'+

@@ -15,8 +15,6 @@ class OpenSearchController < ApplicationController
 
     set = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}"))
 
-    puts set
-
     listSet = []
     set.xpath('//xmlns:set').each do |item|
 
@@ -24,8 +22,6 @@ class OpenSearchController < ApplicationController
         listSet << { set_key: item.children.first.text, set_val: item.children.last.text }
       end
     end
-
-    #listSet = listSet.sort {|left, right| left[:set_key] <=> right[:set_key]}
 
     respond_to do |format|
       format.js { render json: listSet }
@@ -36,67 +32,96 @@ class OpenSearchController < ApplicationController
     #verb		= params[:verb]
     verb    = 'ListRecords'
     q_words	= params[:q].split
+    list_set = params[:listSet].split(',')
 
     res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc"))
 
-    metadata = res.xpath('//xmlns:metadata')
+    records = res.xpath('//xmlns:record')
 
-    @results = []
+    results = []
 
-    metadata.each do |nodes|
-      res = {}
-      match_against = []
-      nodes.children.children.each do |node|
-        if node.name == 'description' and node.text.length > 300
-          last_boundary = node.text[0..300].rindex(/\s/)
-          res[node.name] = node.text[0..last_boundary]
-          first_break = res[node.name][0..100].rindex(/\s/)
-          second_break = res[node.name][0..200].rindex(/\s/)
-          res[node.name][second_break] = '<br/>'
-          res[node.name][first_break] = '<br/>'
+    records.each do |record|
+      set_match = false
 
-          res[node.name] = "#{res[node.name]} ..."
-          match_against << node.text unless node.text.nil?
-        else
-          res[node.name] = node.text
-          if node.name == 'title'
-            match_against << node.text unless node.text.nil?
-          end
-        end
-      end
-
-      search_match = false
-      match_against.select do |param|
-        search_match = q_words.any?{ |word| param.downcase.include? word.downcase }
-        break if search_match
-      end
-
-      next unless search_match
-
-      uri = URI.parse(res['identifier'])
-      host = uri.host.downcase
-      res['domain'] = host
-
-      table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
-
-      table.each do |node|
-        if node.children.first.text.downcase.include?('publisher link:')
-          node.children.last.children.each do |link_node|
-            if link_node.text.downcase.include?('.pdf')
-              res['pdf_link'] = link_node.text
+      # Go in header/metadata
+      record.children.each do |record_part|
+        unless list_set.blank?
+          if record_part.name == 'header'
+            # Go in header
+            record_part.children.each do |set_spec|
+              if set_spec.name == 'setSpec'
+                set_match = list_set.any?{ |set| set_spec.text.include? set }
+                break if set_match
+              end
             end
           end
-        elsif node.children.first.text.downcase.include?('publisher:')
-          res['publisher'] = node.children.last.text
+
+          next unless set_match
+        end
+
+        if record_part.name == 'metadata'
+          # Go in metadata
+          res = {}
+          match_against = []
+          record_part.children.children.each do |node|
+            if node.name == 'description' and node.text.length > 300
+              last_boundary = node.text[0..300].rindex(/\s/)
+              res[node.name] = node.text[0..last_boundary]
+              first_break = res[node.name][0..100].rindex(/\s/)
+              second_break = res[node.name][0..200].rindex(/\s/)
+              res[node.name][second_break] = '<br/>'
+              res[node.name][first_break] = '<br/>'
+
+              res[node.name] = "#{res[node.name]} ..."
+              match_against << node.text unless node.text.nil?
+            else
+              res[node.name] = node.text
+              if node.name == 'title'
+                match_against << node.text unless node.text.nil?
+              end
+            end
+          end
+
+          search_match = false
+          match_against.select do |param|
+            search_match = q_words.any?{ |word| param.downcase.include? word.downcase }
+            break if search_match
+          end
+
+          next unless search_match
+
+          uri = URI.parse(res['identifier'])
+          host = uri.host.downcase
+          res['domain'] = host
+
+          table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
+
+          table.each do |node|
+            if node.children.first.text.downcase.include?('publisher link:')
+              node.children.last.children.each do |link_node|
+                if link_node.text.downcase.include?('.pdf')
+                  res['pdf_link'] = link_node.text
+                end
+              end
+            elsif node.children.first.text.downcase.include?('publisher:')
+              res['publisher'] = node.children.last.text
+            end
+          end
+
+          results << res
+          break if results.length >= params[:num].to_i
         end
       end
+    end
 
-      @results << res
-      break if @results.length >= params[:num].to_i
+    total = results.length.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse
+
+    if total.to_i == 0
+      results = t(:no_results)
     end
 
     respond_to do |format|
-      format.js { render json: { results: @results, total: @results.length.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse, search: params[:q] } }
+      format.js { render json: { results: results, total: total, search: params[:q] } }
     end
   end
 
