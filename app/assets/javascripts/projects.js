@@ -199,6 +199,7 @@ $(document).ready(function() {
   if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs') {
       getListSet($('#select-source').val());
       $('#search_gs_more').hide();
+      $('#search_gs_form p.help-block').show();
   }
 
   $('#select-source').on('change', function() {
@@ -208,9 +209,11 @@ $(document).ready(function() {
      if($(this).val() == 'gs') {
        $('#search_gs_more').show();
        $('.search_div').find('#opensearch-listset').slideUp('fast', function() {
+          $('#search_gs_form p.help-block').hide();
           $(this).remove();
        });
      } else {
+         $('#search_gs_form p.help-block').show();
          getListSet($(this).val());
      }
   });

@@ -14,7 +14,10 @@ class OpenSearchController < ApplicationController
   def list_sets
     repo = repo_uri(params[:repo])
 
-    set = Nokogiri::XML(open("#{repo}?verb=ListSets"))
+    url = URI.escape("#{repo}?verb=ListSets")
+    uri = URI.parse(url)
+
+    set = Nokogiri::XML(open(uri))
 
     listSet = []
     set.xpath('//xmlns:set').each do |item|
@@ -32,13 +35,22 @@ class OpenSearchController < ApplicationController
 
   def list_records
     repo = repo_uri(params[:repo])
-    q_words	= query_words(params[:q])
+    q_words	= params[:q] == 'all' ? nil : query_words(params[:q])
     list_set = params[:listSet].split(',')
 
     start		= params[:start].to_i
     num			= params[:num].to_i
 
-    res = Nokogiri::XML(open("#{repo}?verb=ListRecords&metadataPrefix=oai_dc"))
+    url = URI.escape("#{repo}?verb=ListRecords&metadataPrefix=oai_dc")
+    uri = URI.parse(url)
+
+    puts "\n#{uri}"
+
+    res = Nokogiri::XML(open(uri))
+
+    puts "\n\n\n"
+    puts res
+    puts "\n\n\n"
 
     records = res.xpath('//xmlns:record')
 
@@ -90,10 +102,14 @@ class OpenSearchController < ApplicationController
             end
           end
 
-          search_match = false
-          match_against.select do |param|
-            search_match = q_words.any?{ |word| param.downcase.match(/((^|\s)#{word.downcase}(\s|$))/i) }
-            break if search_match
+          if q_words.nil?
+            search_match = true
+          else
+            search_match = false
+            match_against.select do |param|
+              search_match = q_words.any?{ |word| param.downcase.match(/((^|\s)#{word.downcase}(\s|$))/i) }
+              break if search_match
+            end
           end
 
           next unless search_match
@@ -125,9 +141,11 @@ class OpenSearchController < ApplicationController
             puts "[#{Time.now}] - [ERROR] OpenSearchController: #{e}"
           end
 
-          q_words.each do |word|
-            res['title'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['title'].nil?
-            res['description'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['description'].nil?
+          unless q_words.nil?
+            q_words.each do |word|
+              res['title'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['title'].nil?
+              res['description'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['description'].nil?
+            end
           end
 
           results << res if index.between?(start+1, num+start)
