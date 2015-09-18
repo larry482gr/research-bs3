@@ -1,5 +1,5 @@
 /**
- * Created by Larry on 3/25/15.
+ * Copyright 2015 Kazantzis Lazaros
  */
 
 $(document).ready(function() {
@@ -83,7 +83,7 @@ $(document).ready(function() {
         getSearchResults(current_page, $( "#search_gs_form").serialize());
     });
 
-    // Search Google Scholar
+    // Search
     $('#search_gs_btn').on('click', function() {
         getSearchResults(1, $( "#search_gs_form").serialize());
     });
@@ -98,23 +98,8 @@ $(document).ready(function() {
         }
     });
 
-    /*
-    $('#exact_match').on('click', function() {
-        $('#search_gs_input').focus();
-    });
-    */
-
-    $(document).keypress(function(e) {
-        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13))
-            getSearchResults(1, $( "#search_gs_form").serialize());
-    });
-
     $('.container').on('click', '.gs_nph', function(e) {
         e.preventDefault();
-    });
-
-    $('search_gs_more').on('click', function(){
-
     });
 
     function selectProject() {
@@ -130,9 +115,14 @@ $(document).ready(function() {
         var num = $('.rowsPerPage').val();
         var start = (page-1)*num;
 
-        // if ($('#exact_match').is(':checked'))
-        //    question = '"' + question + '"';
+        if($('#select-source').val() == 'gs') {
+            getScholarResults(page, start, num, form_params);
+        } else {
+            getOpenSearchResults($('#select-source').val(), page, start, num, form_params);
+        }
+    }
 
+    function getScholarResults(page, start, num, form_params) {
         $.ajax({
             url: '/google_scholar/search_scholar?'+form_params+'&start='+start+'&num='+num,
             cache: false,
@@ -158,12 +148,12 @@ $(document).ready(function() {
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
 
-      		if($('html').height() < $(window).height()) {
-          		$('.footer').css('position', 'absolute');
-      		}
-		else {
-			$('.footer').css('position', 'relative');
-		}
+                if($('html').height() < $(window).height()) {
+                    $('.footer').css('position', 'absolute');
+                }
+                else {
+                    $('.footer').css('position', 'relative');
+                }
             }
         });
     }
@@ -268,11 +258,11 @@ function gs_ocit(event ,doc_id, doc_num) {
         beforeSend: function() {
             cite_link.append("<img class='loader_icon' id='cite_loader"+doc_num+"' src='/assets/loader.gif' width='14px' height='14px' />");
         },
-        success: function(citations){
+        success: function(citations) {
             showCitationsModal(doc_id, doc_num, citations);
             $('#cite_loader'+doc_num).remove();
         },
-        error: function(result){
+        error: function(result) {
             alert("Error!!!");
         }
     });

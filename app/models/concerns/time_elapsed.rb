@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 module TimeElapsed
   extend ActiveSupport::Concern
 

@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateHistoryUserInfos < ActiveRecord::Migration
   def change
     create_table :history_user_infos, :id => false do |t|

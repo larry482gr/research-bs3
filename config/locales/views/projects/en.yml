@@ -14,7 +14,9 @@ en:
   invite_user: "Invite User"
   create_project: "Create New Project"
   new_project: "New Project"
+  select_source: "Select Source"
   search_gs: "Search for a book, article or paper"
+  results_per_page: "Results per page"
   upload: "Upload"
   upload_file: "Upload file..."
   uploading_file: "Uploading"
@@ -26,6 +28,41 @@ en:
   project_citations: "Project Citations"
   citation_deleted: "Citation successfully deleted."
   cite_delete_error: "There was an error deleting the citation."
+
+  search_sources:
+    pick_list: "Collections (don't check anything to search everywhere)"
+    acad_search_engine:
+      group_title: "Academic Search Engines"
+      options:
+        gs: "&nbsp;&nbsp;Google Scholar"
+    gr_repo:
+      group_title: "Greek Repositories"
+      options:
+        eadd: "&nbsp;&nbsp;National Archive of PhD Theses"
+        helios: "&nbsp;&nbsp;Helios - National Hellenic Research Foundation Repository"
+        acropolis: "&nbsp;&nbsp;Acropolis Educational Resources Repository"
+        ellak: "&nbsp;&nbsp;FOSS repository"
+        edulll: "&nbsp;&nbsp;Digital Repository Operational Programme \"Education and Lifelong Learning\""
+        parthenon: "&nbsp;&nbsp;Parthenon Frieze Repository"
+        pandektis: "&nbsp;&nbsp;Pandectis"
+        simitis: "&nbsp;&nbsp;Mr. Simitis Foundation Repository"
+        levadia: "&nbsp;&nbsp;Digital Library of Levadia"
+        serres: "&nbsp;&nbsp;Digital Library of Serres"
+        byzant: "&nbsp;&nbsp;Byzantina Symmeikta"
+        historical: "&nbsp;&nbsp;The Historical Review/La Revue Historique"
+        tekmiria: "&nbsp;&nbsp;Tekmeria"
+        latic: "&nbsp;&nbsp;International Journal of Language, Translation and Intercultural Communication"
+        deltiokms: "&nbsp;&nbsp;Bulletin of the Centre for Asia Minor Studies"
+        dialogoi: "&nbsp;&nbsp;Dialogoi! Theory & Praxis in Education"
+        grsr: "&nbsp;&nbsp;The Greek Review of Social Research"
+        esperia: "&nbsp;&nbsp;Eoa kai Esperia"
+        historein: "&nbsp;&nbsp;Historein"
+        makedonika: "&nbsp;&nbsp;Makedonika"
+        mnimon: "&nbsp;&nbsp;Mnimon"
+        eranistis: "&nbsp;&nbsp;The Gleaner"
+        benaki: "&nbsp;&nbsp;Benaki Museum Journal"
+        childeducation: "&nbsp;&nbsp;Preschool & Primary Education"
+        sygkrisi: "&nbsp;&nbsp;Comparison"
 
   time:
     formats:

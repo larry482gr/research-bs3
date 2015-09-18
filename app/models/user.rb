@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 require 'digest/sha1'
 
 class User < ActiveRecord::Base

@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class StaticPagesController < ApplicationController
   before_action :valid_user, only: [:search]
 

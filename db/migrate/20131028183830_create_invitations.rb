@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateInvitations < ActiveRecord::Migration
   def change
     create_table :invitations, :id => false do |t|

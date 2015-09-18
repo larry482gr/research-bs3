@@ -1,3 +1,5 @@
+<!-- Copyright 2015 Kazantzis Lazaros -->
+
 <%- provide(:title, (t :projects)) %>
 
 <div class="col-md-12 left-div">
@@ -39,11 +41,12 @@
             </tbody>
           </table>
       <% end %>
-      <%= link_to (t :create_project), new_project_path, :class => "btn btn-success create_project" %>
+      <%= link_to (t :create_project), new_project_path, :class => 'btn btn-success create_project' %>
     </div>
 </div>
 
 <%=render 'static_pages/search_gs' %>
+<%#=render 'static_pages/search_open' %>
 
 <script type="text/javascript">
     $(document).on('page:change', function() {

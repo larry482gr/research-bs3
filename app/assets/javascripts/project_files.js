@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 var allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/msword', 'application/vnd.oasis.opendocument.text', 'text/plain', 'application/rtf'];
 

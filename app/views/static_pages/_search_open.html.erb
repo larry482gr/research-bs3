@@ -1,0 +1,30 @@
+<!-- Copyright 2015 Kazantzis Lazaros -->
+
+<div class="search-open-div col-md-10 col-sm-12 col-xs-12 left-div">
+  <form id="search_gs_form" class="col-md-12" onsubmit="return false;">
+    <div class="form-group has-success col-md-11">
+      <input type="text" class="form-control" id="search_open_input" name="q" placeholder="<%= t :search_gs %>"
+             value="<%= @search_gs unless @search_gs.nil? %>"
+      />
+    </div>
+    <div class="form-group col-md-1">
+      <button id="search-open-btn" class="btn btn-success pull-right">
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </div>
+  </form>
+
+  <div class="search_gs_results col-md-12"></div>
+  <div class="paging paging_bottom col-md-12">
+    <div id="paging_gs_results"></div>
+    <form>
+      <div id="rows_div">
+        <%= (t :results_per_page) %>
+        <select class="rowsPerPage btn btn-sm btn-default" name="rowsPerPage">
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>

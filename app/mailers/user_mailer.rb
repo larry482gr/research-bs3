@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class UserMailer < ActionMailer::Base
   require 'uri'
   default from: 'no-reply@research.org.gr'

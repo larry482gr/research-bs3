@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class InvitationsController < ApplicationController
   before_action :valid_user
 

@@ -14,7 +14,9 @@ gr:
   invite_user: "Πρόσκληση Χρήστη"
   create_project: "Δημιουργία Νέου Έργου"
   new_project: "Νέο Έργο"
+  select_source: "Επιλογή πηγής"
   search_gs: "Αναζήτηση βιβλίου, άρθρου ή εργασίας"
+  results_per_page: "Αποτελέσματα ανά σελίδα"
   upload: "Μεταφόρτωση"
   upload_file: "Μεταφόρτωση αρχείου..."
   uploading_file: "Μεταφόρτωση του"
@@ -26,6 +28,41 @@ gr:
   project_citations: "Βιβλιογραφικές Αναφορές Έργου"
   citation_deleted: "Η βιβλιογραφική αναφορά διαγράφηκε επιτυχώς."
   cite_delete_error: "Παρουσιάστηκε πρόβλημα κατά τη διαγραφή της βιβλιογραφική αναφοράς."
+
+  search_sources:
+    pick_list: "Συλλογές (μην επιλέξετε καμία, ώστε να πραγματοποιηθεί αναζήτηση σε όλες)"
+    acad_search_engine:
+      group_title: "Ακαδημαϊκές Μηχανές Αναζήτησης"
+      options:
+        gs: "&nbsp;&nbsp;Google Scholar"
+    gr_repo:
+      group_title: "Ελληνικά Αποθετήρια"
+      options:
+        eadd: "&nbsp;&nbsp;Εθνικό Αρχείο Διδακτορικών Διατριβών"
+        helios: "&nbsp;&nbsp;Ήλιος - Ιδρυματικό Αποθετήριο Εθνικού Ιδρύματος Ερευνών"
+        acropolis: "&nbsp;&nbsp;Εκπαιδευτικό Περιεχόμενο για την Ακρόπολη"
+        ellak: "&nbsp;&nbsp;Αποθετήριο ΕΛ/ΛΑΚ"
+        edulll: "&nbsp;&nbsp;Ψηφιακό Αποθετήριο Επιχειρησιακού Προγράμματος «Εκπαίδευση & Δια βίου Μάθηση»"
+        parthenon: "&nbsp;&nbsp;Η Ζωφόρος του Παρθενώνα"
+        pandektis: "&nbsp;&nbsp;Πανδέκτης"
+        simitis: "&nbsp;&nbsp;Αποθετήριο Αρχείου Ιδρύματος Κ. Σημίτη "
+        levadia: "&nbsp;&nbsp;Ψηφιακή Βιβλιοθήκη Λιβαδειάς"
+        serres: "&nbsp;&nbsp;Ψηφιακή Βιβλιοθήκη Σερρών"
+        byzant: "&nbsp;&nbsp;Βυζαντινά Σύμμεικτα"
+        historical: "&nbsp;&nbsp;The Historical Review/La Revue Historique"
+        tekmiria: "&nbsp;&nbsp;Τεκμήρια"
+        latic: "&nbsp;&nbsp;International Journal of Language, Translation and Intercultural Communication"
+        deltiokms: "&nbsp;&nbsp;Δελτίο Κέντρου Μικρασιατικών Σπουδών"
+        dialogoi: "&nbsp;&nbsp;Διάλογοι! Θεωρία & Πράξη στις Επιστήμες της Αγωγής και Εκπαίδευσης"
+        grsr: "&nbsp;&nbsp;Επιθεώρηση Κοινωνικών Ερευνών"
+        esperia: "&nbsp;&nbsp;Εώα και Εσπέρια"
+        historein: "&nbsp;&nbsp;Ιστορείν"
+        makedonika: "&nbsp;&nbsp;Μακεδονικά"
+        mnimon: "&nbsp;&nbsp;Μνήμων"
+        eranistis: "&nbsp;&nbsp;Ο Ερανιστής"
+        benaki: "&nbsp;&nbsp;Περιοδικό Μουσείο Μπενάκη"
+        childeducation: "&nbsp;&nbsp;Προσχολική & Σχολική Εκπαίδευση"
+        sygkrisi: "&nbsp;&nbsp;Σύγκριση"
 
   time:
     formats:

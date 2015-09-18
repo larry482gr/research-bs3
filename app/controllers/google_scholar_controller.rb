@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class GoogleScholarController < ApplicationController
   require 'net/http'
   require 'uri'
@@ -100,6 +104,7 @@ class GoogleScholarController < ApplicationController
 
     if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
       session[:search_gs] = search_field
+      session[:source] = 'gs'
     end
 
     respond_to do |format|

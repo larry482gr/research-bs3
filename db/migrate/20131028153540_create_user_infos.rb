@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateUserInfos < ActiveRecord::Migration
   def change
     create_table :user_infos do |t|

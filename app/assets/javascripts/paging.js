@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 	function paging(numrows, currentPage, rowsPerPage, paging_div, limit) {
 		limit = typeof limit !== 'undefined' ? limit : 3;
 		var flag = 0;

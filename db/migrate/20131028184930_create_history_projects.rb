@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateHistoryProjects < ActiveRecord::Migration
   def change
     create_table :history_projects, :id => false do |t|

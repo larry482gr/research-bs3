@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 // $navbar-default-bg: #312312;
 // $light-orange: #ff8c00;
 // $navbar-default-color: $light-orange;
@@ -14,6 +18,7 @@
 @import "static_pages";
 @import "user_info";
 @import "users";
+@import "open_search";
 @import "pnotify.custom.min";
 
 #alert {
