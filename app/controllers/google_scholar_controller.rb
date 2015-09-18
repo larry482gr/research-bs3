@@ -104,6 +104,7 @@ class GoogleScholarController < ApplicationController
 
     if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
       session[:search_gs] = search_field
+      session[:source] = 'gs'
     end
 
     respond_to do |format|

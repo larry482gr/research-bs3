@@ -1,4 +1,4 @@
-function getOpenSearchResults(page, start, num, form_params) {
+function getOpenSearchResults(repo, page, start, num, form_params) {
     listSet = [];
 
     var selected = [];
@@ -7,7 +7,7 @@ function getOpenSearchResults(page, start, num, form_params) {
     });
 
     $.ajax({
-        url: '/open_search/helios_search?'+form_params+'&start='+start+'&num='+num+'&listSet='+listSet,
+        url: '/open_search/list_records?'+form_params+'&repo='+repo+'&start='+start+'&num='+num+'&listSet='+listSet,
         cache: false,
         type: "get",
         dataType: "json",
@@ -44,8 +44,14 @@ function getOpenSearchResults(page, start, num, form_params) {
 }
 
 function drawResult(doc_num, result) {
+    identifier = (typeof result.identifier != 'undefined') ? '<a href="'+result.identifier+'">'+result.title+'</a>' : result.title;
+    title = (typeof result.title != 'undefined') ? '<a href="'+result.identifier+'">'+result.title+'</a>' : '';
     description = (typeof result.description != 'undefined') ? result.description : '';
     pdf_link = (typeof result.pdf_link != 'undefined') ? getPdfLink(result.pdf_link, result.domain) : '&nbsp;';
+    creator = (typeof result.creator != 'undefined') ? result.creator : '';
+    publisher = (typeof result.publisher != 'undefined') ? ' - '+result.publisher : '';
+    doc_date = (typeof result.date != 'undefined') ? ', '+result.date : '';
+    domain = (typeof result.domain != 'undefined') ? result.domain : '';
 
     return '<div class="gs_r">' +
                 '<div class="gs_ggs gs_fl">' +
@@ -61,26 +67,22 @@ function drawResult(doc_num, result) {
                 '</div>'+
                 '<div class="gs_ri">'+
                     '<h3 class="gs_rt">'+
-                        '<a href="'+result.identifier+'">'+result.title+'</a>'+
+                        title+
                     '</h3>'+
                     '<div class="gs_a">'+
-                        result.creator+' - '+result.publisher+', '+result.date+' - '+result.domain+
+                        creator+publisher+doc_date+' - '+domain+
                     '</div>'+
                     '<div class="gs_rs">'+description+'</div>'+
                     '<div class="gs_fl">'+
-                        '<a aria-haspopup="true" aria-controls="gs_cit" role="button" class="gs_nph" href="#" '+
-                            'title="Check what to return [parse identifier citation div]" '+
-                            'onclick="return helios_cite() // gs_ocit(event,\'5F6EenTzb4cJ\','+doc_num+')">Cite'+
-                        '</a>'+
+                        '<!-- TODO Implement citation from Open Search -->'+
                         '<span class="gs_nph">'+
-                            '<a title="Save this article to my library so that I can read or cite it later...<br/>' +
-                                'parse identifier citation div" href="#"' +
-                                ' onclick="return gs_sva(\'5F6EenTzb4cJ\','+doc_num+')" id="gs_svl'+doc_num+'">Save' +
+                            '<a title="Save this article to my library so that I can read or cite it later..." href="#"' +
+                                ' onclick="return gs_sva(\'\','+doc_num+')" id="gs_svl'+doc_num+'">Save' +
                             '</a>'+
                             '<span class="gs_svm" id="gs_svo'+doc_num+'">Saving<span id="gs_svd'+doc_num+'">...</span></span>'+
                             '<a style="display:none" id="gs_svs'+doc_num+'">Saved</a>'+
                             '<span class="gs_svm" id="gs_sve'+doc_num+'">Error saving. ' +
-                                '<a href="#" onclick="return gs_sva(\'5F6EenTzb4cJ\','+doc_num+')">Try again?</a>' +
+                                '<a href="#" onclick="return gs_sva(\'\','+doc_num+')">Try again?</a>' +
                             '</span>'+
                         '</span>'+
                         '<a onclick="return gs_more(this,1)" role="button" class="gs_mor gs_oph" href="#">More</a>'+
@@ -101,7 +103,7 @@ function getPdfLink(link, domain) {
 function helios_cite() {
     // cite_link = $('#gs_svl' + doc_num).parent().prev();
     $.ajax({
-        url: "/open_search/helios_cite",
+        url: "/open_search/cite_record",
         cache: false,
         type: "get",
         dataType: "json",

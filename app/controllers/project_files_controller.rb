@@ -51,7 +51,6 @@ class ProjectFilesController < ApplicationController
       redirect_to :root and return
     else
       @old_files = @project_file.project.project_files.where('reference = ?', @project_file.id).order('id DESC')
-      # session[:search_gs] = @project_file.filename
     end
   end
 
@@ -71,7 +70,6 @@ class ProjectFilesController < ApplicationController
       flash[:alert] = t :file_edit_no_access
       redirect_to project_path(Project.find(params[:project_id]))
     elsif is_url?(@project_file.filepath)
-      # session[:search_gs] = @project_file.filename
       respond_to do |format|
         format.html { redirect_to @project_file.project, alert: (t :linked_edit_error) }
         format.json { render json: @project_file.errors, status: :unprocessable_entity }

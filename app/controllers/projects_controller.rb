@@ -16,6 +16,7 @@ class ProjectsController < ApplicationController
   def index
     @projects = @current_user.projects.order('updated_at DESC')
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
+    @search_source = session[:source] unless session[:source].nil?
   end
 
   # GET /projects/1
@@ -38,7 +39,9 @@ class ProjectsController < ApplicationController
     @project_citations = get_citations.sort {|x,y| x['cit']<=>y['cit']}
 
     @search_gs = session[:search_gs] unless session[:search_gs].nil?
+    @search_source = session[:source] unless session[:source].nil?
     session.delete(:search_gs)
+    session.delete(:source)
   end
 
   # GET /projects/new
@@ -136,6 +139,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def project_params
+      params.require(:project).permit(:title, :description, :is_private)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
@@ -151,11 +159,6 @@ class ProjectsController < ApplicationController
         flash[:alert] = (t :no_access)
         redirect_to :root and return
       end
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def project_params
-      params.require(:project).permit(:title, :description, :is_private)
     end
 
     def private_count

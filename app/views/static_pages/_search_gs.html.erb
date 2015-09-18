@@ -1,13 +1,37 @@
 <!-- Copyright 2015 Kazantzis Lazaros -->
 
 <div class="search_div col-md-10 col-sm-12 col-xs-12 left-div">
-    <div id="select-source-div" class="col-md-3">
+    <div id="select-source-div" class="col-md-6">
       <h5><%= (t :select_source) %></h5>
       <select id="select-source" class="form-control">
         <optgroup label="<%= (t 'search_sources.acad_search_engine.group_title') %>"></optgroup>
-        <option value="gs"><%= (t 'search_sources.acad_search_engine.options.gs') %></option>
+        <option value="gs" <%= @search_source = 'gs' ? 'selected="selected"' : '' %>><%= (t 'search_sources.acad_search_engine.options.gs').html_safe %></option>
         <optgroup label="<%= (t 'search_sources.gr_repo.group_title') %>"></optgroup>
-        <option value="helios"><%= (t 'search_sources.gr_repo.options.helios') %></option>
+        <option value="eadd" <%= @search_source = 'eadd' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.eadd').html_safe %></option>
+        <option value="helios" <%= @search_source = 'helios' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.helios').html_safe %></option>
+        <option value="acropolis" <%= @search_source = 'acropolis' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.acropolis').html_safe %></option>
+        <option value="ellak" <%= @search_source = 'ellak' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.ellak').html_safe %></option>
+        <option value="edulll" <%= @search_source = 'edulll' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.edulll').html_safe %></option>
+        <option value="parthenon" <%= @search_source = 'parthenon' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.parthenon').html_safe %></option>
+        <option value="pandektis" <%= @search_source = 'pandektis' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.pandektis').html_safe %></option>
+        <option value="simitis" <%= @search_source = 'simitis' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.simitis').html_safe %></option>
+        <option value="levadia" <%= @search_source = 'levadia' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.levadia').html_safe %></option>
+        <option value="serres" <%= @search_source = 'serres' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.serres').html_safe %></option>
+        <option value="byzant" <%= @search_source = 'byzant' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.byzant').html_safe %></option>
+        <option value="historical" <%= @search_source = 'historical' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.historical').html_safe %></option>
+        <option value="tekmiria" <%= @search_source = 'tekmiria' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.tekmiria').html_safe %></option>
+        <option value="latic" <%= @search_source = 'latic' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.latic').html_safe %></option>
+        <option value="deltiokms" <%= @search_source = 'deltiokms' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.deltiokms').html_safe %></option>
+        <option value="dialogoi" <%= @search_source = 'dialogoi' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.dialogoi').html_safe %></option>
+        <option value="grsr" <%= @search_source = 'grsr' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.grsr').html_safe %></option>
+        <option value="esperia" <%= @search_source = 'esperia' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.esperia').html_safe %></option>
+        <option value="historein" <%= @search_source = 'historein' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.historein').html_safe %></option>
+        <option value="makedonika" <%= @search_source = 'makedonika' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.makedonika').html_safe %></option>
+        <option value="mnimon" <%= @search_source = 'mnimon' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.mnimon').html_safe %></option>
+        <option value="eranistis" <%= @search_source = 'eranistis' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.eranistis').html_safe %></option>
+        <option value="benaki" <%= @search_source = 'benaki' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.benaki').html_safe %></option>
+        <option value="childeducation" <%= @search_source = 'childeducation' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.childeducation').html_safe %></option>
+        <option value="sygkrisi" <%= @search_source = 'sygkrisi' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.sygkrisi').html_safe %></option>
       </select>
     </div>
     <form id="search_gs_form" class="col-md-12" onsubmit="return false;">

@@ -3,23 +3,25 @@
 #
 
 class OpenSearchController < ApplicationController
+  include OpenSearchHelper
+
   require 'open-uri'
   require 'nokogiri/xml'
   require 'nokogiri/html'
   require 'net/http'
   require 'uri'
 
-  def helios_list
-    #verb		= params[:verb]
-    verb    = 'ListSets'
+  def list_sets
+    repo = repo_uri(params[:repo])
 
-    set = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}"))
+    set = Nokogiri::XML(open("#{repo}?verb=ListSets"))
 
     listSet = []
     set.xpath('//xmlns:set').each do |item|
+      xml_item = Nokogiri::XML(item.to_xml)
 
-      unless item.children.first.text.blank? or item.children.last.text.blank?
-        listSet << { set_key: item.children.first.text, set_val: item.children.last.text }
+      unless xml_item.xpath('//setSpec').text.blank? or xml_item.xpath('//setName').text.blank?
+        listSet << { set_key: xml_item.xpath('//setSpec').text, set_val: xml_item.xpath('//setName').text }
       end
     end
 
@@ -28,17 +30,21 @@ class OpenSearchController < ApplicationController
     end
   end
 
-  def helios_search
-    #verb		= params[:verb]
-    verb    = 'ListRecords'
-    q_words	= params[:q].split
+  def list_records
+    repo = repo_uri(params[:repo])
+    q_words	= query_words(params[:q])
     list_set = params[:listSet].split(',')
 
-    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc"))
+    start		= params[:start].to_i
+    num			= params[:num].to_i
+
+    res = Nokogiri::XML(open("#{repo}?verb=ListRecords&metadataPrefix=oai_dc"))
 
     records = res.xpath('//xmlns:record')
 
     results = []
+    index = 0
+    total = 0
 
     records.each do |record|
       set_match = false
@@ -74,6 +80,8 @@ class OpenSearchController < ApplicationController
 
               res[node.name] = "#{res[node.name]} ..."
               match_against << node.text unless node.text.nil?
+            elsif node.name == 'identifier'
+              res[node.name] = node.text if is_url?(node.text)
             else
               res[node.name] = node.text
               if node.name == 'title'
@@ -84,91 +92,65 @@ class OpenSearchController < ApplicationController
 
           search_match = false
           match_against.select do |param|
-            search_match = q_words.any?{ |word| param.downcase.include? word.downcase }
+            search_match = q_words.any?{ |word| param.downcase.match(/((^|\s)#{word.downcase}(\s|$))/i) }
             break if search_match
           end
 
           next unless search_match
 
-          uri = URI.parse(res['identifier'])
-          host = uri.host.downcase
-          res['domain'] = host
+          index += 1
+          total += 1
 
-          table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
+          next unless index.between?(start+1, num+start)
 
-          table.each do |node|
-            if node.children.first.text.downcase.include?('publisher link:')
-              node.children.last.children.each do |link_node|
-                if link_node.text.downcase.include?('.pdf')
-                  res['pdf_link'] = link_node.text
+          begin
+            uri = URI.parse(res['identifier'])
+            host = uri.host.downcase
+            res['domain'] = host
+
+            table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
+
+            table.each do |node|
+              if node.children.first.text.downcase.include?('publisher link:')
+                node.children.last.children.each do |link_node|
+                  if link_node.text.downcase.include?('.pdf')
+                    res['pdf_link'] = link_node.text
+                  end
                 end
+              elsif node.children.first.text.downcase.include?('publisher:')
+                res['publisher'] = node.children.last.text
               end
-            elsif node.children.first.text.downcase.include?('publisher:')
-              res['publisher'] = node.children.last.text
             end
+          rescue => e
+            puts "[#{Time.now}] - [ERROR] OpenSearchController: #{e}"
           end
 
-          results << res
-          break if results.length >= params[:num].to_i
+          q_words.each do |word|
+            res['title'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['title'].nil?
+            res['description'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['description'].nil?
+          end
+
+          results << res if index.between?(start+1, num+start)
         end
       end
     end
 
-    total = results.length.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse
-
-    if total.to_i == 0
+    if total == 0
       results = t(:no_results)
     end
 
+    if request.referer.to_s.end_with?('projects') or request.referer.to_s.end_with?('projects/')
+      session[:search_gs] = params[:q]
+      session[:source] = repo
+    end
+
     respond_to do |format|
-      format.js { render json: { results: results, total: total, search: params[:q] } }
+      format.js { render json: { results: results, total: total.to_s, search: params[:q] } }
     end
   end
 
-  def helios_show
-    #verb		= params[:verb]
-    verb    = 'GetRecord'
-
-    res = Nokogiri::XML(open("http://helios-eie.ekt.gr/EIE_oai/request?verb=#{verb}&metadataPrefix=oai_dc&identifier=oai:http://helios-eie.ekt.gr:10442/8715"))
-
-    nodes = res.xpath('//xmlns:metadata')
-
-    @res = {}
-    nodes.children.children.each do |node|
-      if node.name == 'description' and node.text.length > 300
-        last_boundary = node.text[0..300].rindex(/\s/)
-        @res[node.name] = node.text[0..last_boundary]
-        first_break = @res[node.name][0..100].rindex(/\s/)
-        second_break = @res[node.name][0..200].rindex(/\s/)
-        @res[node.name][second_break] = '<br/>'
-        @res[node.name][first_break] = '<br/>'
-
-        @res[node.name] = "#{@res[node.name]} ..."
-      else
-        @res[node.name] = node.text
-      end
-    end
-
-    uri = URI.parse(@res['identifier'])
-    host = uri.host.downcase
-    @res['domain'] = host
-
-    table = Nokogiri::HTML(open(uri)).xpath('//table[@class="itemDisplayTable"]/tr')
-
-    table.each do |node|
-      if node.children.first.text.downcase.include?('publisher link:') # and node.children.last.text.downcase.include?('.pdf')
-        node.children.last.children.each do |link_node|
-          if link_node.text.downcase.include?('.pdf')
-            @res['pdf_link'] = link_node.text
-          end
-        end
-      elsif node.children.first.text.downcase.include?('publisher:')
-        @res['publisher'] = node.children.last.text
-      end
-    end
-  end
-
-  def helios_cite
+=begin
+  def cite_record
     citations = []
 
     format = ['chicago-author-date', 'apa', 'harvard1']
@@ -196,7 +178,8 @@ class OpenSearchController < ApplicationController
           cleaned = res.body.encode( 'UTF-8', 'Windows-1251' )
         end
         tmp_resp = cleaned
-      rescue EncodingError
+      rescue EncodingError => e
+        puts "caught exception #{e}"
         tmp_resp.encode!( 'UTF-8', invalid: :replace, undef: :replace )
       end
 
@@ -226,6 +209,13 @@ class OpenSearchController < ApplicationController
         format.js { render json: error }
       end
     end
-
   end
+=end
+
+  private
+
+  def is_url?(identifier)
+    identifier[0..3] == 'http'
+  end
+
 end

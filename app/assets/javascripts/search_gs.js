@@ -85,17 +85,7 @@ $(document).ready(function() {
 
     // Search
     $('#search_gs_btn').on('click', function() {
-        switch ($('#select-source').val()) {
-            case 'gs':
-                getSearchResults(1, $( "#search_gs_form").serialize());
-                break;
-            case 'helios':
-                getSearchResults(1, $( "#search_gs_form").serialize());
-                break;
-            default:
-                alert('Select a source first!');
-                break;
-        }
+        getSearchResults(1, $( "#search_gs_form").serialize());
     });
 
     $('#search_gs_adv_btn').on('click', function() {
@@ -105,18 +95,6 @@ $(document).ready(function() {
         }
         else {
             $('#search_more_form').submit();
-        }
-    });
-
-    $(document).keyup(function(e) {
-        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13)) {
-            getSearchResults(1, $( "#search_gs_form").serialize());
-        }
-    });
-
-    $(document).keydown(function(e) {
-        if($('#search_gs_input').is(':focus') && (e.which == 13 || e.keycode == 13)) {
-            e.preventDefault();
         }
     });
 
@@ -140,7 +118,7 @@ $(document).ready(function() {
         if($('#select-source').val() == 'gs') {
             getScholarResults(page, start, num, form_params);
         } else {
-            getOpenSearchResults(page, start, num, form_params);
+            getOpenSearchResults($('#select-source').val(), page, start, num, form_params);
         }
     }
 

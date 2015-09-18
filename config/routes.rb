@@ -35,10 +35,12 @@ Researchgr::Application.routes.draw do
     get '/google_scholar/search_scholar' => 'google_scholar#search_scholar'
     get '/google_scholar/search_citation' => 'google_scholar#search_citation'
     get '/google_scholar/citation_save' => 'google_scholar#citation_save'
-    get '/open_search/helios_list' => 'open_search#helios_list'
-    get '/open_search/helios_show' => 'open_search#helios_show'
-    get '/open_search/helios_search' => 'open_search#helios_search'
-    get '/open_search/helios_cite' => 'open_search#helios_cite'
+
+    # Open Search methods
+    get '/open_search/list_sets/:repo' => 'open_search#list_sets'
+    get '/open_search/list_records' => 'open_search#list_records'
+    get '/open_search/get_record' => 'open_search#get_record'
+    get '/open_search/cite_record' => 'open_search#cite_record'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

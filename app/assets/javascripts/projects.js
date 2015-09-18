@@ -196,21 +196,28 @@ $(document).ready(function() {
       $('#clear-file').hide();
   });
 
-  $('#select-source').on('change', function() {
+  if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs') {
+      getListSet($('#select-source').val());
       $('#search_gs_more').hide();
+  }
+
+  $('#select-source').on('change', function() {
+     $('.search_gs_results').html('');
+     $('.paging div').hide();
+     $('#search_gs_more').hide();
      if($(this).val() == 'gs') {
-         $('#search_gs_more').show();
-         $('.search_div').find('#opensearch-listset').slideUp('fast', function(){
-            $(this).remove();
-         });
-     } else if ($(this).val() == 'helios') {
-         getListSet('helios');
+       $('#search_gs_more').show();
+       $('.search_div').find('#opensearch-listset').slideUp('fast', function() {
+          $(this).remove();
+       });
+     } else {
+         getListSet($(this).val());
      }
   });
 
   function getListSet(repo) {
       $.ajax({
-          url: "/open_search/"+repo+"_list",
+          url: "/open_search/list_sets/"+repo,
           cache: true,
           type: 'get',
           dataType: "json",
@@ -227,7 +234,7 @@ $(document).ready(function() {
               listContent += '</form>';
 
               $('#select-source-div').after('<div id="opensearch-listset" class="col-md-12 jumbotron">' +
-                                                '<h4>Pick a List Set (leave blank to search all repos) --> translate it!!!</h4>' + listContent +
+                                                '<h4>'+I18n.t('search_sources.pick_list')+'</h4>' + listContent +
                                             '</div>');
 
               $('#opensearch-listset').slideDown('fast', function(){
