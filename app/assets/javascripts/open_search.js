@@ -1,3 +1,7 @@
+/**
+ * Copyright 2015 Kazantzis Lazaros
+ */
+
 function getOpenSearchResults(repo, page, start, num, form_params) {
     listSet = [];
 
@@ -15,11 +19,12 @@ function getOpenSearchResults(repo, page, start, num, form_params) {
             $('.search_gs_results').animate({opacity: 0.2});
         },
         success: function(response) {
+            $('.search_gs_results').prev().remove();
             if (response.total == 0) {
                 $('.search_gs_results').html("<h5>" + response.results + "</h5>");
             }
             else {
-                $('.search_gs_results').html("<div><strong>Total Results:</strong> " + response.total + "</div>");
+                $('.search_gs_results').html("<div><strong>"+I18n.t('total_results')+":</strong> " + response.total + "</div>");
 
                 for(i = 0; i < response.results.length; i++) {
                     $('.search_gs_results').append(drawResult(i, response.results[i]));

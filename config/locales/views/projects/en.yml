@@ -16,6 +16,8 @@ en:
   new_project: "New Project"
   select_source: "Select Source"
   search_gs: "Search for a book, article or paper"
+  search_all_keyword: "Write the keyword <kbd>all</kbd> to retrieve all content."
+  total_results: "Total Results"
   results_per_page: "Results per page"
   upload: "Upload"
   upload_file: "Upload file..."

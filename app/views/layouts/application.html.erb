@@ -40,9 +40,6 @@
         <% end %>
       <% end %>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/open_search/helios_list">Helios Sets</a></li>
-        <li><a href="/open_search/helios_show">Helios Result</a></li>
-        <li><a href="/open_search/helios_search">Helios Records</a></li>
         <%- unless @current_user.nil? %>
           <% invitation_count = Invitation.where('email = ? AND status = ?', @current_user.email, 'pending').count %>
           <%- unless invitation_count.zero? %>

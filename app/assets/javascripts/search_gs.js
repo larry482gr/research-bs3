@@ -115,6 +115,7 @@ $(document).ready(function() {
         var num = $('.rowsPerPage').val();
         var start = (page-1)*num;
 
+        $('.search_gs_results').before("<div class='col-md-12'><strong>"+I18n.t('total_results')+":</strong> <img class='loader_icon' id='search-loader' src='/assets/loader.gif' width='14px' height='14px' />");
         if($('#select-source').val() == 'gs') {
             getScholarResults(page, start, num, form_params);
         } else {
@@ -132,11 +133,12 @@ $(document).ready(function() {
                 $('.search_gs_results').animate({opacity: 0.2});
             },
             success: function(response) {
+                $('.search_gs_results').prev().remove();
                 if (response.total == 0) {
                     $('.search_gs_results').html("<h5>" + response.results + "</h5>");
                 }
                 else {
-                    $('.search_gs_results').html("<div><strong>Total Results:</strong> " + response.total + "</div>");
+                    $('.search_gs_results').html("<div><strong>"+I18n.t('total_results')+":</strong> " + response.total + "</div>");
                     for(i = 0; i < response.results.length; i++) {
                         $('.search_gs_results').append(response.results[i]);
                     }
