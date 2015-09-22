@@ -32,7 +32,7 @@ gr:
   search_sources:
     pick_list: "Συλλογές (μην επιλέξετε καμία, ώστε να πραγματοποιηθεί αναζήτηση σε όλες)"
     acad_search_engine:
-      group_title: "Ακαδημαϊκές Μηχανές Αναζήτησης"
+      group_title: "Ακαδημαϊκές Βιβλιοθήκες/Μηχανές Αναζήτησης"
       options:
         gs: "&nbsp;&nbsp;Google Scholar"
     gr_repo:
