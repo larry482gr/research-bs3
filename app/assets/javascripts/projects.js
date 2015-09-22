@@ -196,7 +196,7 @@ $(document).ready(function() {
       $('#clear-file').hide();
   });
 
-  if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs') {
+  if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs' && $('#select-source').val() != 'ieee') {
       getListSet($('#select-source').val());
       $('#search_gs_more').hide();
       $('#search_gs_form p.help-block').show();
@@ -207,16 +207,24 @@ $(document).ready(function() {
      $('.paging div').hide();
      $('#search_gs_more').hide();
      if($(this).val() == 'gs') {
-       $('#search_gs_more').show();
-       $('.search_div').find('#opensearch-listset').slideUp('fast', function() {
-          $('#search_gs_form p.help-block').hide();
-          $(this).remove();
-       });
+         removeOpenSearchList();
+         $('#search_gs_more').show();
+     } else if ($(this).val() == 'ieee') {
+         removeOpenSearchList();
+
+         // alert('Get IEEE results...');
      } else {
          $('#search_gs_form p.help-block').show();
          getListSet($(this).val());
      }
   });
+
+  function removeOpenSearchList() {
+      $('.search_div').find('#opensearch-listset').slideUp('fast', function() {
+          $('#search_gs_form p.help-block').hide();
+          $(this).remove();
+      });
+  }
 
   function getListSet(repo) {
       $.ajax({

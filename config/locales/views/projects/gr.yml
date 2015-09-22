@@ -37,6 +37,7 @@ gr:
       group_title: "Ακαδημαϊκές Βιβλιοθήκες/Μηχανές Αναζήτησης"
       options:
         gs: "&nbsp;&nbsp;Google Scholar"
+        ieee: "&nbsp;&nbsp;IEEE Xplore"
     gr_repo:
       group_title: "Ελληνικά Αποθετήρια"
       options:

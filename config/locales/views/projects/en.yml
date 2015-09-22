@@ -37,6 +37,7 @@ en:
       group_title: "Academic Libraries/Search Engines"
       options:
         gs: "&nbsp;&nbsp;Google Scholar"
+        ieee: "&nbsp;&nbsp;IEEE Xplore"
     gr_repo:
       group_title: "Greek Repositories"
       options:

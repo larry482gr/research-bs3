@@ -44,13 +44,7 @@ class OpenSearchController < ApplicationController
     url = URI.escape("#{repo}?verb=ListRecords&metadataPrefix=oai_dc")
     uri = URI.parse(url)
 
-    puts "\n#{uri}"
-
     res = Nokogiri::XML(open(uri))
-
-    puts "\n\n\n"
-    puts res
-    puts "\n\n\n"
 
     records = res.xpath('//xmlns:record')
 
@@ -107,7 +101,7 @@ class OpenSearchController < ApplicationController
           else
             search_match = false
             match_against.select do |param|
-              search_match = q_words.any?{ |word| param.downcase.match(/((^|\s)#{word.downcase}(\s|$))/i) }
+              search_match = q_words.any?{ |word| param.downcase.match(/((\b)#{word.downcase}(\b))/i) }
               break if search_match
             end
           end
@@ -120,7 +114,7 @@ class OpenSearchController < ApplicationController
           next unless index.between?(start+1, num+start)
 
           begin
-            uri = URI.parse(res['identifier'])
+            uri = URI.parse("#{res['identifier']}?locale=en")
             host = uri.host.downcase
             res['domain'] = host
 
@@ -143,8 +137,8 @@ class OpenSearchController < ApplicationController
 
           unless q_words.nil?
             q_words.each do |word|
-              res['title'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['title'].nil?
-              res['description'].gsub!(/((^|\s)#{word}(\s|$))/i, '<b>\1</b>') unless res['description'].nil?
+              res['title'].gsub!(/((\b)#{word}(\b))/i, '<b>\1</b>') unless res['title'].nil?
+              res['description'].gsub!(/((\b)#{word}(\b))/i, '<b>\1</b>') unless res['description'].nil?
             end
           end
 
@@ -162,8 +156,10 @@ class OpenSearchController < ApplicationController
       session[:source] = repo
     end
 
+    total = total.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+
     respond_to do |format|
-      format.js { render json: { results: results, total: total.to_s, search: params[:q] } }
+      format.js { render json: { results: results, total: total, search: params[:q] } }
     end
   end
 

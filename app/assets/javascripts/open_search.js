@@ -27,7 +27,26 @@ function getOpenSearchResults(repo, page, start, num, form_params) {
                 $('.search_gs_results').html("<div><strong>"+I18n.t('total_results')+":</strong> " + response.total + "</div>");
 
                 for(i = 0; i < response.results.length; i++) {
-                    $('.search_gs_results').append(drawResult(i, response.results[i]));
+                    identifier = (typeof response.results[i].identifier != 'undefined') ? response.results[i].identifier : '#';
+                    title = (typeof response.results[i].title != 'undefined') ? '<a href="'+identifier+'">'+response.results[i].title+'</a>' : '';
+                    description = (typeof response.results[i].description != 'undefined') ? response.results[i].description : '';
+                    pdf_link = (typeof response.results[i].pdf_link != 'undefined') ? getPdfLink(response.results[i].pdf_link, response.results[i].domain) : '&nbsp;';
+                    creator = (typeof response.results[i].creator != 'undefined') ? response.results[i].creator+' - ' : '';
+                    publisher = (typeof response.results[i].publisher != 'undefined') ? response.results[i].publisher+', ' : '';
+                    doc_date = (typeof response.results[i].date != 'undefined') ? new Date(response.results[i].date).getFullYear()+' - ' : '';
+                    domain = (typeof response.results[i].domain != 'undefined') ? response.results[i].domain : '';
+
+                    result = {
+                        title: title,
+                        abstract: description,
+                        pdf_link: pdf_link,
+                        authors: creator,
+                        publisher: publisher,
+                        doc_date: doc_date,
+                        domain: domain
+                    };
+
+                    $('.search_gs_results').append(drawResult(i, result));
                 }
 
                 // checkValidSave();
@@ -49,15 +68,6 @@ function getOpenSearchResults(repo, page, start, num, form_params) {
 }
 
 function drawResult(doc_num, result) {
-    identifier = (typeof result.identifier != 'undefined') ? '<a href="'+result.identifier+'">'+result.title+'</a>' : result.title;
-    title = (typeof result.title != 'undefined') ? '<a href="'+result.identifier+'">'+result.title+'</a>' : '';
-    description = (typeof result.description != 'undefined') ? result.description : '';
-    pdf_link = (typeof result.pdf_link != 'undefined') ? getPdfLink(result.pdf_link, result.domain) : '&nbsp;';
-    creator = (typeof result.creator != 'undefined') ? result.creator : '';
-    publisher = (typeof result.publisher != 'undefined') ? ' - '+result.publisher : '';
-    doc_date = (typeof result.date != 'undefined') ? ', '+result.date : '';
-    domain = (typeof result.domain != 'undefined') ? result.domain : '';
-
     return '<div class="gs_r">' +
                 '<div class="gs_ggs gs_fl">' +
                     '<button class="gs_btnFI gs_in_ib gs_btn_half" id="gs_ggsB'+doc_num+'" type="button">' +
@@ -67,17 +77,17 @@ function drawResult(doc_num, result) {
                         '</span>'+
                     '</button>'+
                     '<div id="gs_ggsW'+doc_num+'" class="gs_md_wp gs_ttss">'+
-                        pdf_link+
+                    result.pdf_link+
                     '</div>'+
                 '</div>'+
                 '<div class="gs_ri">'+
                     '<h3 class="gs_rt">'+
-                        title+
+                    result.title+
                     '</h3>'+
                     '<div class="gs_a">'+
-                        creator+publisher+doc_date+' - '+domain+
+                    result.authors+result.publisher+result.doc_date+result.domain+
                     '</div>'+
-                    '<div class="gs_rs">'+description+'</div>'+
+                    '<div class="gs_rs">'+result.abstract+'</div>'+
                     '<div class="gs_fl">'+
                         '<!-- TODO Implement citation from Open Search -->'+
                         '<span class="gs_nph">'+
@@ -105,6 +115,7 @@ function getPdfLink(link, domain) {
             '</a>';
 }
 
+/*
 function helios_cite() {
     // cite_link = $('#gs_svl' + doc_num).parent().prev();
     $.ajax({
@@ -124,3 +135,4 @@ function helios_cite() {
         }
     });
 }
+*/

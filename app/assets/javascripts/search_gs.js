@@ -17,7 +17,7 @@ $(document).ready(function() {
                 showEmbededFile(doc_title, doc_link);
             }
             else {
-                window.open($(this).attr('href'), '_blank');
+                window.open($(this).find('a').attr('href'), '_blank');
             }
         });
 
@@ -118,6 +118,8 @@ $(document).ready(function() {
         $('.search_gs_results').before("<div class='col-md-12'><strong>"+I18n.t('total_results')+":</strong> <img class='loader_icon' id='search-loader' src='/assets/loader.gif' width='14px' height='14px' />");
         if($('#select-source').val() == 'gs') {
             getScholarResults(page, start, num, form_params);
+        } else if($('#select-source').val() == 'ieee') {
+            getIeeeResults(page, start, num, form_params);
         } else {
             getOpenSearchResults($('#select-source').val(), page, start, num, form_params);
         }
@@ -185,7 +187,7 @@ function showCitationsModal(doc_id, doc_num, citations) {
             "<a href='#' class='citation-save' id='citation_mla' onclick='return saveCitation(\"citation_mla\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "<div class='citation'><div class='citation-type' rel='citation_apa'>APA</div><div class='citation-body'>" + citations[1] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_apa' onclick='return saveCitation(\"citation_apa\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
-            "<div class='citation'><div class='citation-type' rel='citation_chicago'>ISO 690</div><div class='citation-body'>" + citations[2] + "<br/>"+
+            "<div class='citation'><div class='citation-type' rel='citation_chicago'>Chicago</div><div class='citation-body'>" + citations[2] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_chicago' onclick='return saveCitation(\"citation_chicago\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "",
             className: "citation-modal"
