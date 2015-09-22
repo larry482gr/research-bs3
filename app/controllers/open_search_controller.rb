@@ -19,17 +19,17 @@ class OpenSearchController < ApplicationController
 
     set = Nokogiri::XML(open(uri))
 
-    listSet = []
+    list_set = []
     set.xpath('//xmlns:set').each do |item|
       xml_item = Nokogiri::XML(item.to_xml)
 
       unless xml_item.xpath('//setSpec').text.blank? or xml_item.xpath('//setName').text.blank?
-        listSet << { set_key: xml_item.xpath('//setSpec').text, set_val: xml_item.xpath('//setName').text }
+        list_set << { set_key: xml_item.xpath('//setSpec').text, set_val: xml_item.xpath('//setName').text }
       end
     end
 
     respond_to do |format|
-      format.js { render json: listSet }
+      format.js { render json: list_set }
     end
   end
 
