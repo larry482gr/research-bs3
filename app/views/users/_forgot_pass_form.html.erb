@@ -1,3 +1,5 @@
+<!-- Copyright 2015 Kazantzis Lazaros -->
+
 <%= form_for @user, url: pass_recover_path, html: { id: 'pass_recover', class: 'pass_recover' } do |f| %>
     <%- if @user.errors.any? do %>
         <div id="error_explanation">

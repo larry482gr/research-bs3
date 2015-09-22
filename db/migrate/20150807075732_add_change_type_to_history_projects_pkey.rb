@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class AddChangeTypeToHistoryProjectsPkey < ActiveRecord::Migration
   def change
     execute 'ALTER TABLE history_projects DROP PRIMARY KEY'

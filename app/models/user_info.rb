@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class UserInfo < ActiveRecord::Base
   belongs_to :user, touch: true
   belongs_to :language

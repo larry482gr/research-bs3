@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class HistoryProject < ActiveRecord::Base
   belongs_to :user
   belongs_to :project

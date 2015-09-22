@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateCitations < ActiveRecord::Migration
   def change
     create_table :citations, :id => false do |t|

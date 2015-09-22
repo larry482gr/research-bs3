@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CitationsController < ApplicationController
   include Concerns::ForceNonSSL
   before_action :valid_user

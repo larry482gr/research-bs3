@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateJoinTableUserProject < ActiveRecord::Migration
   def change
     create_join_table :users, :projects do |t|

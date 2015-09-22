@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateProjectProfiles < ActiveRecord::Migration
   def change
     create_table :project_profiles do |t|

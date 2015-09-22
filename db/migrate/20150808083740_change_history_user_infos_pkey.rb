@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class ChangeHistoryUserInfosPkey < ActiveRecord::Migration
   def change
     change_column :history_user_infos, :admin, :integer

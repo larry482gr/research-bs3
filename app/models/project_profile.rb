@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class ProjectProfile < ActiveRecord::Base
   validates_uniqueness_of :label
   has_many :users

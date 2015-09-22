@@ -1,3 +1,7 @@
+#
+# Copyright 2015 Kazantzis Lazaros
+#
+
 class CreateJoinTableProjectCitation < ActiveRecord::Migration
   def change
     create_join_table :projects, :citations do |t|
