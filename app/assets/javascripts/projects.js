@@ -196,14 +196,17 @@ $(document).ready(function() {
       $('#clear-file').hide();
   });
 
-  if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs' && $('#select-source').val() != 'ieee') {
-      getListSet($('#select-source').val());
+  if(typeof $('#select-source').val() != 'undefined' && $('#select-source').val() != 'gs') {
+      if($('#select-source').val() != 'ieee') {
+          getListSet($('#select-source').val());
+          $('#search_gs_form p.help-block').show();
+      }
+
       $('#search_gs_more').hide();
-      $('#search_gs_form p.help-block').show();
   }
 
   $('#select-source').on('change', function() {
-     $('.search_gs_results').html('');
+     $('.search_gs_results div').html('');
      $('.paging div').hide();
      $('#search_gs_more').hide();
      if($(this).val() == 'gs') {

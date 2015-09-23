@@ -16,15 +16,17 @@ function getOpenSearchResults(repo, page, start, num, form_params) {
         type: "get",
         dataType: "json",
         beforeSend: function(){
-            $('.search_gs_results').animate({opacity: 0.2});
+            $('.search_gs_results .search-results').animate({opacity: 0.2});
         },
         success: function(response) {
-            $('.search_gs_results').prev().remove();
+            // $('.search_gs_results').prev().remove();
             if (response.total == 0) {
-                $('.search_gs_results').html("<h5>" + response.results + "</h5>");
+                $('.search_gs_results .total-results').html("<h5>" + response.results + "</h5>");
             }
             else {
-                $('.search_gs_results').html("<div><strong>"+I18n.t('total_results')+":</strong> " + response.total + "</div>");
+                $('.search_gs_results .total-results').html("<strong>"+I18n.t('total_results')+":</strong> " + response.total);
+
+                $('.search_gs_results .search-results').html('');
 
                 for(i = 0; i < response.results.length; i++) {
                     identifier = (typeof response.results[i].identifier != 'undefined') ? response.results[i].identifier : '#';
@@ -46,11 +48,12 @@ function getOpenSearchResults(repo, page, start, num, form_params) {
                         domain: domain
                     };
 
-                    $('.search_gs_results').append(drawResult(i, result));
+                    $('.search_gs_results .search-results').append(drawResult(i, result));
                 }
 
                 // checkValidSave();
-                $('.search_gs_results').animate({opacity: 1});
+                $('.search_gs_results .search-results').animate({opacity: 1});
+                $('.paging div').show();
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
             }
