@@ -47,7 +47,6 @@ en:
   delete_comment:
     - "User request"
     - "Harmful usage"
-    - "Don't like his/her face"
     - "Other"
 
   email_deliver:
