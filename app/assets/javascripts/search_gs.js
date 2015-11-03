@@ -17,7 +17,7 @@ $(document).ready(function() {
                 showEmbededFile(doc_title, doc_link);
             }
             else {
-                window.open($(this).attr('href'), '_blank');
+                window.open($(this).find('a').attr('href'), '_blank');
             }
         });
 
@@ -112,12 +112,15 @@ $(document).ready(function() {
     }
 
     function getSearchResults(page, form_params) {
+        $('.total-results').html('');
         var num = $('.rowsPerPage').val();
         var start = (page-1)*num;
 
-        $('.search_gs_results').before("<div class='col-md-12'><strong>"+I18n.t('total_results')+":</strong> <img class='loader_icon' id='search-loader' src='/assets/loader.gif' width='14px' height='14px' />");
+        $('.search_gs_results .total-results').html("<strong>"+I18n.t('total_results')+":</strong> <img class='loader_icon' id='search-loader' src='/assets/loader.gif' width='14px' height='14px' />");
         if($('#select-source').val() == 'gs') {
             getScholarResults(page, start, num, form_params);
+        } else if($('#select-source').val() == 'ieee') {
+            getIeeeResults(page, start, num, form_params);
         } else {
             getOpenSearchResults($('#select-source').val(), page, start, num, form_params);
         }
@@ -130,23 +133,27 @@ $(document).ready(function() {
             type: "get",
             dataType: "json",
             beforeSend: function(){
-                $('.search_gs_results').animate({opacity: 0.2});
+                $('.search_gs_results .search-results').animate({opacity: 0.2});
             },
             success: function(response) {
-                $('.search_gs_results').prev().remove();
+                // $('.search_gs_results').prev().remove();
                 if (response.total == 0) {
-                    $('.search_gs_results').html("<h5>" + response.results + "</h5>");
+                    $('.search_gs_results .total-results').html("<h5>" + response.results + "</h5>");
                 }
                 else {
-                    $('.search_gs_results').html("<div><strong>"+I18n.t('total_results')+":</strong> " + response.total + "</div>");
+                    $('.search_gs_results .total-results').html("<strong>"+I18n.t('total_results')+":</strong> " + response.total);
+
+                    $('.search_gs_results .search-results').html('');
+
                     for(i = 0; i < response.results.length; i++) {
-                        $('.search_gs_results').append(response.results[i]);
+                        $('.search_gs_results .search-results').append(response.results[i]);
                     }
                     $('#search_gs_input').val(decodeHtml(response.search));
                 }
 
                 // checkValidSave();
                 $('.search_gs_results').animate({opacity: 1});
+                $('.paging div').show();
                 $('#rows_div').show();
                 paging(response.total.replace(/\./g, ''), page, $('.rowsPerPage').val(), 'paging_gs_results');
 
@@ -185,7 +192,7 @@ function showCitationsModal(doc_id, doc_num, citations) {
             "<a href='#' class='citation-save' id='citation_mla' onclick='return saveCitation(\"citation_mla\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "<div class='citation'><div class='citation-type' rel='citation_apa'>APA</div><div class='citation-body'>" + citations[1] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_apa' onclick='return saveCitation(\"citation_apa\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
-            "<div class='citation'><div class='citation-type' rel='citation_chicago'>ISO 690</div><div class='citation-body'>" + citations[2] + "<br/>"+
+            "<div class='citation'><div class='citation-type' rel='citation_chicago'>Chicago</div><div class='citation-body'>" + citations[2] + "<br/>"+
             "<a href='#' class='citation-save' id='citation_chicago' onclick='return saveCitation(\"citation_chicago\", \""+doc_id+"\")'>" + I18n.t("save_citation") + "</a></div></div>"+
             "",
             className: "citation-modal"

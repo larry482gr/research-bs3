@@ -34,9 +34,10 @@ en:
   search_sources:
     pick_list: "Collections (don't check anything to search everywhere)"
     acad_search_engine:
-      group_title: "Academic Search Engines"
+      group_title: "Academic Libraries/Search Engines"
       options:
         gs: "&nbsp;&nbsp;Google Scholar"
+        ieee: "&nbsp;&nbsp;IEEE Xplore"
     gr_repo:
       group_title: "Greek Repositories"
       options:

@@ -36,11 +36,14 @@ Researchgr::Application.routes.draw do
     get '/google_scholar/search_citation' => 'google_scholar#search_citation'
     get '/google_scholar/citation_save' => 'google_scholar#citation_save'
 
-    # Open Search methods
+    # Open Search routes
     get '/open_search/list_sets/:repo' => 'open_search#list_sets'
     get '/open_search/list_records' => 'open_search#list_records'
     get '/open_search/get_record' => 'open_search#get_record'
     get '/open_search/cite_record' => 'open_search#cite_record'
+
+    # IEEE Xplore routes
+    get '/ieee/list_records' => 'ieee#list_records'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

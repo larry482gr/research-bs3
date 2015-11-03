@@ -6,6 +6,7 @@
       <select id="select-source" class="form-control">
         <optgroup label="<%= (t 'search_sources.acad_search_engine.group_title') %>"></optgroup>
         <option value="gs" <%= @search_source = 'gs' ? 'selected="selected"' : '' %>><%= (t 'search_sources.acad_search_engine.options.gs').html_safe %></option>
+        <option value="ieee" <%= @search_source = 'ieee' ? 'selected="selected"' : '' %>><%= (t 'search_sources.acad_search_engine.options.ieee').html_safe %></option>
         <optgroup label="<%= (t 'search_sources.gr_repo.group_title') %>"></optgroup>
         <option value="eadd" <%= @search_source == 'eadd' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.eadd').html_safe %></option>
         <option value="helios" <%= @search_source == 'helios' ? 'selected="selected"' : '' %>><%= (t 'search_sources.gr_repo.options.helios').html_safe %></option>
@@ -49,7 +50,10 @@
       </div>
     </form>
 
-    <div class="search_gs_results col-md-12"></div>
+    <div class="search_gs_results col-md-12">
+      <div class="total-results col-md-12"></div>
+      <div class="search-results col-md-12"></div>
+    </div>
     <div class="paging paging_bottom col-md-12">
       <div id="paging_gs_results"></div>
       <form>

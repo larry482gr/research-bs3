@@ -107,6 +107,10 @@ div.citations-body {
 
 .search_gs_results {
   padding: 0px;
+
+  .total-results, .search-results {
+    padding: 0px;
+  }
 }
 
 .search_gs {
